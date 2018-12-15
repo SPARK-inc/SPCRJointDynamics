@@ -592,11 +592,11 @@ public unsafe class SPCRJointDynamicsJob
             }
         }
 
-        void PushoutFromSphere(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
+        void PushoutFromSphere(Vector3 Center, float Radius, ref Vector3 point)
         {
-            var direction = point - pColliderEx->Position;
+            var direction = point - Center;
             var sqrDirectionLength = direction.magnitude;
-            var radius = pCollider->Radius;
+            var radius = Radius;
             if (sqrDirectionLength > 0.001f)
             {
                 if (sqrDirectionLength < radius * radius)
@@ -609,24 +609,40 @@ public unsafe class SPCRJointDynamicsJob
             }
         }
 
+        void PushoutFromSphere(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
+        {
+            PushoutFromSphere(pColliderEx->Position, pCollider->Radius, ref point);
+        }
+
         void PushoutFromCapsule(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
         {
-            var halfHeight = pCollider->Height * 0.5f - pCollider->Radius;
-
-            var capsulePos = pColliderEx->Position;
             var capsuleVec = pColliderEx->Direction;
+            var capsulePos = pColliderEx->Position;
             var targetVec = point - capsulePos;
-            var pointOnVec = capsuleVec * Mathf.Clamp(Vector3.Dot(capsuleVec, targetVec), -halfHeight, halfHeight);
-
-            var dVec = point - (pointOnVec + capsulePos);
-            var sqrMagnitude = dVec.sqrMagnitude;
-            if (sqrMagnitude > 0.001f)
+            var distanceOnVec = Vector3.Dot(capsuleVec, targetVec);
+            if (distanceOnVec <= 0.0f)
             {
-                if (sqrMagnitude < pCollider->Radius * pCollider->Radius)
+                PushoutFromSphere(capsulePos, pCollider->Radius, ref point);
+                return;
+            }
+            else if (distanceOnVec >= pCollider->Height)
+            {
+                PushoutFromSphere(capsulePos + capsuleVec * distanceOnVec, pCollider->Radius, ref point);
+                return;
+            }
+            else
+            {
+                var positionOnVec = capsulePos + (capsuleVec * distanceOnVec);
+                var pushoutVec = point - positionOnVec;
+                var sqrPushoutDistance = pushoutVec.sqrMagnitude;
+                if (sqrPushoutDistance > 0.001f)
                 {
-                    var diff = pCollider->Radius - Mathf.Sqrt(sqrMagnitude);
-                    point = dVec.normalized * diff;
-                    return;
+                    if (sqrPushoutDistance < pCollider->Radius * pCollider->Radius)
+                    {
+                        var pushoutDistance = Mathf.Sqrt(sqrPushoutDistance);
+                        point = positionOnVec + pushoutVec * pCollider->Radius / pushoutDistance;
+                        return;
+                    }
                 }
             }
         }
