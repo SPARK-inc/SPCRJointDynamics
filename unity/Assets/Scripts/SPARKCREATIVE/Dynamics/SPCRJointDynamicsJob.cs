@@ -86,7 +86,7 @@ public unsafe class SPCRJointDynamicsJob
     public struct Constraint
     {
         public int IsCollision;
-        public SPCRJointDynamicsCotroller.ConstraintType Type;
+        public SPCRJointDynamicsController.ConstraintType Type;
         public int IndexA;
         public int IndexB;
         public float Length;
@@ -407,27 +407,27 @@ public unsafe class SPCRJointDynamicsJob
             float ConstraintPower;
             switch (constraint->Type)
             {
-            case SPCRJointDynamicsCotroller.ConstraintType.Structural_Vertical:
+            case SPCRJointDynamicsController.ConstraintType.Structural_Vertical:
                 ConstraintPower = IsShrink
                     ? constraint->Shrink * (RptA->StructuralShrinkVertical + RptB->StructuralShrinkVertical)
                     : constraint->Stretch * (RptA->StructuralStretchVertical + RptB->StructuralStretchVertical);
                 break;
-            case SPCRJointDynamicsCotroller.ConstraintType.Structural_Horizontal:
+            case SPCRJointDynamicsController.ConstraintType.Structural_Horizontal:
                 ConstraintPower = IsShrink
                     ? constraint->Shrink * (RptA->StructuralShrinkHorizontal + RptB->StructuralShrinkHorizontal)
                     : constraint->Stretch * (RptA->StructuralStretchHorizontal + RptB->StructuralStretchHorizontal);
                 break;
-            case SPCRJointDynamicsCotroller.ConstraintType.Shear:
+            case SPCRJointDynamicsController.ConstraintType.Shear:
                 ConstraintPower = IsShrink
                     ? constraint->Shrink * (RptA->ShearShrink + RptB->ShearShrink)
                     : constraint->Stretch * (RptA->ShearStretch + RptB->ShearStretch);
                 break;
-            case SPCRJointDynamicsCotroller.ConstraintType.Bending_Vertical:
+            case SPCRJointDynamicsController.ConstraintType.Bending_Vertical:
                 ConstraintPower = IsShrink
                     ? constraint->Shrink * (RptA->BendingShrinkVertical + RptB->BendingShrinkVertical)
                     : constraint->Stretch * (RptA->BendingStretchVertical + RptB->BendingStretchVertical);
                 break;
-            case SPCRJointDynamicsCotroller.ConstraintType.Bending_Horizontal:
+            case SPCRJointDynamicsController.ConstraintType.Bending_Horizontal:
                 ConstraintPower = IsShrink
                     ? constraint->Shrink * (RptA->BendingShrinkHorizontal + RptB->BendingShrinkHorizontal)
                     : constraint->Stretch * (RptA->BendingStretchHorizontal + RptB->BendingStretchHorizontal);

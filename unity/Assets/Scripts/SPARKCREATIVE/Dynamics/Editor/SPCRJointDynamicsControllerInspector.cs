@@ -13,8 +13,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SPCRJointDynamicsCotroller))]
-public class SPCRJointDynamicsCotrollerInspector : Editor
+[CustomEditor(typeof(SPCRJointDynamicsController))]
+public class SPCRJointDynamicsControllerInspector : Editor
 {
     public enum UpdateJointConnectionType
     {
@@ -29,7 +29,7 @@ public class SPCRJointDynamicsCotrollerInspector : Editor
     {
         serializedObject.Update();
 
-        var controller = target as SPCRJointDynamicsCotroller;
+        var controller = target as SPCRJointDynamicsController;
 
         GUILayout.Space(8);
         controller.Name = EditorGUILayout.TextField("名称", controller.Name);
@@ -48,7 +48,7 @@ public class SPCRJointDynamicsCotrollerInspector : Editor
 
         Titlebar("物理設定", new Color(0.7f, 1.0f, 0.7f));
 
-        controller._UpdateTiming = (SPCRJointDynamicsCotroller.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
+        controller._UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
         controller._Relaxation = EditorGUILayout.IntSlider("演算繰り返し回数", controller._Relaxation, 1, 16);
 
         GUILayout.Space(8);
@@ -242,7 +242,7 @@ public class SPCRJointDynamicsCotrollerInspector : Editor
         GUILayout.Space(3);
     }
 
-    void SearchRootPoints(SPCRJointDynamicsCotroller controller)
+    void SearchRootPoints(SPCRJointDynamicsController controller)
     {
         if (controller._RootTransform != null)
         {
@@ -280,7 +280,7 @@ public class SPCRJointDynamicsCotrollerInspector : Editor
         return Point;
     }
 
-    void SortConstraintsHorizontalRoot(SPCRJointDynamicsCotroller controller, UpdateJointConnectionType Type)
+    void SortConstraintsHorizontalRoot(SPCRJointDynamicsController controller, UpdateJointConnectionType Type)
     {
         switch (Type)
         {
