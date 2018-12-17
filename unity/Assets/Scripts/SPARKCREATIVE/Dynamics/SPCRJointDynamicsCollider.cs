@@ -13,19 +13,14 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
-    Transform _RefTransform;
-
-    [SerializeField]
-    [Range(0.0f, 5.0f)]
+    [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
-    [SerializeField]
-    [Range(0.0f, 5.0f)]
+    [SerializeField, Range(0.0f, 5.0f)]
     float _Height = 0.0f;
-    [SerializeField]
-    [Range(0.0f, 1.0f)]
+    [SerializeField, Range(0.0f, 1.0f)]
     float _Friction = 0.5f;
 
-    public Transform RefTransform { get { return _RefTransform; } }
+    public Transform RefTransform { get; private set; }
     public float Radius { get { return _Radius; } }
     public float Height { get { return _Height; } }
     public float Friction { get { return _Friction; } }
@@ -34,42 +29,52 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
 
     void Awake()
     {
-        _RefTransform = transform;
+        RefTransform = transform;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.gray;
+        var pos = transform.position;
+        var rot = transform.rotation;
+
         if (IsCapsule)
         {
-            var halfLength = _Height / 2;
+            var halfLength = _Height / 2.0f;
             var up = Vector3.up * halfLength;
             var down = Vector3.down * halfLength;
             var right = Vector3.right * _Radius;
             var forward = Vector3.forward * _Radius;
+            var top = pos + rot * up;
+            var bottom = pos + rot * down;
 
             var mOld = Gizmos.matrix;
 
-            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.matrix = Matrix4x4.TRS(pos, rot, Vector3.one);
             Gizmos.DrawLine(right - up, right + up);
             Gizmos.DrawLine(-right - up, -right + up);
             Gizmos.DrawLine(forward - up, forward + up);
             Gizmos.DrawLine(-forward - up, -forward + up);
 
-            Gizmos.matrix = Matrix4x4.Translate(transform.position + transform.rotation * up) * Matrix4x4.Rotate(transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot);
+            DrawWireArc(_Radius, 360);
+            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot);
+            DrawWireArc(_Radius, 360);
+
+            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.forward));
             DrawWireArc(_Radius, 180);
-            Gizmos.matrix = Matrix4x4.Translate(transform.position + transform.rotation * up) * Matrix4x4.Rotate(transform.rotation * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward));
             DrawWireArc(_Radius, 180);
-            Gizmos.matrix = Matrix4x4.Translate(transform.position + transform.rotation * down) * Matrix4x4.Rotate(transform.rotation * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward));
             DrawWireArc(_Radius, 180);
-            Gizmos.matrix = Matrix4x4.Translate(transform.position + transform.rotation * down) * Matrix4x4.Rotate(transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(-90, Vector3.forward));
             DrawWireArc(_Radius, 180);
 
             Gizmos.matrix = mOld;
         }
         else
         {
-            Gizmos.DrawWireSphere(transform.position, _Radius);
+            Gizmos.DrawWireSphere(pos, _Radius);
         }
     }
 
