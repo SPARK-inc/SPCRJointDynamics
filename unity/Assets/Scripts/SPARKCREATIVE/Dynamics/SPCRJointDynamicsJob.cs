@@ -80,6 +80,8 @@ public unsafe class SPCRJointDynamicsJob
         public Vector3 Position;
         public Vector3 OldPosition;
         public Vector3 PreviousDirection;
+        public int GrabberIndex;
+        public float GrabberDistance;
         public float Friction;
     }
 
@@ -107,6 +109,18 @@ public unsafe class SPCRJointDynamicsJob
         public Vector3 Direction;
     }
 
+    struct Grabber
+    {
+        public float Radius;
+        public float Force;
+    }
+
+    struct GrabberEx
+    {
+        public int IsEnabled;
+        public Vector3 Position;
+    }
+
     Transform _RootBone;
     int _PointCount;
     NativeArray<PointRead> _PointsR;
@@ -117,9 +131,12 @@ public unsafe class SPCRJointDynamicsJob
     SPCRJointDynamicsCollider[] _RefColliders;
     NativeArray<Collider> _Colliders;
     NativeArray<ColliderEx> _ColliderExs;
+    SPCRJointDynamicsPointGrabber[] _RefGrabbers;
+    NativeArray<Grabber> _Grabbers;
+    NativeArray<GrabberEx> _GrabberExs;
     JobHandle _hJob = default(JobHandle);
 
-    public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders)
+    public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers)
     {
         _RootBone = RootBone;
         _PointCount = Points.Length;
@@ -154,6 +171,8 @@ public unsafe class SPCRJointDynamicsJob
             PointsRW[i].OldPosition = src.OldPosition;
             PointsRW[i].PreviousDirection = src.PreviousDirection;
             PointsRW[i].Friction = 0.5f;
+            PointsRW[i].GrabberIndex = -1;
+            PointsRW[i].GrabberDistance = 0.0f;
         }
 
         _PointsR = new NativeArray<PointRead>(_PointCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
@@ -189,6 +208,17 @@ public unsafe class SPCRJointDynamicsJob
         _Colliders.CopyFrom(ColliderR);
         _ColliderExs = new NativeArray<ColliderEx>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
+        _RefGrabbers = Grabbers;
+        var GrabberR = new Grabber[Grabbers.Length];
+        for (int i = 0; i < Grabbers.Length; ++i)
+        {
+            GrabberR[i].Radius = Grabbers[i].Radius;
+            GrabberR[i].Force = Grabbers[i].Force;
+        }
+        _Grabbers = new NativeArray<Grabber>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        _Grabbers.CopyFrom(GrabberR);
+        _GrabberExs = new NativeArray<GrabberEx>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+
         _hJob = default(JobHandle);
     }
 
@@ -197,6 +227,8 @@ public unsafe class SPCRJointDynamicsJob
         WaitForComplete();
         _hJob = default(JobHandle);
 
+        _GrabberExs.Dispose();
+        _Grabbers.Dispose();
         _ColliderExs.Dispose();
         _Colliders.Dispose();
         for (int i = 0; i < _Constraints.Length; ++i)
@@ -241,6 +273,8 @@ public unsafe class SPCRJointDynamicsJob
         var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
         var pColliders = (Collider*)_Colliders.GetUnsafePtr();
         var pColliderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
+        var pGrabbers = (Grabber*)_Grabbers.GetUnsafePtr();
+        var pGrabberExs = (GrabberEx*)_GrabberExs.GetUnsafePtr();
 
         int ColliderCount = _RefColliders.Length;
         for (int i = 0; i < ColliderCount; ++i)
@@ -259,7 +293,19 @@ public unsafe class SPCRJointDynamicsJob
             }
         }
 
+        int GrabberCount = _RefGrabbers.Length;
+        for (int i = 0; i < GrabberCount; ++i)
+        {
+            var pDst = pGrabberExs + i;
+
+            pDst->IsEnabled = _RefGrabbers[i].IsEnabled ? 1 : 0;
+            pDst->Position = _RefGrabbers[i].RefTransform.position;
+        }
+
         var PointUpdate = new JobPointUpdate();
+        PointUpdate.GrabberCount = _RefGrabbers.Length;
+        PointUpdate.pGrabbers = pGrabbers;
+        PointUpdate.pGrabberExs = pGrabberExs;
         PointUpdate.pRPoints = pRPoints;
         PointUpdate.pRWPoints = pRWPoints;
         PointUpdate.WindForce = WindForce;
@@ -325,7 +371,12 @@ public unsafe class SPCRJointDynamicsJob
     struct JobPointUpdate : IJobParallelFor
     {
         [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        public int GrabberCount;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public Grabber* pGrabbers;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public GrabberEx* pGrabberExs;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public PointRead* pRPoints;
         [NativeDisableUnsafePtrRestriction]
         public PointReadWrite* pRWPoints;
@@ -356,27 +407,66 @@ public unsafe class SPCRJointDynamicsJob
             pRW->OldPosition = pRW->Position;
             pRW->Position += Displacement;
             pRW->Friction = 0.0f;
+
+            if (pRW->GrabberIndex != -1)
+            {
+                Grabber* pGR = pGrabbers + pRW->GrabberIndex;
+                GrabberEx* pGRW = pGrabberExs + pRW->GrabberIndex;
+                if (pGRW->IsEnabled == 0)
+                {
+                    pRW->GrabberIndex = -1;
+                    return;
+                }
+
+                var Vec = pRW->Position - pGRW->Position;
+                var Pos = pGRW->Position + Vec.normalized * pRW->GrabberDistance;
+                pRW->Position += (Pos - pRW->Position) * pGR->Force;
+            }
+            else
+            {
+                int NearIndex = -1;
+                float sqrNearRange = 1000.0f * 1000.0f;
+                for (int i = 0; i < GrabberCount; ++i)
+                {
+                    Grabber* pGR = pGrabbers + i;
+                    GrabberEx* pGRW = pGrabberExs + i;
+
+                    if (pGRW->IsEnabled == 0) continue;
+
+                    var Vec = pGRW->Position - pRW->Position;
+                    var sqrVecLength = Vec.sqrMagnitude;
+                    if (sqrVecLength < pGR->Radius * pGR->Radius)
+                    {
+                        if (sqrVecLength < sqrNearRange)
+                        {
+                            sqrNearRange = sqrVecLength;
+                            NearIndex = i;
+                        }
+                    }
+                }
+                if (NearIndex != -1)
+                {
+                    pRW->GrabberIndex = NearIndex;
+                    pRW->GrabberDistance = Mathf.Sqrt(sqrNearRange) / 2.0f;
+                }
+            }
         }
     }
 
     [BurstCompile]
     struct JobConstraintUpdate : IJobParallelFor
     {
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public Constraint* pConstraints;
 
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public PointRead* pRPoints;
         [NativeDisableUnsafePtrRestriction]
         public PointReadWrite* pRWPoints;
 
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public Collider* pColliders;
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public ColliderEx* pColliderExs;
         [ReadOnly]
         public int ColliderCount;
@@ -545,11 +635,9 @@ public unsafe class SPCRJointDynamicsJob
         [NativeDisableUnsafePtrRestriction]
         public PointReadWrite* pRWPoints;
 
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public Collider* pColliders;
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public ColliderEx* pColliderExs;
         [ReadOnly]
         public int ColliderCount;
@@ -651,8 +739,7 @@ public unsafe class SPCRJointDynamicsJob
     [BurstCompile]
     struct JobPointToTransform : IJobParallelForTransform
     {
-        [ReadOnly]
-        [NativeDisableUnsafePtrRestriction]
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
         public PointRead* pRPoints;
         [NativeDisableUnsafePtrRestriction]
         public PointReadWrite* pRWPoints;

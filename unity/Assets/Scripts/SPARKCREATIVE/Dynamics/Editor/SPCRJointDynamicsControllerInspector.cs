@@ -25,6 +25,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
         SortNearPointXZ_FixedBeginEnd,
     }
 
+    float _BoneStretchScale = 1.0f;
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -45,6 +47,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         GUILayout.Space(5);
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_ColliderTbl"), new GUIContent("コライダー"), true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_PointGrabberTbl"), new GUIContent("グラバー"), true);
 
         Titlebar("物理設定", new Color(0.7f, 1.0f, 0.7f));
 
@@ -165,6 +168,12 @@ public class SPCRJointDynamicsControllerInspector : Editor
             EditorGUILayout.LabelField("※ 無効 ※");
         }
 
+        Titlebar("オプション", new Color(0.7f, 1.0f, 0.7f));
+        if (GUILayout.Button("物理初期化"))
+        {
+            controller.ResetPhysics(0.3f);
+        }
+
         Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
         controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
         controller._IsDebugDraw_StructuralHorizontal = EditorGUILayout.Toggle("水平構造", controller._IsDebugDraw_StructuralHorizontal);
@@ -216,11 +225,12 @@ public class SPCRJointDynamicsControllerInspector : Editor
             controller.UpdateJointDistance();
         }
 
-        Titlebar("オプション", new Color(0.7f, 1.0f, 0.7f));
-
-        if (GUILayout.Button("物理初期化"))
+        Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
+        GUILayout.Space(3);
+        _BoneStretchScale = EditorGUILayout.Slider("伸縮比率", _BoneStretchScale, -5.0f, +5.0f);
+        if (GUILayout.Button("垂直方向にボーンを伸縮する"))
         {
-            controller.ResetPhysics(0.3f);
+            controller.StretchBoneLength(_BoneStretchScale);
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -246,7 +256,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
     {
         if (controller._RootTransform != null)
         {
-            List<SPCRJointDynamicsPoint> PointList = new List<SPCRJointDynamicsPoint>();
+            var PointList = new List<SPCRJointDynamicsPoint>();
             for (int i = 0; i < controller._RootTransform.transform.childCount; ++i)
             {
                 var child = controller._RootTransform.transform.GetChild(i);
@@ -290,7 +300,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             break;
         case UpdateJointConnectionType.SortNearPointXYZ:
             {
-                List<SPCRJointDynamicsPoint> SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
                 var EdgeA = controller._RootPointTbl[0];
                 for (int i = 1; i < controller._RootPointTbl.Length; ++i)
                 {
@@ -310,7 +320,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             break;
         case UpdateJointConnectionType.SortNearPointXZ:
             {
-                List<SPCRJointDynamicsPoint> SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
                 var EdgeA = controller._RootPointTbl[0];
                 for (int i = 1; i < controller._RootPointTbl.Length; ++i)
                 {
@@ -330,7 +340,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             break;
         case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
             {
-                List<SPCRJointDynamicsPoint> SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
                 var EdgeA = controller._RootPointTbl[0];
                 var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
                 for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
@@ -352,7 +362,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             break;
         case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
             {
-                List<SPCRJointDynamicsPoint> SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
                 var EdgeA = controller._RootPointTbl[0];
                 var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
                 for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
