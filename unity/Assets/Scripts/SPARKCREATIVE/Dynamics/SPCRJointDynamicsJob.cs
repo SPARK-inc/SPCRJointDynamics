@@ -22,6 +22,8 @@ using Unity.Burst;
 
 public unsafe class SPCRJointDynamicsJob
 {
+    const float EPSILON = 0.001f;
+
     public struct Point
     {
         public int Parent;
@@ -282,7 +284,7 @@ public unsafe class SPCRJointDynamicsJob
             var pDst = pColliderExs + i;
             var Src = _RefColliders[i];
             var SrcT = Src.RefTransform;
-            if (Src.Height <= 0.0f)
+            if (Src.Height <= EPSILON)
             {
                 pDst->Position = _RefColliders[i].RefTransform.position;
             }
@@ -389,7 +391,7 @@ public unsafe class SPCRJointDynamicsJob
         void IJobParallelFor.Execute(int index)
         {
             var pR = pRPoints + index;
-            if (pR->Weight == 0.0f) return;
+            if (pR->Weight <= EPSILON) return;
 
             var pRW = pRWPoints + index;
 
@@ -483,7 +485,7 @@ public unsafe class SPCRJointDynamicsJob
             float WeightA = RptA->Weight;
             float WeightB = RptB->Weight;
 
-            if ((WeightA == 0.0) && (WeightB == 0.0)) return;
+            if ((WeightA <= EPSILON) && (WeightB <= EPSILON)) return;
 
             var RWptA = pRWPoints + constraint->IndexA;
             var RWptB = pRWPoints + constraint->IndexB;
@@ -570,7 +572,7 @@ public unsafe class SPCRJointDynamicsJob
 
         bool CollisionDetection(Collider* pCollider, ColliderEx* pColliderEx, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider)
         {
-            if (pCollider->Height <= 0.0f)
+            if (pCollider->Height <= EPSILON)
             {
                 var direction = point2 - point1;
                 var directionLength = direction.magnitude;
@@ -685,7 +687,7 @@ public unsafe class SPCRJointDynamicsJob
             var direction = point - Center;
             var sqrDirectionLength = direction.magnitude;
             var radius = Radius;
-            if (sqrDirectionLength > 0.001f)
+            if (sqrDirectionLength > EPSILON)
             {
                 if (sqrDirectionLength < radius * radius)
                 {
@@ -708,7 +710,7 @@ public unsafe class SPCRJointDynamicsJob
             var capsulePos = pColliderEx->Position;
             var targetVec = point - capsulePos;
             var distanceOnVec = Vector3.Dot(capsuleVec, targetVec);
-            if (distanceOnVec <= 0.0f)
+            if (distanceOnVec <= EPSILON)
             {
                 PushoutFromSphere(capsulePos, pCollider->Radius, ref point);
                 return;
@@ -723,7 +725,7 @@ public unsafe class SPCRJointDynamicsJob
                 var positionOnVec = capsulePos + (capsuleVec * distanceOnVec);
                 var pushoutVec = point - positionOnVec;
                 var sqrPushoutDistance = pushoutVec.sqrMagnitude;
-                if (sqrPushoutDistance > 0.001f)
+                if (sqrPushoutDistance > EPSILON)
                 {
                     if (sqrPushoutDistance < pCollider->Radius * pCollider->Radius)
                     {
@@ -749,12 +751,12 @@ public unsafe class SPCRJointDynamicsJob
             var pRW = pRWPoints + index;
             var pR = pRPoints + index;
 
-            if (pR->Weight > 0.0f)
+            if (pR->Weight >= EPSILON)
             {
                 var pRWP = pRWPoints + pR->Parent;
                 var Direction = pRW->Position - pRWP->Position;
                 var RealLength = Direction.magnitude;
-                if (RealLength > 0.001f)
+                if (RealLength > EPSILON)
                 {
                     pRW->PreviousDirection = Direction;
                     transform.position = pRW->Position;
@@ -782,7 +784,7 @@ public unsafe class SPCRJointDynamicsJob
             {
                 var pRWC = pRWPoints + pR->Child;
                 var Direction = pRWC->Position - pRW->Position;
-                if (Direction.magnitude > 0.001f)
+                if (Direction.sqrMagnitude > EPSILON)
                 {
                     Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
                     Vector3 AimVector = mRotate * pR->BoneAxis;

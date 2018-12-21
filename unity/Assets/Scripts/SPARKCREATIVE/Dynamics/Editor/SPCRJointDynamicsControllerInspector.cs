@@ -11,6 +11,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEditor;
 
 [CustomEditor(typeof(SPCRJointDynamicsController))]
@@ -177,6 +178,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
         controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
         controller._IsDebugDraw_StructuralHorizontal = EditorGUILayout.Toggle("水平構造", controller._IsDebugDraw_StructuralHorizontal);
+        controller._IsDebugDraw_Shear = EditorGUILayout.Toggle("せん断", controller._IsDebugDraw_Shear);
 
         Titlebar("事前設定", new Color(1.0f, 1.0f, 0.7f));
         controller._IsLoopRootPoints = EditorGUILayout.Toggle("拘束のループ", controller._IsLoopRootPoints);

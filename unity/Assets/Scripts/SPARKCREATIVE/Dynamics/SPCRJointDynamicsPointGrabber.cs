@@ -17,8 +17,8 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
     bool _IsEnabled = true;
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _Force = 0.1f;
+    [SerializeField, Range(0.0f, 1.0f)]
+    float _Force = 0.5f;
 
     public Transform RefTransform { get; private set; }
     public bool IsEnabled { get { return enabled && _IsEnabled; } }
