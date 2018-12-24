@@ -456,9 +456,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             var parent = Controller._RootTransform;
             for (int i = 0; i < HCurve.Count; ++i)
             {
-                var Position = i == 0
-                    ? HCurve[i].ComputeLinear(Rate)
-                    : HCurve[i].ComputeSpline(Rate);
+                var Position = HCurve[i].ComputeSpline(Rate);
                 var go = new GameObject(h.ToString("D3") + "_" + i.ToString("D3"));
                 var pt = go.AddComponent<SPCRJointDynamicsPoint>();
                 go.transform.SetParent(parent);
@@ -525,8 +523,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
             for (int v = 0; v < HorizontalBones[h].Count; ++v)
             {
                 uvs.Add(new Vector2(
-                    (float)h / (float)HorizontalBones.Count,
-                    (float)v / (float)HorizontalBones[h].Count));
+                    (float)h / (float)(HorizontalBones.Count - 1),
+                    (float)v / (float)(HorizontalBones[h].Count - 1)));
             }
         }
 
