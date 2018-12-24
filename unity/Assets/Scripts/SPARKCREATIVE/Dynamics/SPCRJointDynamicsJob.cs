@@ -100,7 +100,8 @@ public unsafe class SPCRJointDynamicsJob
 
     struct Collider
     {
-        public float Radius;
+        public float RadiusHead;
+        public float RadiusTail;
         public float Height;
         public float Friction;
     }
@@ -202,9 +203,19 @@ public unsafe class SPCRJointDynamicsJob
         var ColliderR = new Collider[Colliders.Length];
         for (int i = 0; i < Colliders.Length; ++i)
         {
-            ColliderR[i].Radius = Colliders[i].Radius;
-            ColliderR[i].Height = Colliders[i].Height;
-            ColliderR[i].Friction = Colliders[i].Friction;
+            var src = Colliders[i];
+            if (src.IsCapsule)
+            {
+                ColliderR[i].RadiusHead = src.RadiusHead;
+                ColliderR[i].RadiusTail = src.RadiusTail;
+                ColliderR[i].Height = src.Height;
+            }
+            else
+            {
+                ColliderR[i].RadiusHead = src.RadiusHead;
+                ColliderR[i].Height = 0.0f;
+            }
+            ColliderR[i].Friction = src.Friction;
         }
         _Colliders = new NativeArray<Collider>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         _Colliders.CopyFrom(ColliderR);
@@ -546,8 +557,9 @@ public unsafe class SPCRJointDynamicsJob
                 Collider* pCollider = pColliders + i;
                 ColliderEx* pColliderEx = pColliderExs + i;
 
+                float Radius;
                 Vector3 pointOnLine, pointOnCollider;
-                if (CollisionDetection(pCollider, pColliderEx, RWptA->Position, RWptB->Position, out pointOnLine, out pointOnCollider))
+                if (CollisionDetection(pCollider, pColliderEx, RWptA->Position, RWptB->Position, out pointOnLine, out pointOnCollider, out Radius))
                 {
                     var Pushout = pointOnLine - pointOnCollider;
                     var PushoutDistance = Pushout.magnitude;
@@ -557,7 +569,7 @@ public unsafe class SPCRJointDynamicsJob
                     var rateP2 = Mathf.Clamp01((pointOnLine - RWptB->Position).magnitude / pointDistance);
 
                     Pushout /= PushoutDistance;
-                    Pushout *= Mathf.Max(pCollider->Radius - PushoutDistance, 0.0f);
+                    Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
                     RWptA->Position += Pushout * rateP2;
                     RWptB->Position += Pushout * rateP1;
 
@@ -570,7 +582,7 @@ public unsafe class SPCRJointDynamicsJob
             RWptB->Friction = Mathf.Max(Friction, RWptB->Friction);
         }
 
-        bool CollisionDetection(Collider* pCollider, ColliderEx* pColliderEx, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider)
+        bool CollisionDetection(Collider* pCollider, ColliderEx* pColliderEx, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider, out float Radius)
         {
             if (pCollider->Height <= EPSILON)
             {
@@ -584,8 +596,9 @@ public unsafe class SPCRJointDynamicsJob
 
                 pointOnCollider = pColliderEx->Position;
                 pointOnLine = pointOnDirection + point1;
+                Radius = pCollider->RadiusHead;
 
-                if ((pointOnCollider - pointOnLine).sqrMagnitude > pCollider->Radius * pCollider->Radius)
+                if ((pointOnCollider - pointOnLine).sqrMagnitude > pCollider->RadiusHead * pCollider->RadiusHead)
                 {
                     return false;
                 }
@@ -600,20 +613,22 @@ public unsafe class SPCRJointDynamicsJob
 
                 float t1, t2;
                 var sqrDistance = ComputeNearestPoints(capsulePos, capsuleDir, point1, pointDir, out t1, out t2, out pointOnCollider, out pointOnLine);
-                if (sqrDistance > pCollider->Radius * pCollider->Radius)
+                t1 = Mathf.Clamp01(t1);
+                Radius = pCollider->RadiusHead + (pCollider->RadiusTail - pCollider->RadiusHead) * t1;
+
+                if (sqrDistance > Radius * Radius)
                 {
                     pointOnCollider = Vector3.zero;
                     pointOnLine = Vector3.zero;
                     return false;
                 }
 
-                t1 = Mathf.Clamp01(t1);
                 t2 = Mathf.Clamp01(t2);
 
                 pointOnCollider = capsulePos + capsuleDir * t1;
                 pointOnLine = point1 + pointDir * t2;
 
-                return (pointOnCollider - pointOnLine).sqrMagnitude <= pCollider->Radius * pCollider->Radius;
+                return (pointOnCollider - pointOnLine).sqrMagnitude <= Radius * Radius;
             }
         }
 
@@ -701,7 +716,7 @@ public unsafe class SPCRJointDynamicsJob
 
         void PushoutFromSphere(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
         {
-            PushoutFromSphere(pColliderEx->Position, pCollider->Radius, ref point);
+            PushoutFromSphere(pColliderEx->Position, pCollider->RadiusHead, ref point);
         }
 
         void PushoutFromCapsule(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
@@ -712,12 +727,12 @@ public unsafe class SPCRJointDynamicsJob
             var distanceOnVec = Vector3.Dot(capsuleVec, targetVec);
             if (distanceOnVec <= EPSILON)
             {
-                PushoutFromSphere(capsulePos, pCollider->Radius, ref point);
+                PushoutFromSphere(capsulePos, pCollider->RadiusHead, ref point);
                 return;
             }
             else if (distanceOnVec >= pCollider->Height)
             {
-                PushoutFromSphere(capsulePos + capsuleVec * distanceOnVec, pCollider->Radius, ref point);
+                PushoutFromSphere(capsulePos + capsuleVec * distanceOnVec, pCollider->RadiusTail, ref point);
                 return;
             }
             else
@@ -727,10 +742,11 @@ public unsafe class SPCRJointDynamicsJob
                 var sqrPushoutDistance = pushoutVec.sqrMagnitude;
                 if (sqrPushoutDistance > EPSILON)
                 {
-                    if (sqrPushoutDistance < pCollider->Radius * pCollider->Radius)
+                    var Radius = pCollider->RadiusHead + (pCollider->RadiusTail - pCollider->RadiusHead) * distanceOnVec;
+                    if (sqrPushoutDistance < Radius * Radius)
                     {
                         var pushoutDistance = Mathf.Sqrt(sqrPushoutDistance);
-                        point = positionOnVec + pushoutVec * pCollider->Radius / pushoutDistance;
+                        point = positionOnVec + pushoutVec * Radius / pushoutDistance;
                         return;
                     }
                 }

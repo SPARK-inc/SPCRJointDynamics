@@ -16,12 +16,17 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
     [SerializeField, Range(0.0f, 5.0f)]
+    float _HeadRadiusScale = 1.0f;
+    [SerializeField, Range(0.0f, 5.0f)]
+    float _TailRadiusScale = 1.0f;
+    [SerializeField, Range(0.0f, 5.0f)]
     float _Height = 0.0f;
     [SerializeField, Range(0.0f, 1.0f)]
     float _Friction = 0.5f;
 
     public Transform RefTransform { get; private set; }
-    public float Radius { get { return _Radius; } }
+    public float RadiusHead { get { return _Radius * _HeadRadiusScale; } }
+    public float RadiusTail { get { return _Radius * _TailRadiusScale; } }
     public float Height { get { return _Height; } }
     public float Friction { get { return _Friction; } }
 
@@ -43,32 +48,34 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             var halfLength = _Height / 2.0f;
             var up = Vector3.up * halfLength;
             var down = Vector3.down * halfLength;
-            var right = Vector3.right * _Radius;
-            var forward = Vector3.forward * _Radius;
+            var right_head = Vector3.right * _Radius * _HeadRadiusScale;
+            var right_tail = Vector3.right * _Radius * _TailRadiusScale;
+            var forward_head = Vector3.forward * _Radius * _HeadRadiusScale;
+            var forward_tail = Vector3.forward * _Radius * _TailRadiusScale;
             var top = pos + rot * up;
             var bottom = pos + rot * down;
 
             var mOld = Gizmos.matrix;
 
             Gizmos.matrix = Matrix4x4.TRS(pos, rot, Vector3.one);
-            Gizmos.DrawLine(right - up, right + up);
-            Gizmos.DrawLine(-right - up, -right + up);
-            Gizmos.DrawLine(forward - up, forward + up);
-            Gizmos.DrawLine(-forward - up, -forward + up);
+            Gizmos.DrawLine(right_head - up, right_tail + up);
+            Gizmos.DrawLine(-right_head - up, -right_tail + up);
+            Gizmos.DrawLine(forward_head - up, forward_tail + up);
+            Gizmos.DrawLine(-forward_head - up, -forward_tail + up);
 
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot);
-            DrawWireArc(_Radius, 360);
+            DrawWireArc(_Radius * _TailRadiusScale, 360);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot);
-            DrawWireArc(_Radius, 360);
+            DrawWireArc(_Radius * _HeadRadiusScale, 360);
 
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.forward));
-            DrawWireArc(_Radius, 180);
+            DrawWireArc(_Radius * _TailRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward));
-            DrawWireArc(_Radius, 180);
+            DrawWireArc(_Radius * _TailRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward));
-            DrawWireArc(_Radius, 180);
+            DrawWireArc(_Radius * _HeadRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(-90, Vector3.forward));
-            DrawWireArc(_Radius, 180);
+            DrawWireArc(_Radius * _HeadRadiusScale, 180);
 
             Gizmos.matrix = mOld;
         }
