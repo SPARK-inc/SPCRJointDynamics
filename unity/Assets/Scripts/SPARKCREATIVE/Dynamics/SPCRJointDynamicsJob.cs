@@ -9,16 +9,7 @@
  *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
 */
 
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Jobs;
-using Unity.Jobs;
-using Unity.Jobs.LowLevel;
-using Unity.Jobs.LowLevel.Unsafe;
-using Unity.Collections;
-using Unity.Collections.LowLevel;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Burst;
 
 public unsafe class SPCRJointDynamicsJob
 {
@@ -43,53 +34,21 @@ public unsafe class SPCRJointDynamicsJob
         public float BendingStretchVertical;
         public float BendingShrinkHorizontal;
         public float BendingStretchHorizontal;
-        public Vector3 Gravity;
-        public Vector3 BoneAxis;
-        public Vector3 InitialPosition;
-        public Quaternion LocalRotation;
-        public Vector3 Position;
-        public Vector3 OldPosition;
-        public Vector3 PreviousDirection;
-    }
-
-    struct PointRead
-    {
-        public int Parent;
-        public int Child;
-        public float Weight;
-        public float Mass;
-        public float Resistance;
-        public float FrictionScale;
-        public float ParentLength;
-        public float StructuralShrinkVertical;
-        public float StructuralStretchVertical;
-        public float StructuralShrinkHorizontal;
-        public float StructuralStretchHorizontal;
-        public float ShearShrink;
-        public float ShearStretch;
-        public float BendingShrinkVertical;
-        public float BendingStretchVertical;
-        public float BendingShrinkHorizontal;
-        public float BendingStretchHorizontal;
-        public Vector3 Gravity;
-        public Vector3 BoneAxis;
-        public Vector3 InitialPosition;
-        public Quaternion LocalRotation;
-    }
-
-    struct PointReadWrite
-    {
-        public Vector3 Position;
-        public Vector3 OldPosition;
-        public Vector3 PreviousDirection;
+        public float Friction;
         public int GrabberIndex;
         public float GrabberDistance;
-        public float Friction;
+        public Vector3 Gravity;
+        public Vector3 BoneAxis;
+        public Vector3 InitialPosition;
+        public Quaternion LocalRotation;
+        public Vector3 Position;
+        public Vector3 OldPosition;
+        public Vector3 PreviousDirection;
     }
 
     public struct Constraint
     {
-        public int IsCollision;
+        public bool IsCollision;
         public SPCRJointDynamicsController.ConstraintType Type;
         public int IndexA;
         public int IndexB;
@@ -104,709 +63,468 @@ public unsafe class SPCRJointDynamicsJob
         public float RadiusTail;
         public float Height;
         public float Friction;
-    }
-
-    struct ColliderEx
-    {
         public Vector3 Position;
         public Vector3 Direction;
     }
 
     struct Grabber
     {
+        public bool IsEnabled;
         public float Radius;
         public float Force;
-    }
-
-    struct GrabberEx
-    {
-        public int IsEnabled;
         public Vector3 Position;
     }
 
     Transform _RootBone;
-    int _PointCount;
-    NativeArray<PointRead> _PointsR;
-    NativeArray<PointReadWrite> _PointsRW;
-    NativeArray<Constraint>[] _Constraints;
+    Point[] _Points;
+    Constraint[][] _Constraints;
     Transform[] _PointTransforms;
-    TransformAccessArray _TransformArray;
     SPCRJointDynamicsCollider[] _RefColliders;
-    NativeArray<Collider> _Colliders;
-    NativeArray<ColliderEx> _ColliderExs;
+    Collider[] _Colliders;
     SPCRJointDynamicsPointGrabber[] _RefGrabbers;
-    NativeArray<Grabber> _Grabbers;
-    NativeArray<GrabberEx> _GrabberExs;
-    JobHandle _hJob = default(JobHandle);
+    Grabber[] _Grabbers;
 
     public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers)
     {
         _RootBone = RootBone;
-        _PointCount = Points.Length;
+        _Points = new Point[Points.Length];
 
-        var PointsR = new PointRead[_PointCount];
-        var PointsRW = new PointReadWrite[_PointCount];
         for (int i = 0; i < Points.Length; ++i)
         {
             var src = Points[i];
-            PointsR[i].Parent = src.Parent;
-            PointsR[i].Child = src.Child;
-            PointsR[i].Weight = src.Weight;
-            PointsR[i].Mass = src.Mass;
-            PointsR[i].Resistance = src.Resistance;
-            PointsR[i].FrictionScale = src.FrictionScale;
-            PointsR[i].ParentLength = src.ParentLength;
-            PointsR[i].StructuralShrinkHorizontal = src.StructuralShrinkHorizontal * 0.5f;
-            PointsR[i].StructuralStretchHorizontal = src.StructuralStretchHorizontal * 0.5f;
-            PointsR[i].StructuralShrinkVertical = src.StructuralShrinkVertical * 0.5f;
-            PointsR[i].StructuralStretchVertical = src.StructuralStretchVertical * 0.5f;
-            PointsR[i].ShearShrink = src.ShearShrink * 0.5f;
-            PointsR[i].ShearStretch = src.ShearStretch * 0.5f;
-            PointsR[i].BendingShrinkHorizontal = src.BendingShrinkHorizontal * 0.5f;
-            PointsR[i].BendingStretchHorizontal = src.BendingStretchHorizontal * 0.5f;
-            PointsR[i].BendingShrinkVertical = src.BendingShrinkVertical * 0.5f;
-            PointsR[i].BendingStretchVertical = src.BendingStretchVertical * 0.5f;
-            PointsR[i].Gravity = src.Gravity;
-            PointsR[i].BoneAxis = src.BoneAxis;
-            PointsR[i].LocalRotation = src.LocalRotation;
-            PointsR[i].InitialPosition = src.InitialPosition;
-            PointsRW[i].Position = src.Position;
-            PointsRW[i].OldPosition = src.OldPosition;
-            PointsRW[i].PreviousDirection = src.PreviousDirection;
-            PointsRW[i].Friction = 0.5f;
-            PointsRW[i].GrabberIndex = -1;
-            PointsRW[i].GrabberDistance = 0.0f;
+            _Points[i].Parent = src.Parent;
+            _Points[i].Child = src.Child;
+            _Points[i].Weight = src.Weight;
+            _Points[i].Mass = src.Mass;
+            _Points[i].Resistance = src.Resistance;
+            _Points[i].FrictionScale = src.FrictionScale;
+            _Points[i].ParentLength = src.ParentLength;
+            _Points[i].StructuralShrinkHorizontal = src.StructuralShrinkHorizontal * 0.5f;
+            _Points[i].StructuralStretchHorizontal = src.StructuralStretchHorizontal * 0.5f;
+            _Points[i].StructuralShrinkVertical = src.StructuralShrinkVertical * 0.5f;
+            _Points[i].StructuralStretchVertical = src.StructuralStretchVertical * 0.5f;
+            _Points[i].ShearShrink = src.ShearShrink * 0.5f;
+            _Points[i].ShearStretch = src.ShearStretch * 0.5f;
+            _Points[i].BendingShrinkHorizontal = src.BendingShrinkHorizontal * 0.5f;
+            _Points[i].BendingStretchHorizontal = src.BendingStretchHorizontal * 0.5f;
+            _Points[i].BendingShrinkVertical = src.BendingShrinkVertical * 0.5f;
+            _Points[i].BendingStretchVertical = src.BendingStretchVertical * 0.5f;
+            _Points[i].Gravity = src.Gravity;
+            _Points[i].BoneAxis = src.BoneAxis;
+            _Points[i].LocalRotation = src.LocalRotation;
+            _Points[i].InitialPosition = src.InitialPosition;
+            _Points[i].Position = src.Position;
+            _Points[i].OldPosition = src.OldPosition;
+            _Points[i].PreviousDirection = src.PreviousDirection;
+            _Points[i].Friction = 0.5f;
+            _Points[i].GrabberIndex = -1;
+            _Points[i].GrabberDistance = 0.0f;
         }
 
-        _PointsR = new NativeArray<PointRead>(_PointCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        _PointsR.CopyFrom(PointsR);
-        _PointsRW = new NativeArray<PointReadWrite>(_PointCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        _PointsRW.CopyFrom(PointsRW);
-
-        _PointTransforms = new Transform[_PointCount];
-        for (int i = 0; i < _PointCount; ++i)
+        _PointTransforms = new Transform[_Points.Length];
+        for (int i = 0; i < _Points.Length; ++i)
         {
             _PointTransforms[i] = PointTransforms[i];
         }
 
-        _TransformArray = new TransformAccessArray(_PointTransforms);
-
-        _Constraints = new NativeArray<Constraint>[Constraints.Length];
+        _Constraints = new Constraint[Constraints.Length][];
         for (int i = 0; i < Constraints.Length; ++i)
         {
-            var src = Constraints[i];
-            _Constraints[i] = new NativeArray<Constraint>(src.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            _Constraints[i].CopyFrom(src);
+            _Constraints[i] = new Constraint[Constraints[i].Length];
+            for (int j = 0; j < Constraints[i].Length; ++j)
+            {
+                _Constraints[i][j] = Constraints[i][j];
+            }
         }
 
         _RefColliders = Colliders;
-        var ColliderR = new Collider[Colliders.Length];
+        _Colliders = new Collider[Colliders.Length];
         for (int i = 0; i < Colliders.Length; ++i)
         {
             var src = Colliders[i];
             if (src.IsCapsule)
             {
-                ColliderR[i].RadiusHead = src.RadiusHead;
-                ColliderR[i].RadiusTail = src.RadiusTail;
-                ColliderR[i].Height = src.Height;
+                _Colliders[i].RadiusHead = src.RadiusHead;
+                _Colliders[i].RadiusTail = src.RadiusTail;
+                _Colliders[i].Height = src.Height;
             }
             else
             {
-                ColliderR[i].RadiusHead = src.RadiusHead;
-                ColliderR[i].Height = 0.0f;
+                _Colliders[i].RadiusHead = src.RadiusHead;
+                _Colliders[i].Height = 0.0f;
             }
-            ColliderR[i].Friction = src.Friction;
+            _Colliders[i].Friction = src.Friction;
         }
-        _Colliders = new NativeArray<Collider>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        _Colliders.CopyFrom(ColliderR);
-        _ColliderExs = new NativeArray<ColliderEx>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
         _RefGrabbers = Grabbers;
-        var GrabberR = new Grabber[Grabbers.Length];
+        _Grabbers = new Grabber[Grabbers.Length];
         for (int i = 0; i < Grabbers.Length; ++i)
         {
-            GrabberR[i].Radius = Grabbers[i].Radius;
-            GrabberR[i].Force = Grabbers[i].Force;
+            _Grabbers[i].Radius = Grabbers[i].Radius;
+            _Grabbers[i].Force = Grabbers[i].Force;
         }
-        _Grabbers = new NativeArray<Grabber>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        _Grabbers.CopyFrom(GrabberR);
-        _GrabberExs = new NativeArray<GrabberEx>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-
-        _hJob = default(JobHandle);
     }
 
     public void Uninitialize()
     {
-        WaitForComplete();
-        _hJob = default(JobHandle);
-
-        _GrabberExs.Dispose();
-        _Grabbers.Dispose();
-        _ColliderExs.Dispose();
-        _Colliders.Dispose();
-        for (int i = 0; i < _Constraints.Length; ++i)
-        {
-            _Constraints[i].Dispose();
-        }
-        _TransformArray.Dispose();
-        _PointsR.Dispose();
-        _PointsRW.Dispose();
     }
 
     public void Reset()
     {
-        var pPointRW = (PointReadWrite*)_PointsRW.GetUnsafePtr();
-        for (int i = 0; i < _PointCount; ++i)
+        for (int i = 0; i < _Points.Length; ++i)
         {
-            pPointRW[i].OldPosition = pPointRW[i].Position = _PointTransforms[i].position;
+            _Points[i].OldPosition = _Points[i].Position = _PointTransforms[i].position;
         }
     }
 
     public void Restore()
     {
-        var pPointR = (PointRead*)_PointsR.GetUnsafePtr();
-        var pPointRW = (PointReadWrite*)_PointsRW.GetUnsafePtr();
-        for (int i = 0; i < _PointCount; ++i)
+        for (int i = 0; i < _Points.Length; ++i)
         {
-            pPointRW[i].Position = _RootBone.TransformPoint(pPointR[i].InitialPosition);
-            pPointRW[i].OldPosition = pPointRW[i].Position;
-            _PointTransforms[i].position = pPointRW[i].Position;
+            _Points[i].Position = _RootBone.TransformPoint(_Points[i].InitialPosition);
+            _Points[i].OldPosition = _Points[i].Position;
+            _PointTransforms[i].position = _Points[i].Position;
         }
     }
 
     public void Execute(
         float StepTime, Vector3 WindForce,
         int Relaxation, float SpringK,
-        bool IsEnableFloorCollision, float FloorHeight,
-        bool IsEnableColliderCollision)
+        bool IsEnableFloorCollision, float FloorHeight)
     {
-        WaitForComplete();
-
-        var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
-        var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
-        var pColliders = (Collider*)_Colliders.GetUnsafePtr();
-        var pColliderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
-        var pGrabbers = (Grabber*)_Grabbers.GetUnsafePtr();
-        var pGrabberExs = (GrabberEx*)_GrabberExs.GetUnsafePtr();
-
         int ColliderCount = _RefColliders.Length;
         for (int i = 0; i < ColliderCount; ++i)
         {
-            var pDst = pColliderExs + i;
             var Src = _RefColliders[i];
             var SrcT = Src.RefTransform;
             if (Src.Height <= EPSILON)
             {
-                pDst->Position = _RefColliders[i].RefTransform.position;
+                _Colliders[i].Position = _RefColliders[i].RefTransform.position;
             }
             else
             {
-                pDst->Direction = SrcT.rotation * Vector3.up * Src.Height;
-                pDst->Position = SrcT.position - (pDst->Direction * 0.5f);
+                _Colliders[i].Direction = SrcT.rotation * Vector3.up * Src.Height;
+                _Colliders[i].Position = SrcT.position - (_Colliders[i].Direction * 0.5f);
             }
         }
 
         int GrabberCount = _RefGrabbers.Length;
         for (int i = 0; i < GrabberCount; ++i)
         {
-            var pDst = pGrabberExs + i;
-
-            pDst->IsEnabled = _RefGrabbers[i].IsEnabled ? 1 : 0;
-            pDst->Position = _RefGrabbers[i].RefTransform.position;
+            _Grabbers[i].IsEnabled = _RefGrabbers[i].IsEnabled;
+            _Grabbers[i].Position = _RefGrabbers[i].RefTransform.position;
         }
 
-        var PointUpdate = new JobPointUpdate();
-        PointUpdate.GrabberCount = _RefGrabbers.Length;
-        PointUpdate.pGrabbers = pGrabbers;
-        PointUpdate.pGrabberExs = pGrabberExs;
-        PointUpdate.pRPoints = pRPoints;
-        PointUpdate.pRWPoints = pRWPoints;
-        PointUpdate.WindForce = WindForce;
-        PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
-        _hJob = PointUpdate.Schedule(_PointCount, 8);
+        UpdatePoints(
+            WindForce, StepTime,
+            IsEnableFloorCollision, FloorHeight);
 
         for (int i = 0; i < Relaxation; ++i)
         {
-            foreach (var constraint in _Constraints)
+            ConstraintUpdate(SpringK);
+        }
+
+        PointToTransform();
+    }
+
+    void UpdatePoints(
+        Vector3 WindForce, float StepTime,
+        bool IsEnableFloorCollision, float FloorHeight)
+    {
+        var StepTime_x2_Half = StepTime * StepTime * 0.5f;
+
+        for (int i = 0; i < _Points.Length; ++i)
+        {
+            UpdatePointsOne(
+                WindForce, StepTime_x2_Half,
+                IsEnableFloorCollision, FloorHeight,
+                i, ref _Points[i]);
+        }
+    }
+
+    void UpdatePointsOne(
+        Vector3 WindForce, float StepTime_x2_Half,
+        bool IsEnableFloorCollision, float FloorHeight,
+        int Index, ref Point point)
+    {
+        if (point.Weight < EPSILON) return;
+
+        Vector3 Force;
+        Force = point.Gravity;
+        Force += WindForce;
+        Force *= StepTime_x2_Half;
+
+        Vector3 Displacement;
+        Displacement = point.Position - point.OldPosition;
+        Displacement += Force / point.Mass;
+        Displacement *= point.Resistance;
+        Displacement *= 1.0f - (point.Friction * point.FrictionScale);
+
+        point.OldPosition = point.Position;
+        point.Position += Displacement;
+        point.Friction = 0.0f;
+
+        if (point.GrabberIndex != -1)
+        {
+            var grabber = _Grabbers[point.GrabberIndex];
+            if (!grabber.IsEnabled)
             {
-                var ConstraintUpdate = new JobConstraintUpdate();
-                ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
-                ConstraintUpdate.pRPoints = pRPoints;
-                ConstraintUpdate.pRWPoints = pRWPoints;
-                ConstraintUpdate.pColliders = pColliders;
-                ConstraintUpdate.pColliderExs = pColliderExs;
-                ConstraintUpdate.ColliderCount = ColliderCount;
-                ConstraintUpdate.SpringK = SpringK;
-                _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
-            }
-        }
-
-        if (IsEnableFloorCollision || IsEnableColliderCollision)
-        {
-            var CollisionPoint = new JobCollisionPoint();
-            CollisionPoint.pRWPoints = pRWPoints;
-            CollisionPoint.pColliders = pColliders;
-            CollisionPoint.pColliderExs = pColliderExs;
-            CollisionPoint.ColliderCount = ColliderCount;
-            CollisionPoint.FloorHeight = FloorHeight;
-            CollisionPoint.IsEnableFloor = IsEnableFloorCollision;
-            CollisionPoint.IsEnableCollider = IsEnableColliderCollision;
-            _hJob = CollisionPoint.Schedule(_PointCount, 8, _hJob);
-        }
-
-        var PointToTransform = new JobPointToTransform();
-        PointToTransform.pRPoints = pRPoints;
-        PointToTransform.pRWPoints = pRWPoints;
-        _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
-    }
-
-    public void WaitForComplete()
-    {
-        _hJob.Complete();
-        _hJob = default(JobHandle);
-    }
-
-    public void DrawGizmos_Points()
-    {
-        Gizmos.color = Color.blue;
-        for (int i = 0; i < _PointCount; ++i)
-        {
-            Gizmos.DrawSphere(_PointsRW[i].Position, 0.005f);
-        }
-    }
-
-    public void DrawGizmos_Constraints(int A, int B)
-    {
-        Gizmos.DrawLine(_PointTransforms[A].position, _PointTransforms[B].position);
-    }
-
-    [BurstCompile]
-    struct JobPointUpdate : IJobParallelFor
-    {
-        [ReadOnly]
-        public int GrabberCount;
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public Grabber* pGrabbers;
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public GrabberEx* pGrabberExs;
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public PointRead* pRPoints;
-        [NativeDisableUnsafePtrRestriction]
-        public PointReadWrite* pRWPoints;
-
-        [ReadOnly]
-        public Vector3 WindForce;
-        [ReadOnly]
-        public float StepTime_x2_Half;
-
-        void IJobParallelFor.Execute(int index)
-        {
-            var pR = pRPoints + index;
-            if (pR->Weight <= EPSILON) return;
-
-            var pRW = pRWPoints + index;
-
-            Vector3 Force = Vector3.zero;
-            Force += pR->Gravity;
-            Force += WindForce;
-            Force *= StepTime_x2_Half;
-
-            Vector3 Displacement;
-            Displacement = pRW->Position - pRW->OldPosition;
-            Displacement += Force / pR->Mass;
-            Displacement *= pR->Resistance;
-            Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
-
-            pRW->OldPosition = pRW->Position;
-            pRW->Position += Displacement;
-            pRW->Friction = 0.0f;
-
-            if (pRW->GrabberIndex != -1)
-            {
-                Grabber* pGR = pGrabbers + pRW->GrabberIndex;
-                GrabberEx* pGRW = pGrabberExs + pRW->GrabberIndex;
-                if (pGRW->IsEnabled == 0)
-                {
-                    pRW->GrabberIndex = -1;
-                    return;
-                }
-
-                var Vec = pRW->Position - pGRW->Position;
-                var Pos = pGRW->Position + Vec.normalized * pRW->GrabberDistance;
-                pRW->Position += (Pos - pRW->Position) * pGR->Force;
+                point.GrabberIndex = -1;
             }
             else
             {
-                int NearIndex = -1;
-                float sqrNearRange = 1000.0f * 1000.0f;
-                for (int i = 0; i < GrabberCount; ++i)
+                var Vec = point.Position - grabber.Position;
+                var Pos = grabber.Position + Vec.normalized * point.GrabberDistance;
+                point.Position += (Pos - point.Position) * grabber.Force;
+            }
+        }
+        else
+        {
+            var NearIndex = -1;
+            var sqrNearRange = 1000.0f * 1000.0f;
+            for (int i = 0; i < _Grabbers.Length; ++i)
+            {
+                var grabber = _Grabbers[i];
+                if (!grabber.IsEnabled) continue;
+
+                var Vec = grabber.Position - point.Position;
+                var sqrVecLength = Vec.sqrMagnitude;
+                if (sqrVecLength < grabber.Radius * grabber.Radius)
                 {
-                    Grabber* pGR = pGrabbers + i;
-                    GrabberEx* pGRW = pGrabberExs + i;
-
-                    if (pGRW->IsEnabled == 0) continue;
-
-                    var Vec = pGRW->Position - pRW->Position;
-                    var sqrVecLength = Vec.sqrMagnitude;
-                    if (sqrVecLength < pGR->Radius * pGR->Radius)
+                    if (sqrVecLength < sqrNearRange)
                     {
-                        if (sqrVecLength < sqrNearRange)
-                        {
-                            sqrNearRange = sqrVecLength;
-                            NearIndex = i;
-                        }
+                        sqrNearRange = sqrVecLength;
+                        NearIndex = Index;
                     }
                 }
-                if (NearIndex != -1)
-                {
-                    pRW->GrabberIndex = NearIndex;
-                    pRW->GrabberDistance = Mathf.Sqrt(sqrNearRange) / 2.0f;
-                }
+            }
+            if (NearIndex != -1)
+            {
+                point.GrabberIndex = NearIndex;
+                point.GrabberDistance = Mathf.Sqrt(sqrNearRange) / 2.0f;
+            }
+        }
+
+        if (IsEnableFloorCollision)
+        {
+            if (point.Position.y <= FloorHeight)
+            {
+                point.Position.y = FloorHeight;
             }
         }
     }
 
-    [BurstCompile]
-    struct JobConstraintUpdate : IJobParallelFor
+    void ConstraintUpdate(float SpringK)
     {
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public Constraint* pConstraints;
-
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public PointRead* pRPoints;
-        [NativeDisableUnsafePtrRestriction]
-        public PointReadWrite* pRWPoints;
-
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public Collider* pColliders;
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public ColliderEx* pColliderExs;
-        [ReadOnly]
-        public int ColliderCount;
-
-        [ReadOnly]
-        public float SpringK;
-
-        void IJobParallelFor.Execute(int index)
+        for (int i = 0; i < _Constraints.Length; ++i)
         {
-            var constraint = pConstraints + index;
-            var RptA = pRPoints + constraint->IndexA;
-            var RptB = pRPoints + constraint->IndexB;
-
-            float WeightA = RptA->Weight;
-            float WeightB = RptB->Weight;
-
-            if ((WeightA <= EPSILON) && (WeightB <= EPSILON)) return;
-
-            var RWptA = pRWPoints + constraint->IndexA;
-            var RWptB = pRWPoints + constraint->IndexB;
-
-            var Direction = RWptB->Position - RWptA->Position;
-
-            float Distance = Direction.magnitude;
-            float Force = (Distance - constraint->Length) * SpringK;
-
-            bool IsShrink = Force >= 0.0f;
-            float ConstraintPower;
-            switch (constraint->Type)
+            for (int j = 0; j < _Constraints[i].Length; ++j)
             {
-            case SPCRJointDynamicsController.ConstraintType.Structural_Vertical:
-                ConstraintPower = IsShrink
-                    ? constraint->Shrink * (RptA->StructuralShrinkVertical + RptB->StructuralShrinkVertical)
-                    : constraint->Stretch * (RptA->StructuralStretchVertical + RptB->StructuralStretchVertical);
-                break;
-            case SPCRJointDynamicsController.ConstraintType.Structural_Horizontal:
-                ConstraintPower = IsShrink
-                    ? constraint->Shrink * (RptA->StructuralShrinkHorizontal + RptB->StructuralShrinkHorizontal)
-                    : constraint->Stretch * (RptA->StructuralStretchHorizontal + RptB->StructuralStretchHorizontal);
-                break;
-            case SPCRJointDynamicsController.ConstraintType.Shear:
-                ConstraintPower = IsShrink
-                    ? constraint->Shrink * (RptA->ShearShrink + RptB->ShearShrink)
-                    : constraint->Stretch * (RptA->ShearStretch + RptB->ShearStretch);
-                break;
-            case SPCRJointDynamicsController.ConstraintType.Bending_Vertical:
-                ConstraintPower = IsShrink
-                    ? constraint->Shrink * (RptA->BendingShrinkVertical + RptB->BendingShrinkVertical)
-                    : constraint->Stretch * (RptA->BendingStretchVertical + RptB->BendingStretchVertical);
-                break;
-            case SPCRJointDynamicsController.ConstraintType.Bending_Horizontal:
-                ConstraintPower = IsShrink
-                    ? constraint->Shrink * (RptA->BendingShrinkHorizontal + RptB->BendingShrinkHorizontal)
-                    : constraint->Stretch * (RptA->BendingStretchHorizontal + RptB->BendingStretchHorizontal);
-                break;
-            default:
-                ConstraintPower = 0.0f;
-                break;
-            }
-
-            if (ConstraintPower > 0.0f)
-            {
-                var Displacement = Direction.normalized * (Force * ConstraintPower);
-
-                float WightAB = WeightA + WeightB;
-                RWptA->Position += Displacement * WeightA / WightAB;
-                RWptB->Position -= Displacement * WeightB / WightAB;
-            }
-
-            if (constraint->IsCollision == 0) return;
-
-            float Friction = 0.0f;
-            for (int i = 0; i < ColliderCount; ++i)
-            {
-                Collider* pCollider = pColliders + i;
-                ColliderEx* pColliderEx = pColliderExs + i;
-
-                float Radius;
-                Vector3 pointOnLine, pointOnCollider;
-                if (CollisionDetection(pCollider, pColliderEx, RWptA->Position, RWptB->Position, out pointOnLine, out pointOnCollider, out Radius))
-                {
-                    var Pushout = pointOnLine - pointOnCollider;
-                    var PushoutDistance = Pushout.magnitude;
-
-                    var pointDistance = (RWptB->Position - RWptA->Position).magnitude * 0.5f;
-                    var rateP1 = Mathf.Clamp01((pointOnLine - RWptA->Position).magnitude / pointDistance);
-                    var rateP2 = Mathf.Clamp01((pointOnLine - RWptB->Position).magnitude / pointDistance);
-
-                    Pushout /= PushoutDistance;
-                    Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
-                    RWptA->Position += Pushout * rateP2;
-                    RWptB->Position += Pushout * rateP1;
-
-                    var Dot = Vector3.Dot(Vector3.up, (pointOnLine - pointOnCollider).normalized);
-                    Friction = Mathf.Max(Friction, pCollider->Friction * Mathf.Clamp01(Dot));
-                }
-            }
-
-            RWptA->Friction = Mathf.Max(Friction, RWptA->Friction);
-            RWptB->Friction = Mathf.Max(Friction, RWptB->Friction);
-        }
-
-        bool CollisionDetection(Collider* pCollider, ColliderEx* pColliderEx, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider, out float Radius)
-        {
-            if (pCollider->Height <= EPSILON)
-            {
-                var direction = point2 - point1;
-                var directionLength = direction.magnitude;
-                direction /= directionLength;
-
-                var toCenter = pColliderEx->Position - point1;
-                var dot = Vector3.Dot(direction, toCenter);
-                var pointOnDirection = direction * Mathf.Clamp(dot, 0.0f, directionLength);
-
-                pointOnCollider = pColliderEx->Position;
-                pointOnLine = pointOnDirection + point1;
-                Radius = pCollider->RadiusHead;
-
-                if ((pointOnCollider - pointOnLine).sqrMagnitude > pCollider->RadiusHead * pCollider->RadiusHead)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            else
-            {
-                var capsuleDir = pColliderEx->Direction;
-                var capsulePos = pColliderEx->Position;
-                var pointDir = point2 - point1;
-
-                float t1, t2;
-                var sqrDistance = ComputeNearestPoints(capsulePos, capsuleDir, point1, pointDir, out t1, out t2, out pointOnCollider, out pointOnLine);
-                t1 = Mathf.Clamp01(t1);
-                Radius = pCollider->RadiusHead + (pCollider->RadiusTail - pCollider->RadiusHead) * t1;
-
-                if (sqrDistance > Radius * Radius)
-                {
-                    pointOnCollider = Vector3.zero;
-                    pointOnLine = Vector3.zero;
-                    return false;
-                }
-
-                t2 = Mathf.Clamp01(t2);
-
-                pointOnCollider = capsulePos + capsuleDir * t1;
-                pointOnLine = point1 + pointDir * t2;
-
-                return (pointOnCollider - pointOnLine).sqrMagnitude <= Radius * Radius;
-            }
-        }
-
-        float ComputeNearestPoints(Vector3 posP, Vector3 dirP, Vector3 posQ, Vector3 dirQ, out float tP, out float tQ, out Vector3 pointOnP, out Vector3 pointOnQ)
-        {
-            var n1 = Vector3.Cross(dirP, Vector3.Cross(dirQ, dirP));
-            var n2 = Vector3.Cross(dirQ, Vector3.Cross(dirP, dirQ));
-
-            tP = Vector3.Dot((posQ - posP), n2) / Vector3.Dot(dirP, n2);
-            tQ = Vector3.Dot((posP - posQ), n1) / Vector3.Dot(dirQ, n1);
-            pointOnP = posP + dirP * tP;
-            pointOnQ = posQ + dirQ * tQ;
-
-            return (pointOnQ - pointOnP).sqrMagnitude;
-        }
-    }
-
-    [BurstCompile]
-    struct JobCollisionPoint : IJobParallelFor
-    {
-        [NativeDisableUnsafePtrRestriction]
-        public PointReadWrite* pRWPoints;
-
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public Collider* pColliders;
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public ColliderEx* pColliderExs;
-        [ReadOnly]
-        public int ColliderCount;
-
-        [ReadOnly]
-        public float FloorHeight;
-
-        [ReadOnly]
-        public bool IsEnableFloor;
-        public bool IsEnableCollider;
-
-        void IJobParallelFor.Execute(int index)
-        {
-            var pRW = pRWPoints + index;
-
-            if (IsEnableFloor)
-            {
-                if (pRW->Position.y <= FloorHeight)
-                {
-                    pRW->Position.y = FloorHeight;
-                }
-            }
-
-            if (IsEnableCollider)
-            {
-                for (int i = 0; i < ColliderCount; ++i)
-                {
-                    Collider* pCollider = pColliders + i;
-                    ColliderEx* pColliderEx = pColliderExs + i;
-
-                    if (pCollider->Height <= 0.0f)
-                    {
-                        PushoutFromSphere(pCollider, pColliderEx, ref pRW->Position);
-                    }
-                    else
-                    {
-                        PushoutFromCapsule(pCollider, pColliderEx, ref pRW->Position);
-                    }
-                }
-            }
-        }
-
-        void PushoutFromSphere(Vector3 Center, float Radius, ref Vector3 point)
-        {
-            var direction = point - Center;
-            var sqrDirectionLength = direction.magnitude;
-            var radius = Radius;
-            if (sqrDirectionLength > EPSILON)
-            {
-                if (sqrDirectionLength < radius * radius)
-                {
-                    var directionLength = Mathf.Sqrt(sqrDirectionLength);
-                    var diff = radius - directionLength;
-                    point = direction * diff / directionLength;
-                    return;
-                }
-            }
-        }
-
-        void PushoutFromSphere(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
-        {
-            PushoutFromSphere(pColliderEx->Position, pCollider->RadiusHead, ref point);
-        }
-
-        void PushoutFromCapsule(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
-        {
-            var capsuleVec = pColliderEx->Direction;
-            var capsulePos = pColliderEx->Position;
-            var targetVec = point - capsulePos;
-            var distanceOnVec = Vector3.Dot(capsuleVec, targetVec);
-            if (distanceOnVec <= EPSILON)
-            {
-                PushoutFromSphere(capsulePos, pCollider->RadiusHead, ref point);
-                return;
-            }
-            else if (distanceOnVec >= pCollider->Height)
-            {
-                PushoutFromSphere(capsulePos + capsuleVec * distanceOnVec, pCollider->RadiusTail, ref point);
-                return;
-            }
-            else
-            {
-                var positionOnVec = capsulePos + (capsuleVec * distanceOnVec);
-                var pushoutVec = point - positionOnVec;
-                var sqrPushoutDistance = pushoutVec.sqrMagnitude;
-                if (sqrPushoutDistance > EPSILON)
-                {
-                    var Radius = pCollider->RadiusHead + (pCollider->RadiusTail - pCollider->RadiusHead) * distanceOnVec;
-                    if (sqrPushoutDistance < Radius * Radius)
-                    {
-                        var pushoutDistance = Mathf.Sqrt(sqrPushoutDistance);
-                        point = positionOnVec + pushoutVec * Radius / pushoutDistance;
-                        return;
-                    }
-                }
+                Constraint constraint = _Constraints[i][j];
+                ConstraintUpdateOne(
+                    constraint,
+                    ref _Points[constraint.IndexA],
+                    ref _Points[constraint.IndexB],
+                    SpringK);
             }
         }
     }
 
-    [BurstCompile]
-    struct JobPointToTransform : IJobParallelForTransform
+    void ConstraintUpdateOne(Constraint constraint, ref Point pointA, ref Point pointB, float SpringK)
     {
-        [ReadOnly, NativeDisableUnsafePtrRestriction]
-        public PointRead* pRPoints;
-        [NativeDisableUnsafePtrRestriction]
-        public PointReadWrite* pRWPoints;
+        var WeightA = pointA.Weight;
+        var WeightB = pointB.Weight;
 
-        void IJobParallelForTransform.Execute(int index, TransformAccess transform)
+        if ((WeightA <= EPSILON) && (WeightB <= EPSILON)) return;
+
+        var Direction = pointB.Position - pointA.Position;
+
+        var Distance = Direction.magnitude;
+        var Force = (Distance - constraint.Length) * SpringK;
+
+        var IsShrink = Force >= 0.0f;
+        float ConstraintPower;
+        switch (constraint.Type)
         {
-            var pRW = pRWPoints + index;
-            var pR = pRPoints + index;
+        case SPCRJointDynamicsController.ConstraintType.Structural_Vertical:
+            ConstraintPower = IsShrink
+                ? constraint.Shrink * (pointA.StructuralShrinkVertical + pointB.StructuralShrinkVertical)
+                : constraint.Stretch * (pointA.StructuralStretchVertical + pointB.StructuralStretchVertical);
+            break;
+        case SPCRJointDynamicsController.ConstraintType.Structural_Horizontal:
+            ConstraintPower = IsShrink
+                ? constraint.Shrink * (pointA.StructuralShrinkHorizontal + pointB.StructuralShrinkHorizontal)
+                : constraint.Stretch * (pointA.StructuralStretchHorizontal + pointB.StructuralStretchHorizontal);
+            break;
+        case SPCRJointDynamicsController.ConstraintType.Shear:
+            ConstraintPower = IsShrink
+                ? constraint.Shrink * (pointA.ShearShrink + pointB.ShearShrink)
+                : constraint.Stretch * (pointA.ShearStretch + pointB.ShearStretch);
+            break;
+        case SPCRJointDynamicsController.ConstraintType.Bending_Vertical:
+            ConstraintPower = IsShrink
+                ? constraint.Shrink * (pointA.BendingShrinkVertical + pointB.BendingShrinkVertical)
+                : constraint.Stretch * (pointA.BendingStretchVertical + pointB.BendingStretchVertical);
+            break;
+        case SPCRJointDynamicsController.ConstraintType.Bending_Horizontal:
+            ConstraintPower = IsShrink
+                ? constraint.Shrink * (pointA.BendingShrinkHorizontal + pointB.BendingShrinkHorizontal)
+                : constraint.Stretch * (pointA.BendingStretchHorizontal + pointB.BendingStretchHorizontal);
+            break;
+        default:
+            ConstraintPower = 0.0f;
+            break;
+        }
 
-            if (pR->Weight >= EPSILON)
+        if (ConstraintPower > 0.0f)
+        {
+            var Displacement = Direction.normalized * (Force * ConstraintPower);
+
+            float WightAB = WeightA + WeightB;
+            pointA.Position += Displacement * WeightA / WightAB;
+            pointB.Position -= Displacement * WeightB / WightAB;
+        }
+
+        if (!constraint.IsCollision) return;
+
+        float Friction = 0.0f;
+        for (int k = 0; k < _Colliders.Length; ++k)
+        {
+            Collider collider = _Colliders[k];
+
+            float Radius;
+            Vector3 pointOnLine, pointOnCollider;
+            if (CollisionDetection(collider, pointA.Position, pointB.Position, out pointOnLine, out pointOnCollider, out Radius))
             {
-                var pRWP = pRWPoints + pR->Parent;
-                var Direction = pRW->Position - pRWP->Position;
-                var RealLength = Direction.magnitude;
-                if (RealLength > EPSILON)
-                {
-                    pRW->PreviousDirection = Direction;
-                    transform.position = pRW->Position;
-                    SetRotation(index, transform);
-                }
-                else
-                {
-                    pRW->Position = pRWP->Position + pRW->PreviousDirection;
-                }
-            }
-            else
-            {
-                pRW->Position = transform.position;
-                SetRotation(index, transform);
+                var Pushout = pointOnLine - pointOnCollider;
+                var PushoutDistance = Pushout.magnitude;
+
+                var pointDistance = (pointB.Position - pointA.Position).magnitude * 0.5f;
+                var rateP1 = Mathf.Clamp01((pointOnLine - pointA.Position).magnitude / pointDistance);
+                var rateP2 = Mathf.Clamp01((pointOnLine - pointB.Position).magnitude / pointDistance);
+
+                Pushout /= PushoutDistance;
+                Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
+                pointA.Position += Pushout * rateP2;
+                pointB.Position += Pushout * rateP1;
+
+                var Dot = Vector3.Dot(Vector3.up, (pointOnLine - pointOnCollider).normalized);
+                Friction = Mathf.Max(Friction, collider.Friction * Mathf.Clamp01(Dot));
             }
         }
 
-        void SetRotation(int index, TransformAccess transform)
-        {
-            var pR = pRPoints + index;
-            var pRW = pRWPoints + index;
+        pointA.Friction = Mathf.Max(Friction, pointA.Friction);
+        pointB.Friction = Mathf.Max(Friction, pointB.Friction);
+    }
 
-            transform.localRotation = Quaternion.identity * pR->LocalRotation;
-            if (pR->Child != -1)
+    bool CollisionDetection(Collider collider, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider, out float Radius)
+    {
+        if (collider.Height <= EPSILON)
+        {
+            var direction = point2 - point1;
+            var directionLength = direction.magnitude;
+            direction /= directionLength;
+
+            var toCenter = collider.Position - point1;
+            var dot = Vector3.Dot(direction, toCenter);
+            var pointOnDirection = direction * Mathf.Clamp(dot, 0.0f, directionLength);
+
+            pointOnCollider = collider.Position;
+            pointOnLine = pointOnDirection + point1;
+            Radius = collider.RadiusHead;
+
+            if ((pointOnCollider - pointOnLine).sqrMagnitude > collider.RadiusHead * collider.RadiusHead)
             {
-                var pRWC = pRWPoints + pR->Child;
-                var Direction = pRWC->Position - pRW->Position;
-                if (Direction.sqrMagnitude > EPSILON)
-                {
-                    Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
-                    Vector3 AimVector = mRotate * pR->BoneAxis;
-                    Quaternion AimRotation = Quaternion.FromToRotation(AimVector, Direction);
-                    transform.rotation = AimRotation * transform.rotation;
-                }
+                return false;
+            }
+
+            return true;
+        }
+        else
+        {
+            var capsuleDir = collider.Direction;
+            var capsulePos = collider.Position;
+            var pointDir = point2 - point1;
+
+            float t1, t2;
+            var sqrDistance = ComputeNearestPoints(capsulePos, capsuleDir, point1, pointDir, out t1, out t2, out pointOnCollider, out pointOnLine);
+            t1 = Mathf.Clamp01(t1);
+            Radius = collider.RadiusHead + (collider.RadiusTail - collider.RadiusHead) * t1;
+
+            if (sqrDistance > Radius * Radius)
+            {
+                pointOnCollider = Vector3.zero;
+                pointOnLine = Vector3.zero;
+                return false;
+            }
+
+            t2 = Mathf.Clamp01(t2);
+
+            pointOnCollider = capsulePos + capsuleDir * t1;
+            pointOnLine = point1 + pointDir * t2;
+
+            return (pointOnCollider - pointOnLine).sqrMagnitude <= Radius * Radius;
+        }
+    }
+
+    float ComputeNearestPoints(Vector3 posP, Vector3 dirP, Vector3 posQ, Vector3 dirQ, out float tP, out float tQ, out Vector3 pointOnP, out Vector3 pointOnQ)
+    {
+        var n1 = Vector3.Cross(dirP, Vector3.Cross(dirQ, dirP));
+        var n2 = Vector3.Cross(dirQ, Vector3.Cross(dirP, dirQ));
+
+        tP = Vector3.Dot((posQ - posP), n2) / Vector3.Dot(dirP, n2);
+        tQ = Vector3.Dot((posP - posQ), n1) / Vector3.Dot(dirQ, n1);
+        pointOnP = posP + dirP * tP;
+        pointOnQ = posQ + dirQ * tQ;
+
+        return (pointOnQ - pointOnP).sqrMagnitude;
+    }
+
+    void PointToTransform()
+    {
+        for (int i = 0; i < _Points.Length; ++i)
+        {
+            PointToTransformOne(_PointTransforms[i], ref _Points[i]);
+        }
+    }
+
+    void PointToTransformOne(Transform transform, ref Point point)
+    {
+        if (point.Weight > EPSILON)
+        {
+            var parent = _Points[point.Parent];
+            var direction = point.Position - parent.Position;
+            var realLength = direction.magnitude;
+            if (realLength > EPSILON)
+            {
+                point.PreviousDirection = direction;
+                transform.position = point.Position;
+                SetRotation(transform, ref point);
+            }
+            else
+            {
+                point.Position = parent.Position + point.PreviousDirection;
+            }
+        }
+        else
+        {
+            point.Position = transform.position;
+            SetRotation(transform, ref point);
+        }
+    }
+
+    void SetRotation(Transform transform, ref Point point)
+    {
+        transform.localRotation = Quaternion.identity * point.LocalRotation;
+        if (point.Child != -1)
+        {
+            var child = _Points[point.Child];
+            var direction = child.Position - point.Position;
+            if (direction.sqrMagnitude > EPSILON)
+            {
+                var aimVector = transform.TransformDirection(point.BoneAxis);
+                var aimRotation = Quaternion.FromToRotation(aimVector, direction);
+                transform.rotation = aimRotation * transform.rotation;
             }
         }
     }

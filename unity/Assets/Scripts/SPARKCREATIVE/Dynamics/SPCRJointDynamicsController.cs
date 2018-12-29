@@ -70,8 +70,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsEnableFloorCollision = true;
     public float _FloorHeight = 0.02f;
 
-    public bool _IsEnableColliderCollision = false;
-
     public bool _IsCancelResetPhysics = false;
 
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -262,8 +260,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Job.Execute(
             StepTime, _WindForce * WindForcePower,
             _Relaxation, _SpringK,
-            _IsEnableFloorCollision, _FloorHeight,
-            _IsEnableColliderCollision);
+            _IsEnableFloorCollision, _FloorHeight);
     }
 
     void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)
@@ -704,7 +701,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     Length = src._Length,
                     Shrink = _BendingingShrinkHorizontal,
                     Stretch = _BendingingStretchHorizontal,
-                    IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingHorizontal) ? 1 : 0,
+                    IsCollision = !src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingHorizontal,
                 });
             }
         }
@@ -720,7 +717,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     Length = src._Length,
                     Shrink = _StructuralShrinkHorizontal,
                     Stretch = _StructuralStretchHorizontal,
-                    IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralHorizontal) ? 1 : 0,
+                    IsCollision = !src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralHorizontal,
                 });
             }
         }
@@ -736,7 +733,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     Length = src._Length,
                     Shrink = _ShearShrink,
                     Stretch = _ShearStretch,
-                    IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideShear) ? 1 : 0,
+                    IsCollision = !src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideShear,
                 });
             }
         }
@@ -752,7 +749,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     Length = src._Length,
                     Shrink = _BendingingShrinkVertical,
                     Stretch = _BendingingStretchVertical,
-                    IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingVertical) ? 1 : 0,
+                    IsCollision = !src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingVertical,
                 });
             }
         }
@@ -768,7 +765,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     Length = src._Length,
                     Shrink = _StructuralShrinkVertical,
                     Stretch = _StructuralStretchVertical,
-                    IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralVertical) ? 1 : 0,
+                    IsCollision = !src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralVertical,
                 });
             }
         }
@@ -793,9 +790,13 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        Gizmos.color = Color.magenta;
-        _Job.DrawGizmos_Points();
+        Gizmos.color = Color.blue;
+        for (int i = 0; i < _PointTbl.Length; ++i)
+        {
+            Gizmos.DrawSphere(_PointTbl[i].transform.position, 0.002f);
+        }
 
+        Gizmos.color = Color.magenta;
         if (_IsDebugDraw_StructuralVertical)
         {
             Gizmos.color = new Color(0.8f, 0.4f, 0.4f);

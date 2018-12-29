@@ -63,18 +63,18 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             Gizmos.DrawLine(forward_head - up, forward_tail + up);
             Gizmos.DrawLine(-forward_head - up, -forward_tail + up);
 
-            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot);
+            Gizmos.matrix = Matrix4x4.TRS(top, rot, Vector3.one);
             DrawWireArc(_Radius * _TailRadiusScale, 360);
-            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot);
+            Gizmos.matrix = Matrix4x4.TRS(bottom, rot, Vector3.one);
             DrawWireArc(_Radius * _HeadRadiusScale, 360);
 
-            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.TRS(top, rot * Quaternion.AngleAxis(90, Vector3.forward), Vector3.one);
             DrawWireArc(_Radius * _TailRadiusScale, 180);
-            Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.TRS(top, rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward), Vector3.one);
             DrawWireArc(_Radius * _TailRadiusScale, 180);
-            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.TRS(bottom, rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward), Vector3.one);
             DrawWireArc(_Radius * _HeadRadiusScale, 180);
-            Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(-90, Vector3.forward));
+            Gizmos.matrix = Matrix4x4.TRS(bottom, rot * Quaternion.AngleAxis(-90, Vector3.forward), Vector3.one);
             DrawWireArc(_Radius * _HeadRadiusScale, 180);
 
             Gizmos.matrix = mOld;
