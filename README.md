@@ -6,6 +6,9 @@
 
 * Unity2018.2.0f1にて動作確認  
 
+## License
+* [MIT License](./LICENSE)  
+
 ## 開発目的
 足がスカートを貫通するのを何とかして綺麗に広がるスカートを作ってみたい  
 ![](./image/sample.gif)  
