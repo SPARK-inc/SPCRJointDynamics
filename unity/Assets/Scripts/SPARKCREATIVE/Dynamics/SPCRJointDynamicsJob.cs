@@ -700,7 +700,7 @@ public unsafe class SPCRJointDynamicsJob
         void PushoutFromSphere(Vector3 Center, float Radius, ref Vector3 point)
         {
             var direction = point - Center;
-            var sqrDirectionLength = direction.magnitude;
+            var sqrDirectionLength = direction.sqrMagnitude;
             var radius = Radius;
             if (sqrDirectionLength > EPSILON)
             {
