@@ -79,6 +79,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller._MassScaleCurve = EditorGUILayout.CurveField("質量", controller._MassScaleCurve);
         controller._GravityScaleCurve = EditorGUILayout.CurveField("重力", controller._GravityScaleCurve);
         controller._ResistanceCurve = EditorGUILayout.CurveField("空気抵抗", controller._ResistanceCurve);
+        controller._HardnessCurve = EditorGUILayout.CurveField("硬さ", controller._HardnessCurve);
         controller._FrictionCurve = EditorGUILayout.CurveField("摩擦", controller._FrictionCurve);
 
         Titlebar("拘束設定", new Color(0.7f, 1.0f, 0.7f));

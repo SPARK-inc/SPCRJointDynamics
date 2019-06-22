@@ -77,6 +77,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
+    public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
     public AnimationCurve _FrictionCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.7f), new Keyframe(1.0f, 0.7f) });
 
     public AnimationCurve _AllShrinkScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -176,6 +177,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].Weight = src._IsFixed ? 0.0f : 1.0f;
             Points[i].Mass = src._Mass * _MassScaleCurve.Evaluate(rate);
             Points[i].Resistance = 1.0f - _ResistanceCurve.Evaluate(rate);
+            Points[i].Hardness = _HardnessCurve.Evaluate(rate);
             Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
             Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
             Points[i].BoneAxis = src._BoneAxis;
@@ -260,6 +262,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Accel += StepTime * 3.0f;
 
         _Job.Execute(
+            _RootTransform,
             StepTime, _WindForce * WindForcePower,
             _Relaxation, _SpringK,
             _IsEnableFloorCollision, _FloorHeight,
@@ -330,15 +333,71 @@ public class SPCRJointDynamicsController : MonoBehaviour
             }
         }
 
-        // Vertical Structural
-        _ConstraintsStructuralVertical = new SPCRJointDynamicsConstraint[0];
+        // Shear
+        _ConstraintsShear = new SPCRJointDynamicsConstraint[0];
+        {
+            var ConstraintList = new List<SPCRJointDynamicsConstraint>();
+            if (_IsLoopRootPoints)
+            {
+                for (int i = 0; i < HorizontalRootCount; ++i)
+                {
+                    CreationConstraintShear(
+                        _RootPointTbl[(i + 0) % HorizontalRootCount],
+                        _RootPointTbl[(i + 1) % HorizontalRootCount],
+                        ref ConstraintList);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < HorizontalRootCount - 1; ++i)
+                {
+                    CreationConstraintShear(
+                        _RootPointTbl[i + 0],
+                        _RootPointTbl[i + 1],
+                        ref ConstraintList);
+                }
+            }
+            _ConstraintsShear = ConstraintList.ToArray();
+        }
+
+        // Bending Horizontal
+        _ConstraintsBendingHorizontal = new SPCRJointDynamicsConstraint[0];
+        {
+            var ConstraintList = new List<SPCRJointDynamicsConstraint>();
+            if (_IsLoopRootPoints)
+            {
+                for (int i = 0; i < HorizontalRootCount; ++i)
+                {
+                    CreationConstraintBendingHorizontal(
+                        _RootPointTbl[(i + 0) % HorizontalRootCount],
+                        _RootPointTbl[(i + 2) % HorizontalRootCount],
+                        ref ConstraintList);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < HorizontalRootCount - 2; ++i)
+                {
+                    CreationConstraintBendingHorizontal(
+                        _RootPointTbl[i + 0],
+                        _RootPointTbl[i + 2],
+                        ref ConstraintList);
+                }
+            }
+            _ConstraintsBendingHorizontal = ConstraintList.ToArray();
+        }
+
+        // Bending Vertical
+        _ConstraintsBendingVertical = new SPCRJointDynamicsConstraint[0];
         {
             var ConstraintList = new List<SPCRJointDynamicsConstraint>();
             for (int i = 0; i < HorizontalRootCount; ++i)
             {
-                CreateConstraintStructuralVertical(_RootPointTbl[i], ref ConstraintList);
+                CreationConstraintBendingVertical(
+                    _RootPointTbl[i],
+                    ref ConstraintList);
             }
-            _ConstraintsStructuralVertical = ConstraintList.ToArray();
+            _ConstraintsBendingVertical = ConstraintList.ToArray();
         }
 
         // Stracturarl Horizontal
@@ -368,71 +427,15 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _ConstraintsStructuralHorizontal = ConstraintList.ToArray();
         }
 
-        // Shear
-        _ConstraintsShear = new SPCRJointDynamicsConstraint[0];
-        {
-            var ConstraintList = new List<SPCRJointDynamicsConstraint>();
-            if (_IsLoopRootPoints)
-            {
-                for (int i = 0; i < HorizontalRootCount; ++i)
-                {
-                    CreationConstraintShear(
-                        _RootPointTbl[(i + 0) % HorizontalRootCount],
-                        _RootPointTbl[(i + 1) % HorizontalRootCount],
-                        ref ConstraintList);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < HorizontalRootCount - 1; ++i)
-                {
-                    CreationConstraintShear(
-                        _RootPointTbl[i + 0],
-                        _RootPointTbl[i + 1],
-                        ref ConstraintList);
-                }
-            }
-            _ConstraintsShear = ConstraintList.ToArray();
-        }
-
-        // Bending Vertical
-        _ConstraintsBendingVertical = new SPCRJointDynamicsConstraint[0];
+        // Vertical Structural
+        _ConstraintsStructuralVertical = new SPCRJointDynamicsConstraint[0];
         {
             var ConstraintList = new List<SPCRJointDynamicsConstraint>();
             for (int i = 0; i < HorizontalRootCount; ++i)
             {
-                CreationConstraintBendingVertical(
-                    _RootPointTbl[i],
-                    ref ConstraintList);
+                CreateConstraintStructuralVertical(_RootPointTbl[i], ref ConstraintList);
             }
-            _ConstraintsBendingVertical = ConstraintList.ToArray();
-        }
-
-        // Bending Horizontal
-        _ConstraintsBendingHorizontal = new SPCRJointDynamicsConstraint[0];
-        {
-            var ConstraintList = new List<SPCRJointDynamicsConstraint>();
-            if (_IsLoopRootPoints)
-            {
-                for (int i = 0; i < HorizontalRootCount; ++i)
-                {
-                    CreationConstraintBendingHorizontal(
-                        _RootPointTbl[(i + 0) % HorizontalRootCount],
-                        _RootPointTbl[(i + 2) % HorizontalRootCount],
-                        ref ConstraintList);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < HorizontalRootCount - 2; ++i)
-                {
-                    CreationConstraintBendingHorizontal(
-                        _RootPointTbl[i + 0],
-                        _RootPointTbl[i + 2],
-                        ref ConstraintList);
-                }
-            }
-            _ConstraintsBendingHorizontal = ConstraintList.ToArray();
+            _ConstraintsStructuralVertical = ConstraintList.ToArray();
         }
 
         CreationConstraintTable();

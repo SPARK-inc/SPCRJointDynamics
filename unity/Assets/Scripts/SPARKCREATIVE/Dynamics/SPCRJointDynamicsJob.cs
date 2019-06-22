@@ -31,6 +31,7 @@ public unsafe class SPCRJointDynamicsJob
         public float Weight;
         public float Mass;
         public float Resistance;
+        public float Hardness;
         public float FrictionScale;
         public float ParentLength;
         public float StructuralShrinkVertical;
@@ -59,6 +60,7 @@ public unsafe class SPCRJointDynamicsJob
         public float Weight;
         public float Mass;
         public float Resistance;
+        public float Hardness;
         public float FrictionScale;
         public float ParentLength;
         public float StructuralShrinkVertical;
@@ -154,6 +156,7 @@ public unsafe class SPCRJointDynamicsJob
             PointsR[i].Weight = src.Weight;
             PointsR[i].Mass = src.Mass;
             PointsR[i].Resistance = src.Resistance;
+            PointsR[i].Hardness = src.Hardness;
             PointsR[i].FrictionScale = src.FrictionScale;
             PointsR[i].ParentLength = src.ParentLength;
             PointsR[i].StructuralShrinkHorizontal = src.StructuralShrinkHorizontal * 0.5f;
@@ -275,6 +278,7 @@ public unsafe class SPCRJointDynamicsJob
     }
 
     public void Execute(
+        Transform RootTransform,
         float StepTime, Vector3 WindForce,
         int Relaxation, float SpringK,
         bool IsEnableFloorCollision, float FloorHeight,
@@ -316,6 +320,7 @@ public unsafe class SPCRJointDynamicsJob
         }
 
         var PointUpdate = new JobPointUpdate();
+        PointUpdate.RootMatrix = RootTransform.localToWorldMatrix;
         PointUpdate.GrabberCount = _RefGrabbers.Length;
         PointUpdate.pGrabbers = pGrabbers;
         PointUpdate.pGrabberExs = pGrabberExs;
@@ -395,6 +400,8 @@ public unsafe class SPCRJointDynamicsJob
         public PointReadWrite* pRWPoints;
 
         [ReadOnly]
+        public Matrix4x4 RootMatrix;
+        [ReadOnly]
         public Vector3 WindForce;
         [ReadOnly]
         public float StepTime_x2_Half;
@@ -420,6 +427,12 @@ public unsafe class SPCRJointDynamicsJob
             pRW->OldPosition = pRW->Position;
             pRW->Position += Displacement;
             pRW->Friction = 0.0f;
+
+            if (pR->Hardness > 0.0f)
+            {
+                var Target = RootMatrix.MultiplyPoint3x4(pR->InitialPosition);
+                pRW->Position += (Target - pRW->Position) * pR->Hardness;
+            }
 
             if (pRW->GrabberIndex != -1)
             {
