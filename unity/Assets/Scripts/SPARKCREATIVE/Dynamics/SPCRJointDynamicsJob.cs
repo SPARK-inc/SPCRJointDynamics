@@ -721,7 +721,7 @@ public unsafe class SPCRJointDynamicsJob
                 {
                     var directionLength = Mathf.Sqrt(sqrDirectionLength);
                     var diff = radius - directionLength;
-                    point = direction * diff / directionLength;
+                    point = Center + direction * radius / directionLength;
                     return;
                 }
             }
@@ -735,9 +735,10 @@ public unsafe class SPCRJointDynamicsJob
         void PushoutFromCapsule(Collider* pCollider, ColliderEx* pColliderEx, ref Vector3 point)
         {
             var capsuleVec = pColliderEx->Direction;
+            var capsuleVecNormal = capsuleVec.normalized;
             var capsulePos = pColliderEx->Position;
             var targetVec = point - capsulePos;
-            var distanceOnVec = Vector3.Dot(capsuleVec, targetVec);
+            var distanceOnVec = Vector3.Dot(capsuleVecNormal, targetVec);
             if (distanceOnVec <= EPSILON)
             {
                 PushoutFromSphere(capsulePos, pCollider->RadiusHead, ref point);
@@ -745,12 +746,12 @@ public unsafe class SPCRJointDynamicsJob
             }
             else if (distanceOnVec >= pCollider->Height)
             {
-                PushoutFromSphere(capsulePos + capsuleVec * distanceOnVec, pCollider->RadiusTail, ref point);
+                PushoutFromSphere(capsulePos + capsuleVec, pCollider->RadiusTail, ref point);
                 return;
             }
             else
             {
-                var positionOnVec = capsulePos + (capsuleVec * distanceOnVec);
+                var positionOnVec = capsulePos + (capsuleVecNormal * distanceOnVec);
                 var pushoutVec = point - positionOnVec;
                 var sqrPushoutDistance = pushoutVec.sqrMagnitude;
                 if (sqrPushoutDistance > EPSILON)
