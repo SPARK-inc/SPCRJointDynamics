@@ -404,7 +404,11 @@ public class SPCRJointDynamicsControllerInspector : Editor
         var HCurve = new List<CurveData>();
 
         var RootTbl = Controller._RootPointTbl;
+#if UNITY_2018_3_OR_NEWER
+        PrefabUtility.UnpackPrefabInstance(Controller.gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+#else//UNITY_2018_3_OR_NEWER
         PrefabUtility.DisconnectPrefabInstance(Controller.gameObject);
+#endif//UNITY_2018_3_OR_NEWER
 
         for (int i = 0; i < RootTbl.Length; ++i)
         {
