@@ -11,6 +11,7 @@
 
 ## 開発目的
 足がスカートを貫通するのを何とかして綺麗に広がるスカートを作ってみたい  
+※UE4版 https://github.com/SPARK-inc/SPCRJointDynamicsUE4  
 ![](./image/sample.gif)  
 
 ## 基本仕様
