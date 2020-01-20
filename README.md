@@ -23,13 +23,6 @@
 ![](./image/constraint.png)  
 
 ## 事前準備
-![](./image/01.png)  
-まずはパッケージの設定をします。  
-上部メニューから Window ⇒ Package Manager を選択しPackage Managerを開きます。  
-  
-![](./image/02.png)  
-AllからBurstを選択しInstallします。  
-  
 ![](./image/03.png)  
 ビルド設定のプレイヤー設定から Scripting Runtime Versionを.Net4 以降にし  
 Allow 'unsafe' Code のチェックを入れてunsafeコードが使えるようにします。  
