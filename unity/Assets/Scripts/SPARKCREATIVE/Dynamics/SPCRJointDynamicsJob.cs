@@ -385,7 +385,7 @@ public unsafe class SPCRJointDynamicsJob
         Gizmos.DrawLine(_PointTransforms[A].position, _PointTransforms[B].position);
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     struct JobPointUpdate : IJobParallelFor
     {
         [ReadOnly]
@@ -479,7 +479,7 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     struct JobConstraintUpdate : IJobParallelFor
     {
         [ReadOnly, NativeDisableUnsafePtrRestriction]
@@ -659,7 +659,7 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     struct JobCollisionPoint : IJobParallelFor
     {
         [NativeDisableUnsafePtrRestriction]
@@ -768,7 +768,7 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     struct JobPointToTransform : IJobParallelForTransform
     {
         [ReadOnly, NativeDisableUnsafePtrRestriction]
