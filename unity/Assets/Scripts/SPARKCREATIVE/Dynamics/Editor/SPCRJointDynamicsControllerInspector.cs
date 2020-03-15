@@ -204,30 +204,36 @@ public class SPCRJointDynamicsControllerInspector : Editor
         if (GUILayout.Button("自動設定"))
         {
             controller.UpdateJointConnection();
+            EditorUtility.SetDirty(controller);
         }
         if (GUILayout.Button("自動設定（近ポイント自動検索XYZ）"))
         {
             SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ);
             controller.UpdateJointConnection();
+            EditorUtility.SetDirty(controller);
         }
         if (GUILayout.Button("自動設定（近ポイント自動検索XZ）"))
         {
             SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ);
             controller.UpdateJointConnection();
+            EditorUtility.SetDirty(controller);
         }
         if (GUILayout.Button("自動設定（近ポイント自動検索XYZ：先端終端固定）"))
         {
             SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd);
             controller.UpdateJointConnection();
+            EditorUtility.SetDirty(controller);
         }
         if (GUILayout.Button("自動設定（近ポイント自動検索XZ：先端終端固定）"))
         {
-            controller.UpdateJointConnection();
             SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd);
+            controller.UpdateJointConnection();
+            EditorUtility.SetDirty(controller);
         }
         if (GUILayout.Button("拘束長さ再計算"))
         {
             controller.UpdateJointDistance();
+            EditorUtility.SetDirty(controller);
         }
 
         Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
