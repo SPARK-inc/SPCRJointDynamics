@@ -409,9 +409,16 @@ public unsafe class SPCRJointDynamicsJob
         void IJobParallelFor.Execute(int index)
         {
             var pR = pRPoints + index;
-            if (pR->Weight <= EPSILON) return;
-
             var pRW = pRWPoints + index;
+
+            if (pR->Weight <= EPSILON)
+            {
+                pRW->OldPosition = pRW->Position;
+                pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialPosition);
+                pRW->Friction = 0.0f;
+
+                return;
+            }
 
             Vector3 Force = Vector3.zero;
             Force += pR->Gravity;
