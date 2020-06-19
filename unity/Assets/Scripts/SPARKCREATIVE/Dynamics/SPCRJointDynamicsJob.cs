@@ -127,6 +127,7 @@ public unsafe class SPCRJointDynamicsJob
     }
 
     Transform _RootBone;
+    Vector3 _OldRootPosition;
     int _PointCount;
     NativeArray<PointRead> _PointsR;
     NativeArray<PointReadWrite> _PointsRW;
@@ -145,6 +146,7 @@ public unsafe class SPCRJointDynamicsJob
     {
         _RootBone = RootBone;
         _PointCount = Points.Length;
+        _OldRootPosition = _RootBone.position;
 
         var PointsR = new PointRead[_PointCount];
         var PointsRW = new PointReadWrite[_PointCount];
@@ -275,10 +277,12 @@ public unsafe class SPCRJointDynamicsJob
             pPointRW[i].OldPosition = pPointRW[i].Position;
             _PointTransforms[i].position = pPointRW[i].Position;
         }
+
+        _OldRootPosition = _RootBone.position;
     }
 
     public void Execute(
-        Transform RootTransform,
+        Transform RootTransform, float RootSlideLimit,
         float StepTime, Vector3 WindForce,
         int Relaxation, float SpringK,
         bool IsEnableFloorCollision, float FloorHeight,
@@ -286,6 +290,16 @@ public unsafe class SPCRJointDynamicsJob
     {
         WaitForComplete();
 
+        var RootPosition = RootTransform.position;
+        var RootSlide = RootPosition - _OldRootPosition;
+        _OldRootPosition = RootPosition;
+
+        var SystemOffset = Vector3.zero;
+        float SlideLength = RootSlide.magnitude;
+        if (RootSlideLimit > 0.0f && SlideLength > RootSlideLimit)
+        {
+            SystemOffset = RootSlide * (1.0f - RootSlideLimit / SlideLength);
+        }
         var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
         var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
         var pColliders = (Collider*)_Colliders.GetUnsafePtr();
@@ -328,6 +342,7 @@ public unsafe class SPCRJointDynamicsJob
         PointUpdate.pRWPoints = pRWPoints;
         PointUpdate.WindForce = WindForce;
         PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
+        PointUpdate.SystemOffset = SystemOffset;
         _hJob = PointUpdate.Schedule(_PointCount, 8);
 
         for (int i = 0; i < Relaxation; ++i)
@@ -406,6 +421,9 @@ public unsafe class SPCRJointDynamicsJob
         [ReadOnly]
         public float StepTime_x2_Half;
 
+        [ReadOnly]
+        public Vector3 SystemOffset;
+
         void IJobParallelFor.Execute(int index)
         {
             var pR = pRPoints + index;
@@ -414,11 +432,15 @@ public unsafe class SPCRJointDynamicsJob
             if (pR->Weight <= EPSILON)
             {
                 pRW->OldPosition = pRW->Position;
+                pRW->OldPosition = pRW->Position + SystemOffset;
                 pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialPosition);
                 pRW->Friction = 0.0f;
 
                 return;
             }
+
+            pRW->Position += SystemOffset;
+            pRW->OldPosition += SystemOffset;
 
             Vector3 Force = Vector3.zero;
             Force += pR->Gravity;

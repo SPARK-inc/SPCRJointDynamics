@@ -69,6 +69,9 @@ public class SPCRJointDynamicsControllerInspector : Editor
         }
 
         GUILayout.Space(8);
+        controller._RootSlideLimit = EditorGUILayout.FloatField("ルートの最大移動距離", controller._RootSlideLimit);
+
+        GUILayout.Space(8);
         controller._SpringK = EditorGUILayout.Slider("バネ係数", controller._SpringK, 0.0f, 1.0f);
 
         GUILayout.Space(8);

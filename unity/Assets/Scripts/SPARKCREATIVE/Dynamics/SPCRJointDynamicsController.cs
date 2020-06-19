@@ -98,6 +98,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public float _SpringK = 1.0f;
 
+    public float _RootSlideLimit = 0.0f;
+
     public float _StructuralShrinkVertical = 1.0f;
     public float _StructuralStretchVertical = 1.0f;
     public float _StructuralShrinkHorizontal = 1.0f;
@@ -262,7 +264,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Accel += StepTime * 3.0f;
 
         _Job.Execute(
-            _RootTransform,
+            _RootTransform, _RootSlideLimit,
             StepTime, _WindForce * WindForcePower,
             _Relaxation, _SpringK,
             _IsEnableFloorCollision, _FloorHeight,
