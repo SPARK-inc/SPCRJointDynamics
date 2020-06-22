@@ -185,6 +185,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
         controller._IsDebugDraw_StructuralHorizontal = EditorGUILayout.Toggle("水平構造", controller._IsDebugDraw_StructuralHorizontal);
         controller._IsDebugDraw_Shear = EditorGUILayout.Toggle("せん断", controller._IsDebugDraw_Shear);
+        controller._IsDebugDraw_BendingVertical = EditorGUILayout.Toggle("垂直曲げ", controller._IsDebugDraw_BendingVertical);
+        controller._IsDebugDraw_BendingHorizontal = EditorGUILayout.Toggle("水平曲げ", controller._IsDebugDraw_BendingHorizontal);
 
         Titlebar("事前設定", new Color(1.0f, 1.0f, 0.7f));
         controller._IsLoopRootPoints = EditorGUILayout.Toggle("拘束のループ", controller._IsLoopRootPoints);
