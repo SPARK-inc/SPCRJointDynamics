@@ -96,6 +96,7 @@ public unsafe class SPCRJointDynamicsJob
         public int IndexA;
         public int IndexB;
         public float Length;
+        public float StretchLength;
         public float Shrink;
         public float Stretch;
     }
@@ -546,8 +547,15 @@ public unsafe class SPCRJointDynamicsJob
             var Direction = RWptB->Position - RWptA->Position;
 
             float Distance = Direction.magnitude;
-            float Force = (Distance - constraint->Length) * SpringK;
-
+            float Force = 0.0f;
+            if(Distance >= constraint->StretchLength)
+            {
+                Force = (Distance - constraint->StretchLength) * SpringK;
+            }
+            else if(Distance <= constraint->Length)
+            {
+                Force = (Distance - constraint->Length) * SpringK;
+            }
             bool IsShrink = Force >= 0.0f;
             float ConstraintPower;
             switch (constraint->Type)

@@ -38,19 +38,32 @@ public class SPCRJointDynamicsController : MonoBehaviour
         public ConstraintType _Type;
         public SPCRJointDynamicsPoint _PointA;
         public SPCRJointDynamicsPoint _PointB;
+        public SPCRJointDynamicsPoint _PointC; // Mid Point
         public float _Length;
+        public float _LengthACB;
 
-        public SPCRJointDynamicsConstraint(ConstraintType Type, SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB)
+        public SPCRJointDynamicsConstraint(ConstraintType Type, SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB, SPCRJointDynamicsPoint PointC=null)
         {
             _Type = Type;
             _PointA = PointA;
             _PointB = PointB;
+            _PointC = PointC;
             UpdateLength();
         }
 
         public void UpdateLength()
         {
             _Length = (_PointA.transform.position - _PointB.transform.position).magnitude;
+
+            if (_PointC != null)
+            {
+                _LengthACB = (_PointA.transform.position - _PointC.transform.position).magnitude;
+                _LengthACB += (_PointC.transform.position - _PointB.transform.position).magnitude;
+            }
+            else
+            {
+                _LengthACB = _Length;
+            }
         }
     }
 
@@ -375,6 +388,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     CreationConstraintBendingHorizontal(
                         _RootPointTbl[(i + 0) % HorizontalRootCount],
                         _RootPointTbl[(i + 2) % HorizontalRootCount],
+                        _RootPointTbl[(i + 1) % HorizontalRootCount],
                         ref ConstraintList);
                 }
             }
@@ -385,6 +399,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     CreationConstraintBendingHorizontal(
                         _RootPointTbl[i + 0],
                         _RootPointTbl[i + 2],
+                        _RootPointTbl[i + 1],
                         ref ConstraintList);
                 }
             }
@@ -611,6 +626,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         if (childA.childCount != 1) return;
         var childB = childA.transform.GetChild(0);
 
+        var childPointA = childA.GetComponent<SPCRJointDynamicsPoint>();
         var childPointB = childB.GetComponent<SPCRJointDynamicsPoint>();
 
         if (childPointB != null)
@@ -618,10 +634,10 @@ public class SPCRJointDynamicsController : MonoBehaviour
             ConstraintList.Add(new SPCRJointDynamicsConstraint(
                 ConstraintType.Bending_Vertical,
                 Point,
-                childPointB));
+                childPointB,
+                childPointA));
         }
 
-        var childPointA = childA.GetComponent<SPCRJointDynamicsPoint>();
         if (childPointA != null)
         {
             CreationConstraintBendingVertical(childPointA, ref ConstraintList);
@@ -631,6 +647,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
     void CreationConstraintBendingHorizontal(
         SPCRJointDynamicsPoint PointA,
         SPCRJointDynamicsPoint PointB,
+        SPCRJointDynamicsPoint PointC,
         ref List<SPCRJointDynamicsConstraint> ConstraintList)
     {
         if ((PointA == null) || (PointB == null)) return;
@@ -638,29 +655,38 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
         var childPointA = GetChildJointDynamicsPoint(PointA);
         var childPointB = GetChildJointDynamicsPoint(PointB);
+        var childPointC = (PointC == null) ? null : GetChildJointDynamicsPoint(PointC);
+
+        if(childPointC == null)
+        {
+            childPointC = PointC;
+        }
 
         if ((childPointA != null) && (childPointB != null))
         {
             ConstraintList.Add(new SPCRJointDynamicsConstraint(
                 ConstraintType.Bending_Horizontal,
                 childPointA,
-                childPointB));
+                childPointB,
+                childPointC));
 
-            CreationConstraintBendingHorizontal(childPointA, childPointB, ref ConstraintList);
+            CreationConstraintBendingHorizontal(childPointA, childPointB, childPointC, ref ConstraintList);
         }
         else if ((childPointA != null) && (childPointB == null))
         {
             ConstraintList.Add(new SPCRJointDynamicsConstraint(
                 ConstraintType.Bending_Horizontal,
                 childPointA,
-                PointB));
+                PointB,
+                childPointC));
         }
         else if ((childPointA == null) && (childPointB != null))
         {
             ConstraintList.Add(new SPCRJointDynamicsConstraint(
                 ConstraintType.Bending_Horizontal,
                 PointA,
-                childPointB));
+                childPointB,
+                childPointC));
         }
     }
 
@@ -709,6 +735,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     IndexA = src._PointA._Index,
                     IndexB = src._PointB._Index,
                     Length = src._Length,
+                    StretchLength = src._LengthACB,
                     Shrink = _BendingingShrinkHorizontal,
                     Stretch = _BendingingStretchHorizontal,
                     IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingHorizontal) ? 1 : 0,
@@ -725,6 +752,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     IndexA = src._PointA._Index,
                     IndexB = src._PointB._Index,
                     Length = src._Length,
+                    StretchLength = src._LengthACB,
                     Shrink = _StructuralShrinkHorizontal,
                     Stretch = _StructuralStretchHorizontal,
                     IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralHorizontal) ? 1 : 0,
@@ -741,6 +769,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     IndexA = src._PointA._Index,
                     IndexB = src._PointB._Index,
                     Length = src._Length,
+                    StretchLength = src._LengthACB,
                     Shrink = _ShearShrink,
                     Stretch = _ShearStretch,
                     IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideShear) ? 1 : 0,
@@ -757,6 +786,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     IndexA = src._PointA._Index,
                     IndexB = src._PointB._Index,
                     Length = src._Length,
+                    StretchLength = src._LengthACB,
                     Shrink = _BendingingShrinkVertical,
                     Stretch = _BendingingStretchVertical,
                     IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideBendingVertical) ? 1 : 0,
@@ -773,6 +803,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
                     IndexA = src._PointA._Index,
                     IndexB = src._PointB._Index,
                     Length = src._Length,
+                    StretchLength = src._LengthACB,
                     Shrink = _StructuralShrinkVertical,
                     Stretch = _StructuralStretchVertical,
                     IsCollision = (!src._PointA._IsFixed && !src._PointB._IsFixed && _IsCollideStructuralVertical) ? 1 : 0,
