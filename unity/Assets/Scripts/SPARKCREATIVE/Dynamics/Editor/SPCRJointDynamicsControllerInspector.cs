@@ -67,6 +67,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
         {
             controller._FloorHeight = EditorGUILayout.FloatField("床の高さ", controller._FloorHeight);
         }
+        GUILayout.Space(8);
+        controller._DetailHitDivideMax = EditorGUILayout.IntSlider("詳細な衝突判定の最大分割数", controller._DetailHitDivideMax, 0, 16);
 
         GUILayout.Space(8);
         controller._RootSlideLimit = EditorGUILayout.FloatField("ルートの最大移動距離", controller._RootSlideLimit);
@@ -187,6 +189,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller._IsDebugDraw_Shear = EditorGUILayout.Toggle("せん断", controller._IsDebugDraw_Shear);
         controller._IsDebugDraw_BendingVertical = EditorGUILayout.Toggle("垂直曲げ", controller._IsDebugDraw_BendingVertical);
         controller._IsDebugDraw_BendingHorizontal = EditorGUILayout.Toggle("水平曲げ", controller._IsDebugDraw_BendingHorizontal);
+        controller._IsDebugDraw_RuntimeColliderBounds = EditorGUILayout.Toggle("実行中のコリジョン情報", controller._IsDebugDraw_RuntimeColliderBounds);
 
         Titlebar("事前設定", new Color(1.0f, 1.0f, 0.7f));
         controller._IsLoopRootPoints = EditorGUILayout.Toggle("拘束のループ", controller._IsLoopRootPoints);
