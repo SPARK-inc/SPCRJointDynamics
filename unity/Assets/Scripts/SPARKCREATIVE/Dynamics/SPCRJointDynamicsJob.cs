@@ -285,6 +285,8 @@ public unsafe class SPCRJointDynamicsJob
             pColloderExs[i].Position = pColloderExs[i].OldPosition = Src.transform.position;
             pColloderExs[i].Direction = pColloderExs[i].OldDirection = Src.transform.rotation * Vector3.up * Src.Height;
         }
+
+        _OldRootPosition = _RootBone.position;
     }
 
     public void Restore()
