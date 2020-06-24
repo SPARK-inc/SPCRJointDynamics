@@ -56,7 +56,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
 
         controller._UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
         controller._Relaxation = EditorGUILayout.IntSlider("演算繰り返し回数", controller._Relaxation, 1, 16);
-
+        controller._SubSteps = EditorGUILayout.IntSlider("演算分割数", controller._SubSteps, 1, 16);
+        
         GUILayout.Space(8);
         controller._IsCancelResetPhysics = EditorGUILayout.Toggle("物理リセットを拒否", controller._IsCancelResetPhysics);
         GUILayout.Space(8);

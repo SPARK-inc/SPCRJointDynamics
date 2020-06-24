@@ -79,6 +79,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public UpdateTiming _UpdateTiming = UpdateTiming.LateUpdate;
 
     public int _Relaxation = 3;
+    public int _SubSteps = 1;
 
     public bool _IsEnableFloorCollision = true;
     public float _FloorHeight = 0.02f;
@@ -283,7 +284,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
         _Job.Execute(
             _RootTransform, _RootSlideLimit,
-            StepTime, _WindForce * WindForcePower,
+            StepTime, _SubSteps,
+            _WindForce * WindForcePower,
             _Relaxation, _SpringK,
             _IsEnableFloorCollision, _FloorHeight,
             _DetailHitDivideMax,
