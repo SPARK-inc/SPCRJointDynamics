@@ -108,6 +108,7 @@ public unsafe class SPCRJointDynamicsJob
         public float RadiusTail;
         public float Height;
         public float Friction;
+        public float PushOutRate;
     }
 
     struct ColliderEx
@@ -235,6 +236,7 @@ public unsafe class SPCRJointDynamicsJob
                 ColliderR[i].Height = 0.0f;
             }
             ColliderR[i].Friction = src.Friction;
+            ColliderR[i].PushOutRate = src.PushOutRate;
             ColliderExR[i].Position = ColliderExR[i].OldPosition = src.transform.position;
             ColliderExR[i].Direction = ColliderExR[i].OldDirection = src.transform.rotation * Vector3.up * src.Height;
             ColliderExR[i].LocalBounds = new Bounds();
@@ -928,6 +930,11 @@ public unsafe class SPCRJointDynamicsJob
                 Collider* pCollider = pColliders + i;
                 ColliderEx* pColliderEx = pColliderExs + i;
 
+                // if(pCollider->PushOutRate < 1.0f)
+                // {
+                //     continue;
+                // }
+
                 var Point0 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->OriginalOldPosition);
                 var Point1 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->Position);
                 var Direction = Point1 - Point0;
@@ -1020,11 +1027,11 @@ public unsafe class SPCRJointDynamicsJob
                 {
                     if (IsCatch)
                     {
-                        pRW->Position = ColliderPoint1 + Offset;
+                        pRW->Position = ColliderPoint1 + Offset * pCollider->PushOutRate;
                     }
                     else
                     {
-                        pRW->Position = Point + Offset;
+                        pRW->Position = Point + Offset * pCollider->PushOutRate;
                     }
                     break;
                 }
@@ -1079,11 +1086,11 @@ public unsafe class SPCRJointDynamicsJob
                     if (IsCatch)
                     {
                         ColliderPoint = ColliderHead1 + ColliderDir1 * w;
-                        pRW->Position = ColliderPoint + Offset;
+                        pRW->Position = ColliderPoint + Offset * pCollider->PushOutRate;
                     }
                     else
                     {
-                        pRW->Position = Point + Offset;
+                        pRW->Position = Point + Offset * pCollider->PushOutRate;
                     }
                     break;
                 }
@@ -1132,14 +1139,18 @@ public unsafe class SPCRJointDynamicsJob
                     Collider* pCollider = pColliders + i;
                     ColliderEx* pColliderEx = pColliderExs + i;
 
+                    Vector3 point = pRW->Position;
+
                     if (pCollider->Height <= 0.0f)
                     {
-                        PushoutFromSphere(pCollider, pColliderEx, ref pRW->Position);
+                        PushoutFromSphere(pCollider, pColliderEx, ref point);
                     }
                     else
                     {
-                        PushoutFromCapsule(pCollider, pColliderEx, ref pRW->Position);
+                        PushoutFromCapsule(pCollider, pColliderEx, ref point);
                     }
+
+                    pRW->Position += (point - pRW->Position) * pCollider->PushOutRate;
                 }
             }
         }
