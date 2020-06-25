@@ -113,6 +113,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public float _SpringK = 1.0f;
 
     public float _RootSlideLimit = 0.0f;
+    public float _RootRotateLimit = 0.0f;
 
     public int _DetailHitDivideMax = 0;
 
@@ -283,7 +284,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Accel += StepTime * 3.0f;
 
         _Job.Execute(
-            _RootTransform, _RootSlideLimit,
+            _RootTransform, _RootSlideLimit, _RootRotateLimit,
             StepTime, _SubSteps,
             _WindForce * WindForcePower,
             _Relaxation, _SpringK,
