@@ -341,7 +341,7 @@ public unsafe class SPCRJointDynamicsJob
         var RootSlide = RootPosition - _OldRootPosition;
         var SystemOffset = Vector3.zero;
         float SlideLength = RootSlide.magnitude;
-        if (RootSlideLimit > 0.0f && SlideLength > RootSlideLimit)
+        if (RootSlideLimit >= 0.0f && SlideLength > RootSlideLimit)
         {
             SystemOffset = RootSlide * (1.0f - RootSlideLimit / SlideLength);
             SystemOffset /= SubSteps;
@@ -350,7 +350,7 @@ public unsafe class SPCRJointDynamicsJob
         var RootDeltaRotation = RootRotation * Quaternion.Inverse(_OldRootRotation);
         float RotateAngle = Mathf.Acos(RootDeltaRotation.w) * 2.0f * Mathf.Rad2Deg;
         Quaternion SystemRotation = Quaternion.identity;
-        if(RootRotateLimit > 0.0f && Mathf.Abs(RotateAngle) > RootRotateLimit)
+        if(RootRotateLimit >= 0.0f && Mathf.Abs(RotateAngle) > RootRotateLimit)
         {
             Vector3 RotateAxis = Vector3.zero;
             RootDeltaRotation.ToAngleAxis(out RotateAngle, out RotateAxis);
@@ -988,10 +988,15 @@ public unsafe class SPCRJointDynamicsJob
                 float a = Vector3.Dot(Direction, Direction);
                 float b = Vector3.Dot(CenterToPoint, Direction) * 2.0f;
                 float c = Vector3.Dot(CenterToPoint, CenterToPoint) - Radius * Radius;
-                float x = (-b + Mathf.Sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-                Offset = Direction * x + CenterToPoint;
-                return true;
+                float D = b * b - 4.0f * a * c;
+                if(D > 0.0f)
+                {
+                    float x = (-b + Mathf.Sqrt(D)) / (2.0f * a);
+                    Offset = Direction * x + CenterToPoint;
+                    return true;
+                }
             }
+            Offset = Vector3.zero;
             return false;
         }
 
