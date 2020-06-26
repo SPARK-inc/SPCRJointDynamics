@@ -136,7 +136,7 @@ public unsafe class SPCRJointDynamicsJob
     }
 
     Transform _RootBone;
-    Vector3[] _OldRootPositions;
+    Vector3 _OldRootPosition;
     Vector3 _OldRootScale;
     Quaternion _OldRootRotation;
     int _PointCount;
@@ -157,7 +157,7 @@ public unsafe class SPCRJointDynamicsJob
     {
         _RootBone = RootBone;
         _PointCount = Points.Length;
-        _OldRootPositions = new Vector3[] {_RootBone.position, _RootBone.position};
+        _OldRootPosition = _RootBone.position;
         _OldRootRotation = _RootBone.rotation;
         _OldRootScale = _RootBone.lossyScale;
 
@@ -294,8 +294,7 @@ public unsafe class SPCRJointDynamicsJob
             pColloderExs[i].Direction = pColloderExs[i].OldDirection = Src.transform.rotation * Vector3.up * Src.Height;
         }
 
-        _OldRootPositions[0] = _RootBone.position;
-        _OldRootPositions[1] = _RootBone.position;
+        _OldRootPosition = _RootBone.position;
         _OldRootRotation = _RootBone.rotation;
         _OldRootScale = _RootBone.lossyScale;
     }
@@ -319,8 +318,7 @@ public unsafe class SPCRJointDynamicsJob
             pColloderExs[i].Direction = pColloderExs[i].OldDirection = Src.transform.rotation * Vector3.up * Src.Height;
         }
 
-        _OldRootPositions[0] = _RootBone.position;
-        _OldRootPositions[1] = _RootBone.position;
+        _OldRootPosition = _RootBone.position;
         _OldRootRotation = _RootBone.rotation;
         _OldRootScale = _RootBone.lossyScale;
     }
@@ -340,7 +338,7 @@ public unsafe class SPCRJointDynamicsJob
         var RootRotation = RootTransform.rotation;
         var RootScale = RootTransform.lossyScale;
 
-        var RootSlide = RootPosition - _OldRootPositions[0];
+        var RootSlide = RootPosition - _OldRootPosition;
         var SystemOffset = Vector3.zero;
         float SlideLength = RootSlide.magnitude;
         if (RootSlideLimit > 0.0f && SlideLength > RootSlideLimit)
@@ -442,15 +440,14 @@ public unsafe class SPCRJointDynamicsJob
             }
 
             var RootMatrix = Matrix4x4.TRS(
-                Vector3.Lerp(_OldRootPositions[0], RootPosition, SubDelta),
+                Vector3.Lerp(_OldRootPosition, RootPosition, SubDelta),
                 Quaternion.Slerp(_OldRootRotation, RootRotation, SubDelta),
                 Vector3.Lerp(_OldRootScale, RootScale, SubDelta)
             );
 
             var PointUpdate = new JobPointUpdate();
             PointUpdate.RootMatrix = RootMatrix;
-            PointUpdate.OldRootPosition0 = _OldRootPositions[0];
-            PointUpdate.OldRootPosition1 = _OldRootPositions[1];
+            PointUpdate.OldRootPosition = _OldRootPosition;
             PointUpdate.GrabberCount = _RefGrabbers.Length;
             PointUpdate.pGrabbers = pGrabbers;
             PointUpdate.pGrabberExs = pGrabberExs;
@@ -460,10 +457,11 @@ public unsafe class SPCRJointDynamicsJob
             PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
             PointUpdate.SystemOffset = SystemOffset;
             PointUpdate.SystemRotation = SystemRotation;
-            if(iSubStep == 1)
-                _hJob = PointUpdate.Schedule(_PointCount, 8);
-            else
-                _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
+            // if(iSubStep == 1)
+            //     _hJob = PointUpdate.Schedule(_PointCount, 8);
+            // else
+            //     _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
+            _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
 
             if(IsEnableColliderCollision && DetailHitDivideMax > 0)
             {
@@ -513,8 +511,7 @@ public unsafe class SPCRJointDynamicsJob
             _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
         }
 
-        _OldRootPositions[1] = _OldRootPositions[0];
-        _OldRootPositions[0] = RootPosition;
+        _OldRootPosition = RootPosition;
         _OldRootRotation = RootRotation;
         _OldRootScale = RootScale;
     }
@@ -605,9 +602,7 @@ public unsafe class SPCRJointDynamicsJob
         [ReadOnly]
         public Matrix4x4 RootMatrix;
         [ReadOnly]
-        public Vector3 OldRootPosition0;
-        [ReadOnly]
-        public Vector3 OldRootPosition1;
+        public Vector3 OldRootPosition;
         [ReadOnly]
         public Vector3 WindForce;
         [ReadOnly]
@@ -631,7 +626,7 @@ public unsafe class SPCRJointDynamicsJob
             if (pR->Weight <= EPSILON)
             {
                 pRW->OriginalOldPosition = pRW->Position;
-                pRW->OldPosition = ApplySystemTransform(pRW->Position, OldRootPosition0);
+                pRW->OldPosition = ApplySystemTransform(pRW->Position, OldRootPosition);
                 pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialPosition);
                 pRW->Friction = 0.0f;
 
@@ -639,8 +634,8 @@ public unsafe class SPCRJointDynamicsJob
             }
 
             pRW->OriginalOldPosition = pRW->Position;
-            pRW->OldPosition = ApplySystemTransform(pRW->OldPosition, OldRootPosition1);
-            pRW->Position = ApplySystemTransform(pRW->Position, OldRootPosition0);
+            pRW->OldPosition = ApplySystemTransform(pRW->OldPosition, OldRootPosition);
+            pRW->Position = ApplySystemTransform(pRW->Position, OldRootPosition);
 
             Vector3 Force = Vector3.zero;
             Force += pR->Gravity;
