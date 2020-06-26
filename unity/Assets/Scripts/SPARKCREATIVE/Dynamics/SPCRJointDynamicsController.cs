@@ -178,6 +178,14 @@ public class SPCRJointDynamicsController : MonoBehaviour
     [SerializeField]
     int _MaxPointDepth = 0;
 
+#if UNITY_EDITOR
+    [SerializeField]
+    public List<SPCRJointDynamicsPoint> _SubDivInsertedPoints = new List<SPCRJointDynamicsPoint>();
+    
+    [SerializeField]
+    public List<SPCRJointDynamicsPoint> _SubDivOriginalPoints = new List<SPCRJointDynamicsPoint>();
+#endif
+
     float _Accel;
     float _Delay;
 
@@ -500,6 +508,22 @@ public class SPCRJointDynamicsController : MonoBehaviour
             constraint._PointB.transform.position = constraint._PointA.transform.position + direction * BoneStretchScale;
         }
         UpdateJointDistance();
+    }
+    
+    public void DeleteJointConnection()
+    {
+#if UNITY_EDITOR
+        if(!UnityEditor.EditorApplication.isPlaying)
+        {
+            _PointTbl = new SPCRJointDynamicsPoint[0];
+            _ConstraintsStructuralVertical = new SPCRJointDynamicsConstraint[0];
+            _ConstraintsStructuralHorizontal = new SPCRJointDynamicsConstraint[0];
+            _ConstraintsShear = new SPCRJointDynamicsConstraint[0];
+            _ConstraintsBendingVertical = new SPCRJointDynamicsConstraint[0];
+            _ConstraintsBendingHorizontal = new SPCRJointDynamicsConstraint[0];
+            _ConstraintTable = null;
+        }
+#endif
     }
 
     public void ResetPhysics(float Delay)
