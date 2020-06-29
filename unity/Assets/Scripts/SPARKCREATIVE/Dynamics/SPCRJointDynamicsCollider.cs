@@ -29,7 +29,7 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
     public Transform RefTransform { get; private set; }
     public float RadiusHead { get { return _Radius * _HeadRadiusScale; } }
     public float RadiusTail { get { return _Radius * _TailRadiusScale; } }
-    public float Height { get { return _Height; } }
+    public float Height { get { return _Height; } set { _Height = value; } }
     public float Friction { get { return _Friction; } }
     public float PushOutRate { get { return _PushOutRate; } }
 
