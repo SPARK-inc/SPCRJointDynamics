@@ -332,6 +332,12 @@ public unsafe class SPCRJointDynamicsJob
         int DetailHitDivideMax,
         bool IsEnableColliderCollision)
     {
+        bool IsPaused = StepTime <= 0.0f;
+        if(IsPaused)
+        {
+            SubSteps = 1;
+        }
+
         WaitForComplete();
 
         var RootPosition = RootTransform.position;
@@ -357,6 +363,12 @@ public unsafe class SPCRJointDynamicsJob
             var Angle = (RotateAngle > 0.0f) ? (RotateAngle - RootRotateLimit) : (RotateAngle + RootRotateLimit);
             Angle /= SubSteps;
             SystemRotation = Quaternion.AngleAxis(Angle, RotateAxis);
+        }
+        
+        if(IsPaused)
+        {
+            SystemOffset = RootSlide;
+            SystemRotation = RootDeltaRotation;
         }
         
         var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
@@ -457,51 +469,51 @@ public unsafe class SPCRJointDynamicsJob
             PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
             PointUpdate.SystemOffset = SystemOffset;
             PointUpdate.SystemRotation = SystemRotation;
-            // if(iSubStep == 1)
-            //     _hJob = PointUpdate.Schedule(_PointCount, 8);
-            // else
-            //     _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
+            PointUpdate.IsPaused = IsPaused;
             _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
 
-            if(IsEnableColliderCollision && DetailHitDivideMax > 0)
+            if(!IsPaused)
             {
-                var MovingCollisionPoint = new JobMovingCollisionPoint();
-                MovingCollisionPoint.pRPoints = pRPoints;
-                MovingCollisionPoint.pRWPoints = pRWPoints;
-                MovingCollisionPoint.pColliders = pColliders;
-                MovingCollisionPoint.pColliderExs = pColliderExs;
-                MovingCollisionPoint.ColliderCount = ColliderCount;
-                MovingCollisionPoint.DivideMax = DetailHitDivideMax;
-                _hJob = MovingCollisionPoint.Schedule(_PointCount, 8, _hJob);
-            }
-
-            for (int i = 0; i < Relaxation; ++i)
-            {
-                foreach (var constraint in _Constraints)
+                if(IsEnableColliderCollision && DetailHitDivideMax > 0)
                 {
-                    var ConstraintUpdate = new JobConstraintUpdate();
-                    ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
-                    ConstraintUpdate.pRPoints = pRPoints;
-                    ConstraintUpdate.pRWPoints = pRWPoints;
-                    ConstraintUpdate.pColliders = pColliders;
-                    ConstraintUpdate.pColliderExs = pColliderExs;
-                    ConstraintUpdate.ColliderCount = IsEnableColliderCollision ? ColliderCount : 0;
-                    ConstraintUpdate.SpringK = SpringK;
-                    _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
+                    var MovingCollisionPoint = new JobMovingCollisionPoint();
+                    MovingCollisionPoint.pRPoints = pRPoints;
+                    MovingCollisionPoint.pRWPoints = pRWPoints;
+                    MovingCollisionPoint.pColliders = pColliders;
+                    MovingCollisionPoint.pColliderExs = pColliderExs;
+                    MovingCollisionPoint.ColliderCount = ColliderCount;
+                    MovingCollisionPoint.DivideMax = DetailHitDivideMax;
+                    _hJob = MovingCollisionPoint.Schedule(_PointCount, 8, _hJob);
                 }
-            }
 
-            if (IsEnableFloorCollision || IsEnableColliderCollision)
-            {
-                var CollisionPoint = new JobCollisionPoint();
-                CollisionPoint.pRWPoints = pRWPoints;
-                CollisionPoint.pColliders = pColliders;
-                CollisionPoint.pColliderExs = pColliderExs;
-                CollisionPoint.ColliderCount = ColliderCount;
-                CollisionPoint.FloorHeight = FloorHeight;
-                CollisionPoint.IsEnableFloor = IsEnableFloorCollision;
-                CollisionPoint.IsEnableCollider = IsEnableColliderCollision;
-                _hJob = CollisionPoint.Schedule(_PointCount, 8, _hJob);
+                for (int i = 0; i < Relaxation; ++i)
+                {
+                    foreach (var constraint in _Constraints)
+                    {
+                        var ConstraintUpdate = new JobConstraintUpdate();
+                        ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
+                        ConstraintUpdate.pRPoints = pRPoints;
+                        ConstraintUpdate.pRWPoints = pRWPoints;
+                        ConstraintUpdate.pColliders = pColliders;
+                        ConstraintUpdate.pColliderExs = pColliderExs;
+                        ConstraintUpdate.ColliderCount = IsEnableColliderCollision ? ColliderCount : 0;
+                        ConstraintUpdate.SpringK = SpringK;
+                        _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
+                    }
+                }
+
+                if (IsEnableFloorCollision || IsEnableColliderCollision)
+                {
+                    var CollisionPoint = new JobCollisionPoint();
+                    CollisionPoint.pRWPoints = pRWPoints;
+                    CollisionPoint.pColliders = pColliders;
+                    CollisionPoint.pColliderExs = pColliderExs;
+                    CollisionPoint.ColliderCount = ColliderCount;
+                    CollisionPoint.FloorHeight = FloorHeight;
+                    CollisionPoint.IsEnableFloor = IsEnableFloorCollision;
+                    CollisionPoint.IsEnableCollider = IsEnableColliderCollision;
+                    _hJob = CollisionPoint.Schedule(_PointCount, 8, _hJob);
+                }
             }
 
             var PointToTransform = new JobPointToTransform();
@@ -612,6 +624,8 @@ public unsafe class SPCRJointDynamicsJob
         public Vector3 SystemOffset;
         [ReadOnly]
         public Quaternion SystemRotation;
+        [ReadOnly]
+        public bool IsPaused;
 
         private Vector3 ApplySystemTransform(Vector3 Point, Vector3 Pivot)
         {
@@ -637,16 +651,19 @@ public unsafe class SPCRJointDynamicsJob
             pRW->OldPosition = ApplySystemTransform(pRW->OldPosition, OldRootPosition);
             pRW->Position = ApplySystemTransform(pRW->Position, OldRootPosition);
 
-            Vector3 Force = Vector3.zero;
-            Force += pR->Gravity;
-            Force += WindForce;
-            Force *= StepTime_x2_Half;
+            Vector3 Displacement = Vector3.zero;
+            if(!IsPaused)
+            {
+                Vector3 Force = Vector3.zero;
+                Force += pR->Gravity;
+                Force += WindForce;
+                Force *= StepTime_x2_Half;
 
-            Vector3 Displacement;
-            Displacement = pRW->Position - pRW->OldPosition;
-            Displacement += Force / pR->Mass;
-            Displacement *= pR->Resistance;
-            Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
+                Displacement = pRW->Position - pRW->OldPosition;
+                Displacement += Force / pR->Mass;
+                Displacement *= pR->Resistance;
+                Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
+            }
 
             pRW->OldPosition = pRW->Position;
             pRW->Position += Displacement;

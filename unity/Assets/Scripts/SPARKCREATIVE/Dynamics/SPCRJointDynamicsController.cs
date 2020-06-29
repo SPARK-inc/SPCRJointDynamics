@@ -178,6 +178,9 @@ public class SPCRJointDynamicsController : MonoBehaviour
     [SerializeField]
     int _MaxPointDepth = 0;
 
+    [SerializeField]
+    public bool _IsPaused = false;
+
 #if UNITY_EDITOR
     [SerializeField]
     public List<SPCRJointDynamicsPoint> _SubDivInsertedPoints = new List<SPCRJointDynamicsPoint>();
@@ -287,7 +290,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _Job.Reset();
         }
 
-        float StepTime = DeltaTime;
+        float StepTime = _IsPaused ? 0.0f : DeltaTime;
         float WindForcePower = (Mathf.Sin(_Accel) * 0.5f + 0.5f);
         _Accel += StepTime * 3.0f;
 

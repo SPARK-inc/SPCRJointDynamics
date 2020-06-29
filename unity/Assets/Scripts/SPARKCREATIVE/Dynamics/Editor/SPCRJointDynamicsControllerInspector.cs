@@ -184,6 +184,9 @@ public class SPCRJointDynamicsControllerInspector : Editor
         {
             controller.ResetPhysics(0.3f);
         }
+        
+        GUILayout.Space(8);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent("一時停止"), true);
 
         Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
         controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
