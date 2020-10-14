@@ -83,6 +83,7 @@ public unsafe class SPCRJointDynamicsJob
     {
         public Vector3 Position;
         public Vector3 OldPosition;
+        public Vector3 OriginalOldPosition;
         public Vector3 PreviousDirection;
         public int GrabberIndex;
         public float GrabberDistance;
@@ -96,6 +97,7 @@ public unsafe class SPCRJointDynamicsJob
         public int IndexA;
         public int IndexB;
         public float Length;
+        public float StretchLength;
         public float Shrink;
         public float Stretch;
     }
@@ -106,12 +108,19 @@ public unsafe class SPCRJointDynamicsJob
         public float RadiusTail;
         public float Height;
         public float Friction;
+        public float PushOutRate;
     }
 
     struct ColliderEx
     {
         public Vector3 Position;
         public Vector3 Direction;
+        public Vector3 OldPosition;
+        public Vector3 OldDirection;
+        public Vector3 SourcePosition;
+        public Vector3 SourceDirection;
+        public Matrix4x4 WorldToLocal;
+        public Bounds LocalBounds;
     }
 
     struct Grabber
@@ -127,6 +136,9 @@ public unsafe class SPCRJointDynamicsJob
     }
 
     Transform _RootBone;
+    Vector3 _OldRootPosition;
+    Vector3 _OldRootScale;
+    Quaternion _OldRootRotation;
     int _PointCount;
     NativeArray<PointRead> _PointsR;
     NativeArray<PointReadWrite> _PointsRW;
@@ -145,6 +157,9 @@ public unsafe class SPCRJointDynamicsJob
     {
         _RootBone = RootBone;
         _PointCount = Points.Length;
+        _OldRootPosition = _RootBone.position;
+        _OldRootRotation = _RootBone.rotation;
+        _OldRootScale = _RootBone.lossyScale;
 
         var PointsR = new PointRead[_PointCount];
         var PointsRW = new PointReadWrite[_PointCount];
@@ -175,6 +190,7 @@ public unsafe class SPCRJointDynamicsJob
             PointsR[i].InitialPosition = src.InitialPosition;
             PointsRW[i].Position = src.Position;
             PointsRW[i].OldPosition = src.OldPosition;
+            PointsRW[i].OriginalOldPosition = src.OldPosition;
             PointsRW[i].PreviousDirection = src.PreviousDirection;
             PointsRW[i].Friction = 0.5f;
             PointsRW[i].GrabberIndex = -1;
@@ -204,6 +220,7 @@ public unsafe class SPCRJointDynamicsJob
 
         _RefColliders = Colliders;
         var ColliderR = new Collider[Colliders.Length];
+        var ColliderExR = new ColliderEx[Colliders.Length];
         for (int i = 0; i < Colliders.Length; ++i)
         {
             var src = Colliders[i];
@@ -219,10 +236,15 @@ public unsafe class SPCRJointDynamicsJob
                 ColliderR[i].Height = 0.0f;
             }
             ColliderR[i].Friction = src.Friction;
+            ColliderR[i].PushOutRate = src.PushOutRate;
+            ColliderExR[i].Position = ColliderExR[i].OldPosition = src.transform.position;
+            ColliderExR[i].Direction = ColliderExR[i].OldDirection = src.transform.rotation * Vector3.up * src.Height;
+            ColliderExR[i].LocalBounds = new Bounds();
         }
         _Colliders = new NativeArray<Collider>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         _Colliders.CopyFrom(ColliderR);
         _ColliderExs = new NativeArray<ColliderEx>(Colliders.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        _ColliderExs.CopyFrom(ColliderExR);
 
         _RefGrabbers = Grabbers;
         var GrabberR = new Grabber[Grabbers.Length];
@@ -263,6 +285,18 @@ public unsafe class SPCRJointDynamicsJob
         {
             pPointRW[i].OldPosition = pPointRW[i].Position = _PointTransforms[i].position;
         }
+
+        var pColloderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
+        for (int i = 0; i < _RefColliders.Length; ++i)
+        {
+            var Src = _RefColliders[i];
+            pColloderExs[i].Position = pColloderExs[i].OldPosition = Src.transform.position;
+            pColloderExs[i].Direction = pColloderExs[i].OldDirection = Src.transform.rotation * Vector3.up * Src.Height;
+        }
+
+        _OldRootPosition = _RootBone.position;
+        _OldRootRotation = _RootBone.rotation;
+        _OldRootScale = _RootBone.lossyScale;
     }
 
     public void Restore()
@@ -275,17 +309,68 @@ public unsafe class SPCRJointDynamicsJob
             pPointRW[i].OldPosition = pPointRW[i].Position;
             _PointTransforms[i].position = pPointRW[i].Position;
         }
+
+        var pColloderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
+        for (int i = 0; i < _RefColliders.Length; ++i)
+        {
+            var Src = _RefColliders[i];
+            pColloderExs[i].Position = pColloderExs[i].OldPosition = Src.transform.position;
+            pColloderExs[i].Direction = pColloderExs[i].OldDirection = Src.transform.rotation * Vector3.up * Src.Height;
+        }
+
+        _OldRootPosition = _RootBone.position;
+        _OldRootRotation = _RootBone.rotation;
+        _OldRootScale = _RootBone.lossyScale;
     }
 
     public void Execute(
-        Transform RootTransform,
-        float StepTime, Vector3 WindForce,
+        Transform RootTransform, float RootSlideLimit, float RootRotateLimit,
+        float StepTime, int SubSteps,
+        Vector3 WindForce,
         int Relaxation, float SpringK,
         bool IsEnableFloorCollision, float FloorHeight,
+        int DetailHitDivideMax,
         bool IsEnableColliderCollision)
     {
+        bool IsPaused = StepTime <= 0.0f;
+        if(IsPaused)
+        {
+            SubSteps = 1;
+        }
+
         WaitForComplete();
 
+        var RootPosition = RootTransform.position;
+        var RootRotation = RootTransform.rotation;
+        var RootScale = RootTransform.lossyScale;
+
+        var RootSlide = RootPosition - _OldRootPosition;
+        var SystemOffset = Vector3.zero;
+        float SlideLength = RootSlide.magnitude;
+        if (RootSlideLimit >= 0.0f && SlideLength > RootSlideLimit)
+        {
+            SystemOffset = RootSlide * (1.0f - RootSlideLimit / SlideLength);
+            SystemOffset /= SubSteps;
+        }
+
+        var RootDeltaRotation = RootRotation * Quaternion.Inverse(_OldRootRotation);
+        float RotateAngle = Mathf.Acos(RootDeltaRotation.w) * 2.0f * Mathf.Rad2Deg;
+        Quaternion SystemRotation = Quaternion.identity;
+        if(RootRotateLimit >= 0.0f && Mathf.Abs(RotateAngle) > RootRotateLimit)
+        {
+            Vector3 RotateAxis = Vector3.zero;
+            RootDeltaRotation.ToAngleAxis(out RotateAngle, out RotateAxis);
+            var Angle = (RotateAngle > 0.0f) ? (RotateAngle - RootRotateLimit) : (RotateAngle + RootRotateLimit);
+            Angle /= SubSteps;
+            SystemRotation = Quaternion.AngleAxis(Angle, RotateAxis);
+        }
+        
+        if(IsPaused)
+        {
+            SystemOffset = RootSlide;
+            SystemRotation = RootDeltaRotation;
+        }
+        
         var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
         var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
         var pColliders = (Collider*)_Colliders.GetUnsafePtr();
@@ -294,21 +379,7 @@ public unsafe class SPCRJointDynamicsJob
         var pGrabberExs = (GrabberEx*)_GrabberExs.GetUnsafePtr();
 
         int ColliderCount = _RefColliders.Length;
-        for (int i = 0; i < ColliderCount; ++i)
-        {
-            var pDst = pColliderExs + i;
-            var Src = _RefColliders[i];
-            var SrcT = Src.RefTransform;
-            if (Src.Height <= EPSILON)
-            {
-                pDst->Position = _RefColliders[i].RefTransform.position;
-            }
-            else
-            {
-                pDst->Direction = SrcT.rotation * Vector3.up * Src.Height;
-                pDst->Position = SrcT.position - (pDst->Direction * 0.5f);
-            }
-        }
+        Bounds TempBounds = new Bounds();
 
         int GrabberCount = _RefGrabbers.Length;
         for (int i = 0; i < GrabberCount; ++i)
@@ -319,50 +390,142 @@ public unsafe class SPCRJointDynamicsJob
             pDst->Position = _RefGrabbers[i].RefTransform.position;
         }
 
-        var PointUpdate = new JobPointUpdate();
-        PointUpdate.RootMatrix = RootTransform.localToWorldMatrix;
-        PointUpdate.GrabberCount = _RefGrabbers.Length;
-        PointUpdate.pGrabbers = pGrabbers;
-        PointUpdate.pGrabberExs = pGrabberExs;
-        PointUpdate.pRPoints = pRPoints;
-        PointUpdate.pRWPoints = pRWPoints;
-        PointUpdate.WindForce = WindForce;
-        PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
-        _hJob = PointUpdate.Schedule(_PointCount, 8);
+        StepTime /= SubSteps;
 
-        for (int i = 0; i < Relaxation; ++i)
+        for(int iSubStep = 1; iSubStep <= SubSteps; iSubStep++)
         {
-            foreach (var constraint in _Constraints)
+            float SubDelta = (float)iSubStep / SubSteps;
+
+            float ColliderDelta = 1.0f / (SubSteps - iSubStep + 1.0f);
+            for (int i = 0; i < ColliderCount; ++i)
             {
-                var ConstraintUpdate = new JobConstraintUpdate();
-                ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
-                ConstraintUpdate.pRPoints = pRPoints;
-                ConstraintUpdate.pRWPoints = pRWPoints;
-                ConstraintUpdate.pColliders = pColliders;
-                ConstraintUpdate.pColliderExs = pColliderExs;
-                ConstraintUpdate.ColliderCount = ColliderCount;
-                ConstraintUpdate.SpringK = SpringK;
-                _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
+                var pDst = pColliderExs + i;
+                var Src = _RefColliders[i];
+
+                if(iSubStep == 1)
+                {
+                    var SrcT = Src.RefTransform;
+                    if (Src.Height <= EPSILON)
+                    {
+                        pDst->SourcePosition = SrcT.position;
+                    }
+                    else
+                    {
+                        pDst->SourceDirection = SrcT.rotation * Vector3.up * Src.Height;
+                        pDst->SourcePosition = SrcT.position - (pDst->Direction * 0.5f);
+                    }
+
+                    pDst->WorldToLocal = SrcT.worldToLocalMatrix;
+                }
+
+                pDst->OldPosition = pDst->Position;
+                pDst->OldDirection = pDst->Direction;
+
+                pDst->Position = Vector3.Lerp(pDst->OldPosition, pDst->SourcePosition, ColliderDelta);
+                pDst->Direction = Vector3.Lerp(pDst->OldDirection, pDst->SourceDirection, ColliderDelta);
+
+                Vector3 Center;
+                Vector3 Corner;
+                // Head
+                Corner = Vector3.one * Src.RadiusHead;
+                // Current
+                Center = pDst->WorldToLocal.MultiplyPoint(pDst->Position);
+                pDst->LocalBounds.SetMinMax(Center - Corner, Center + Corner);
+                // Old
+                Center = pDst->WorldToLocal.MultiplyPoint(pDst->OldPosition);
+                TempBounds.SetMinMax(Center - Corner, Center + Corner);
+                pDst->LocalBounds.Encapsulate(TempBounds);
+
+                // Tail
+                if (Src.Height > EPSILON)
+                {
+                    Corner = Vector3.one * Src.RadiusTail;
+                    // Current
+                    Center = pDst->WorldToLocal.MultiplyPoint(pDst->Position + pDst->Direction);
+                    TempBounds.SetMinMax(Center - Corner, Center + Corner);
+                    pDst->LocalBounds.Encapsulate(TempBounds);
+                    // Old
+                    Center = pDst->WorldToLocal.MultiplyPoint(pDst->OldPosition + pDst->OldDirection);
+                    TempBounds.SetMinMax(Center - Corner, Center + Corner);
+                    pDst->LocalBounds.Encapsulate(TempBounds);
+                }
             }
+
+            var RootMatrix = Matrix4x4.TRS(
+                Vector3.Lerp(_OldRootPosition, RootPosition, SubDelta),
+                Quaternion.Slerp(_OldRootRotation, RootRotation, SubDelta),
+                Vector3.Lerp(_OldRootScale, RootScale, SubDelta)
+            );
+
+            var PointUpdate = new JobPointUpdate();
+            PointUpdate.RootMatrix = RootMatrix;
+            PointUpdate.OldRootPosition = _OldRootPosition;
+            PointUpdate.GrabberCount = _RefGrabbers.Length;
+            PointUpdate.pGrabbers = pGrabbers;
+            PointUpdate.pGrabberExs = pGrabberExs;
+            PointUpdate.pRPoints = pRPoints;
+            PointUpdate.pRWPoints = pRWPoints;
+            PointUpdate.WindForce = WindForce;
+            PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
+            PointUpdate.SystemOffset = SystemOffset;
+            PointUpdate.SystemRotation = SystemRotation;
+            PointUpdate.IsPaused = IsPaused;
+            _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
+
+            if(!IsPaused)
+            {
+                if(IsEnableColliderCollision && DetailHitDivideMax > 0)
+                {
+                    var MovingCollisionPoint = new JobMovingCollisionPoint();
+                    MovingCollisionPoint.pRPoints = pRPoints;
+                    MovingCollisionPoint.pRWPoints = pRWPoints;
+                    MovingCollisionPoint.pColliders = pColliders;
+                    MovingCollisionPoint.pColliderExs = pColliderExs;
+                    MovingCollisionPoint.ColliderCount = ColliderCount;
+                    MovingCollisionPoint.DivideMax = DetailHitDivideMax;
+                    _hJob = MovingCollisionPoint.Schedule(_PointCount, 8, _hJob);
+                }
+
+                for (int i = 0; i < Relaxation; ++i)
+                {
+                    foreach (var constraint in _Constraints)
+                    {
+                        var ConstraintUpdate = new JobConstraintUpdate();
+                        ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
+                        ConstraintUpdate.pRPoints = pRPoints;
+                        ConstraintUpdate.pRWPoints = pRWPoints;
+                        ConstraintUpdate.pColliders = pColliders;
+                        ConstraintUpdate.pColliderExs = pColliderExs;
+                        ConstraintUpdate.ColliderCount = IsEnableColliderCollision ? ColliderCount : 0;
+                        ConstraintUpdate.SpringK = SpringK;
+                        _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
+                    }
+                }
+                
+                if (IsEnableFloorCollision || IsEnableColliderCollision)
+                {
+                    var CollisionPoint = new JobCollisionPoint();
+                    CollisionPoint.pRWPoints = pRWPoints;
+                    CollisionPoint.pColliders = pColliders;
+                    CollisionPoint.pColliderExs = pColliderExs;
+                    CollisionPoint.ColliderCount = ColliderCount;
+                    CollisionPoint.FloorHeight = FloorHeight;
+                    CollisionPoint.IsEnableFloor = IsEnableFloorCollision;
+                    CollisionPoint.IsEnableCollider = IsEnableColliderCollision;
+                    _hJob = CollisionPoint.Schedule(_PointCount, 8, _hJob);
+                }
+            }
+
+            var PointToTransform = new JobPointToTransform();
+            PointToTransform.pRPoints = pRPoints;
+            PointToTransform.pRWPoints = pRWPoints;
+            PointToTransform.UpdateTransform = iSubStep == SubSteps;
+            _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
         }
 
-        if (IsEnableFloorCollision || IsEnableColliderCollision)
-        {
-            var CollisionPoint = new JobCollisionPoint();
-            CollisionPoint.pRWPoints = pRWPoints;
-            CollisionPoint.pColliders = pColliders;
-            CollisionPoint.pColliderExs = pColliderExs;
-            CollisionPoint.ColliderCount = ColliderCount;
-            CollisionPoint.FloorHeight = FloorHeight;
-            CollisionPoint.IsEnableFloor = IsEnableFloorCollision;
-            CollisionPoint.IsEnableCollider = IsEnableColliderCollision;
-            _hJob = CollisionPoint.Schedule(_PointCount, 8, _hJob);
-        }
-
-        var PointToTransform = new JobPointToTransform();
-        PointToTransform.pRPoints = pRPoints;
-        PointToTransform.pRWPoints = pRWPoints;
-        _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
+        _OldRootPosition = RootPosition;
+        _OldRootRotation = RootRotation;
+        _OldRootScale = RootScale;
     }
 
     public void WaitForComplete()
@@ -385,6 +548,55 @@ public unsafe class SPCRJointDynamicsJob
         Gizmos.DrawLine(_PointTransforms[A].position, _PointTransforms[B].position);
     }
 
+    public void DrawGizmos_ColliderEx()
+    {
+        var BoundsColor = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+        for (int i = 0; i < _ColliderExs.Length; i++)
+        {
+            var CurHead = _ColliderExs[i].Position;
+            var CurTail = _ColliderExs[i].Position + _ColliderExs[i].Direction;
+            var OldHead = _ColliderExs[i].OldPosition;
+            var OldTail = _ColliderExs[i].OldPosition + _ColliderExs[i].OldDirection;
+
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(CurHead, OldHead);
+            Gizmos.DrawLine(CurTail, OldTail);
+
+            Gizmos.color = Color.gray;
+            Gizmos.DrawLine(OldHead, OldTail);
+
+            var LocalToWorld = _ColliderExs[i].WorldToLocal.inverse;
+            var BoundsMin = _ColliderExs[i].LocalBounds.min;
+            var BoundsMax = _ColliderExs[i].LocalBounds.max;
+
+            var BV000 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMin.x, BoundsMin.y, BoundsMin.z));
+            var BV100 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMax.x, BoundsMin.y, BoundsMin.z));
+            var BV010 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMin.x, BoundsMax.y, BoundsMin.z));
+            var BV110 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMax.x, BoundsMax.y, BoundsMin.z));
+            var BV001 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMin.x, BoundsMin.y, BoundsMax.z));
+            var BV101 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMax.x, BoundsMin.y, BoundsMax.z));
+            var BV011 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMin.x, BoundsMax.y, BoundsMax.z));
+            var BV111 = LocalToWorld.MultiplyPoint(new Vector3(BoundsMax.x, BoundsMax.y, BoundsMax.z));
+
+            Gizmos.color = BoundsColor;
+            // X
+            Gizmos.DrawLine(BV000, BV100);
+            Gizmos.DrawLine(BV010, BV110);
+            Gizmos.DrawLine(BV001, BV101);
+            Gizmos.DrawLine(BV011, BV111);
+            // Y
+            Gizmos.DrawLine(BV000, BV010);
+            Gizmos.DrawLine(BV100, BV110);
+            Gizmos.DrawLine(BV001, BV011);
+            Gizmos.DrawLine(BV101, BV111);
+            // Z
+            Gizmos.DrawLine(BV000, BV001);
+            Gizmos.DrawLine(BV100, BV101);
+            Gizmos.DrawLine(BV010, BV011);
+            Gizmos.DrawLine(BV110, BV111);
+        }
+    }
+
     //[BurstCompile]
     struct JobPointUpdate : IJobParallelFor
     {
@@ -402,27 +614,56 @@ public unsafe class SPCRJointDynamicsJob
         [ReadOnly]
         public Matrix4x4 RootMatrix;
         [ReadOnly]
+        public Vector3 OldRootPosition;
+        [ReadOnly]
         public Vector3 WindForce;
         [ReadOnly]
         public float StepTime_x2_Half;
 
+        [ReadOnly]
+        public Vector3 SystemOffset;
+        [ReadOnly]
+        public Quaternion SystemRotation;
+        [ReadOnly]
+        public bool IsPaused;
+
+        private Vector3 ApplySystemTransform(Vector3 Point, Vector3 Pivot)
+        {
+            return SystemRotation * (Point - Pivot) + Pivot + SystemOffset;
+        }
+
         void IJobParallelFor.Execute(int index)
         {
             var pR = pRPoints + index;
-            if (pR->Weight <= EPSILON) return;
-
             var pRW = pRWPoints + index;
 
-            Vector3 Force = Vector3.zero;
-            Force += pR->Gravity;
-            Force += WindForce;
-            Force *= StepTime_x2_Half;
+            if (pR->Weight <= EPSILON)
+            {
+                pRW->OriginalOldPosition = pRW->Position;
+                pRW->OldPosition = ApplySystemTransform(pRW->Position, OldRootPosition);
+                pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialPosition);
+                pRW->Friction = 0.0f;
 
-            Vector3 Displacement;
-            Displacement = pRW->Position - pRW->OldPosition;
-            Displacement += Force / pR->Mass;
-            Displacement *= pR->Resistance;
-            Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
+                return;
+            }
+
+            pRW->OriginalOldPosition = pRW->Position;
+            pRW->OldPosition = ApplySystemTransform(pRW->OldPosition, OldRootPosition);
+            pRW->Position = ApplySystemTransform(pRW->Position, OldRootPosition);
+
+            Vector3 Displacement = Vector3.zero;
+            if(!IsPaused)
+            {
+                Vector3 Force = Vector3.zero;
+                Force += pR->Gravity;
+                Force += WindForce;
+                Force *= StepTime_x2_Half;
+
+                Displacement = pRW->Position - pRW->OldPosition;
+                Displacement += Force / pR->Mass;
+                Displacement *= pR->Resistance;
+                Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
+            }
 
             pRW->OldPosition = pRW->Position;
             pRW->Position += Displacement;
@@ -517,8 +758,15 @@ public unsafe class SPCRJointDynamicsJob
             var Direction = RWptB->Position - RWptA->Position;
 
             float Distance = Direction.magnitude;
-            float Force = (Distance - constraint->Length) * SpringK;
-
+            float Force = 0.0f;
+            if(Distance >= constraint->StretchLength)
+            {
+                Force = (Distance - constraint->StretchLength) * SpringK;
+            }
+            else if(Distance <= constraint->Length)
+            {
+                Force = (Distance - constraint->Length) * SpringK;
+            }
             bool IsShrink = Force >= 0.0f;
             float ConstraintPower;
             switch (constraint->Type)
@@ -660,6 +908,202 @@ public unsafe class SPCRJointDynamicsJob
     }
 
     //[BurstCompile]
+    struct JobMovingCollisionPoint : IJobParallelFor
+    {
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public PointRead* pRPoints;
+        [NativeDisableUnsafePtrRestriction]
+        public PointReadWrite* pRWPoints;
+
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public Collider* pColliders;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public ColliderEx* pColliderExs;
+        [ReadOnly]
+        public int ColliderCount;
+
+        [ReadOnly]
+        public int DivideMax;
+
+        void IJobParallelFor.Execute(int index)
+        {
+            var pR = pRPoints + index;
+            var pRW = pRWPoints + index;
+            
+            if (pR->Weight <= EPSILON)
+            {
+                return;
+            }
+
+            var ray = new Ray();
+
+            for (int i = 0; i < ColliderCount; ++i)
+            {
+                Collider* pCollider = pColliders + i;
+                ColliderEx* pColliderEx = pColliderExs + i;
+
+                if(pCollider->PushOutRate < 1.0f)
+                {
+                    continue;
+                }
+
+                var Point0 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->OriginalOldPosition);
+                var Point1 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->Position);
+                var Direction = Point1 - Point0;
+                var SqrDistance = Direction.sqrMagnitude;
+
+                bool NeedsCheck = false;
+                if(SqrDistance < EPSILON)
+                {
+                    NeedsCheck = pColliderEx->LocalBounds.Contains(Point0);
+                }
+                else
+                {
+                    ray.origin = Point0;
+                    ray.direction = Direction;
+                    if (pColliderEx->LocalBounds.IntersectRay(ray, out float IntersectDistance))
+                    {
+                        NeedsCheck = (IntersectDistance * IntersectDistance < SqrDistance);
+                    }
+                }
+
+                if(NeedsCheck)
+                {
+                    if (pCollider->Height <= EPSILON)
+                    {
+                        ResolveSphereCollision(pCollider, pColliderEx, pRW);
+                    }
+                    else
+                    {
+                        ResolveCapsuleCollision(pCollider, pColliderEx, pRW);
+                    }
+                }
+            }
+        }
+
+        bool CheckSphereCollisionOffset(Vector3 Point, Vector3 PrevPoint, Vector3 SphereCenter, float Radius, Vector3 ColliderMove, Vector3 PointMove, ref bool IsCatch, ref Vector3 Offset)
+        {
+            var CenterToPoint = Point - SphereCenter;
+            float Distance = CenterToPoint.magnitude;
+            if (Distance < Radius)
+            {
+                if (ColliderMove.sqrMagnitude <= EPSILON)
+                {
+                    IsCatch = false;
+                }
+                else if (PointMove.sqrMagnitude <= EPSILON)
+                {
+                    IsCatch = true;
+                }
+                else
+                {
+                    IsCatch = Vector3.Dot(ColliderMove, PrevPoint - SphereCenter) > 0.0f;
+                }
+                
+                // Push out for direction
+                var Direction = IsCatch ? ColliderMove : (-1.0f * PointMove);
+                float a = Vector3.Dot(Direction, Direction);
+                float b = Vector3.Dot(CenterToPoint, Direction) * 2.0f;
+                float c = Vector3.Dot(CenterToPoint, CenterToPoint) - Radius * Radius;
+                float D = b * b - 4.0f * a * c;
+                if(D > 0.0f)
+                {
+                    float x = (-b + Mathf.Sqrt(D)) / (2.0f * a);
+                    Offset = Direction * x + CenterToPoint;
+                    return true;
+                }
+            }
+            Offset = Vector3.zero;
+            return false;
+        }
+
+        void ResolveSphereCollision(Collider* pCollider, ColliderEx* pColliderEx, PointReadWrite* pRW)
+        {
+            var Point0 = pRW->OriginalOldPosition;
+            var Point1 = pRW->Position;
+            var PointMove = Point1 - Point0;
+
+            var ColliderPoint0 = pColliderEx->OldPosition;
+            var ColliderPoint1 = pColliderEx->Position;
+            var ColliderMove = ColliderPoint1 - ColliderPoint0;
+
+            var Radius = pCollider->RadiusHead;
+
+            var PrevPoint = Point0;
+            var Offset = Vector3.zero;
+
+            int Iteration = System.Math.Max(DivideMax, (int)Mathf.Ceil(ColliderMove.magnitude / Radius));
+            for(int i = 1; i <= Iteration; i++)
+            {
+                float t = (float)i / Iteration;
+                var Point = Vector3.Lerp(Point0, Point1, t);
+                var Sphere = Vector3.Lerp(ColliderPoint0, ColliderPoint1, t);
+
+                bool IsCatch = false;
+                if (CheckSphereCollisionOffset(Point, PrevPoint, Sphere, Radius, ColliderMove, PointMove, ref IsCatch, ref Offset))
+                {
+                    pRW->Position = ColliderPoint1 + Offset; // * pCollider->PushOutRate;
+                    break;
+                }
+
+                PrevPoint = Point;
+            }
+        }
+
+        void ResolveCapsuleCollision(Collider* pCollider, ColliderEx* pColliderEx, PointReadWrite* pRW)
+        {
+            var Point0 = pRW->OriginalOldPosition;
+            var Point1 = pRW->Position;
+            var PointMove = Point1 - Point0;
+
+            var ColliderHead0 = pColliderEx->OldPosition;
+            var ColliderHead1 = pColliderEx->Position;
+            var ColliderTail0 = pColliderEx->OldPosition + pColliderEx->OldDirection;
+            var ColliderTail1 = pColliderEx->Position + pColliderEx->Direction;
+            var ColliderDir0 = pColliderEx->OldDirection;
+            var ColliderDir1 = pColliderEx->Direction;
+
+            var HeadMove = ColliderHead1 - ColliderHead0;
+            var TailMove = ColliderTail1 - ColliderTail0;
+
+            var HeadRadius = pCollider->RadiusHead;
+            var TailRadius = pCollider->RadiusTail;
+
+            var PrevPoint = Point0;
+            var Offset = Vector3.zero;
+
+            int HeadSteps = (int)Mathf.Ceil(HeadMove.magnitude / HeadRadius);
+            int TailSteps = (int)Mathf.Ceil(TailMove.magnitude / TailRadius);
+
+            int Iteration = System.Math.Max(DivideMax, System.Math.Max(HeadSteps, TailSteps));
+            for (int i = 1; i <= Iteration; i++)
+            {
+                float t = (float)i / Iteration;
+                var Point = Vector3.Lerp(Point0, Point1, t);
+                var Head = Vector3.Lerp(ColliderHead0, ColliderHead1, t);
+                var Dir = Vector3.Lerp(ColliderDir0, ColliderDir1, t);
+                var NormDir = Dir.normalized;
+                var HeadToPoint = Point - Head;
+
+                float w = Mathf.Clamp01(Vector3.Dot(Dir, HeadToPoint) / HeadToPoint.sqrMagnitude);
+                var ColliderPoint = Head + Dir * w;
+                var ColliderMove = Vector3.Lerp(HeadMove, TailMove, w);
+                var Radius = Mathf.Lerp(HeadRadius, TailRadius, w);
+
+                bool IsCatch = false;
+                if (CheckSphereCollisionOffset(Point, PrevPoint, ColliderPoint, Radius, ColliderMove, PointMove, ref IsCatch, ref Offset))
+                {
+                    ColliderPoint = ColliderHead1 + ColliderDir1 * w;
+                    pRW->Position = ColliderPoint + Offset; // * pCollider->PushOutRate;
+                    break;
+                }
+
+                PrevPoint = Point;
+            }
+        }
+    }
+
+    //[BurstCompile]
     struct JobCollisionPoint : IJobParallelFor
     {
         [NativeDisableUnsafePtrRestriction]
@@ -698,14 +1142,18 @@ public unsafe class SPCRJointDynamicsJob
                     Collider* pCollider = pColliders + i;
                     ColliderEx* pColliderEx = pColliderExs + i;
 
+                    Vector3 point = pRW->Position;
+
                     if (pCollider->Height <= 0.0f)
                     {
-                        PushoutFromSphere(pCollider, pColliderEx, ref pRW->Position);
+                        PushoutFromSphere(pCollider, pColliderEx, ref point);
                     }
                     else
                     {
-                        PushoutFromCapsule(pCollider, pColliderEx, ref pRW->Position);
+                        PushoutFromCapsule(pCollider, pColliderEx, ref point);
                     }
+
+                    pRW->Position += (point - pRW->Position) * pCollider->PushOutRate;
                 }
             }
         }
@@ -775,6 +1223,8 @@ public unsafe class SPCRJointDynamicsJob
         public PointRead* pRPoints;
         [NativeDisableUnsafePtrRestriction]
         public PointReadWrite* pRWPoints;
+        [ReadOnly]
+        public bool UpdateTransform;
 
         void IJobParallelForTransform.Execute(int index, TransformAccess transform)
         {
@@ -789,8 +1239,11 @@ public unsafe class SPCRJointDynamicsJob
                 if (RealLength > EPSILON)
                 {
                     pRW->PreviousDirection = Direction;
-                    transform.position = pRW->Position;
-                    SetRotation(index, transform);
+                    if(UpdateTransform)
+                    {
+                        transform.position = pRW->Position;
+                        SetRotation(index, transform);
+                    }
                 }
                 else
                 {
@@ -800,7 +1253,10 @@ public unsafe class SPCRJointDynamicsJob
             else
             {
                 pRW->Position = transform.position;
-                SetRotation(index, transform);
+                if(UpdateTransform)
+                {
+                    SetRotation(index, transform);
+                }
             }
         }
 

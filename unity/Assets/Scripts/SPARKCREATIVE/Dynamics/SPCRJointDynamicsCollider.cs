@@ -23,12 +23,15 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
     float _Height = 0.0f;
     [SerializeField, Range(0.0f, 1.0f)]
     float _Friction = 0.5f;
+    [SerializeField, Range(0.0f, 1.0f)]
+    float _PushOutRate = 1.0f;
 
     public Transform RefTransform { get; private set; }
     public float RadiusHead { get { return _Radius * _HeadRadiusScale; } }
     public float RadiusTail { get { return _Radius * _TailRadiusScale; } }
-    public float Height { get { return _Height; } }
+    public float Height { get { return _Height; } set { _Height = value; } }
     public float Friction { get { return _Friction; } }
+    public float PushOutRate { get { return _PushOutRate; } }
 
     public bool IsCapsule { get { return _Height > 0.0f; } }
 

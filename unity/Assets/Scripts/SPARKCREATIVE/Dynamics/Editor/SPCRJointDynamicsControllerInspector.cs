@@ -56,7 +56,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
 
         controller._UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
         controller._Relaxation = EditorGUILayout.IntSlider("演算繰り返し回数", controller._Relaxation, 1, 16);
-
+        controller._SubSteps = EditorGUILayout.IntSlider("演算分割数", controller._SubSteps, 1, 16);
+        
         GUILayout.Space(8);
         controller._IsCancelResetPhysics = EditorGUILayout.Toggle("物理リセットを拒否", controller._IsCancelResetPhysics);
         GUILayout.Space(8);
@@ -67,6 +68,12 @@ public class SPCRJointDynamicsControllerInspector : Editor
         {
             controller._FloorHeight = EditorGUILayout.FloatField("床の高さ", controller._FloorHeight);
         }
+        GUILayout.Space(8);
+        controller._DetailHitDivideMax = EditorGUILayout.IntSlider("詳細な衝突判定の最大分割数", controller._DetailHitDivideMax, 0, 16);
+
+        GUILayout.Space(8);
+        controller._RootSlideLimit = EditorGUILayout.FloatField("ルートの最大移動距離", controller._RootSlideLimit);
+        controller._RootRotateLimit = EditorGUILayout.FloatField("ルートの最大回転角", controller._RootRotateLimit);
 
         GUILayout.Space(8);
         controller._SpringK = EditorGUILayout.Slider("バネ係数", controller._SpringK, 0.0f, 1.0f);
@@ -177,11 +184,17 @@ public class SPCRJointDynamicsControllerInspector : Editor
         {
             controller.ResetPhysics(0.3f);
         }
+        
+        GUILayout.Space(8);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent("一時停止"), true);
 
         Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
         controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
         controller._IsDebugDraw_StructuralHorizontal = EditorGUILayout.Toggle("水平構造", controller._IsDebugDraw_StructuralHorizontal);
         controller._IsDebugDraw_Shear = EditorGUILayout.Toggle("せん断", controller._IsDebugDraw_Shear);
+        controller._IsDebugDraw_BendingVertical = EditorGUILayout.Toggle("垂直曲げ", controller._IsDebugDraw_BendingVertical);
+        controller._IsDebugDraw_BendingHorizontal = EditorGUILayout.Toggle("水平曲げ", controller._IsDebugDraw_BendingHorizontal);
+        controller._IsDebugDraw_RuntimeColliderBounds = EditorGUILayout.Toggle("実行中のコリジョン情報", controller._IsDebugDraw_RuntimeColliderBounds);
 
         Titlebar("事前設定", new Color(1.0f, 1.0f, 0.7f));
         controller._IsLoopRootPoints = EditorGUILayout.Toggle("拘束のループ", controller._IsLoopRootPoints);
@@ -235,6 +248,19 @@ public class SPCRJointDynamicsControllerInspector : Editor
             controller.UpdateJointDistance();
             EditorUtility.SetDirty(controller);
         }
+        {
+            var bgColor = GUI.backgroundColor;
+            var contentColor = GUI.contentColor;
+            GUI.contentColor = Color.yellow;
+            GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
+            if (GUILayout.Button("拘束の設定を破棄"))
+            {
+                controller.DeleteJointConnection();
+                EditorUtility.SetDirty(controller);
+            }
+            GUI.backgroundColor = bgColor;
+            GUI.contentColor = contentColor;
+        }
 
         Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
         GUILayout.Space(3);
@@ -250,6 +276,50 @@ public class SPCRJointDynamicsControllerInspector : Editor
         if (GUILayout.Button("垂直方向にボーンを伸縮する"))
         {
             controller.StretchBoneLength(_BoneStretchScale);
+        }
+
+        GUILayout.Space(5);
+        EditorGUILayout.LabelField("=============== 細分化");
+        if (GUILayout.Button("水平の拘束を挿入"))
+        {
+            SubdivideVerticalChain(controller, 1);
+            EditorUtility.SetDirty(controller);
+        }
+        if (GUILayout.Button("垂直の拘束を挿入"))
+        {
+            SubdivideHorizontalChain(controller, 1);
+            EditorUtility.SetDirty(controller);
+        }
+        if(controller._SubDivInsertedPoints.Count > 0)
+        {
+            if (GUILayout.Button("細分化を元に戻す"))
+            {
+                RemoveInsertedPoints(controller);
+                EditorUtility.SetDirty(controller);
+            }
+            {
+                var bgColor = GUI.backgroundColor;
+                var contentColor = GUI.contentColor;
+                GUI.contentColor = Color.yellow;
+                GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
+                if (GUILayout.Button("細分化の確定"))
+                {
+                    PurgeSubdivideOriginalInfo(controller);
+                    EditorUtility.SetDirty(controller);
+                }
+                GUI.backgroundColor = bgColor;
+                GUI.contentColor = contentColor;
+            }
+            // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
+            // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
+            
+            {
+                var message = string.Format(
+                    "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
+                    controller._SubDivOriginalPoints.Count,
+                    controller._SubDivInsertedPoints.Count);
+                EditorGUILayout.HelpBox(message, MessageType.Warning);
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -404,6 +474,211 @@ public class SPCRJointDynamicsControllerInspector : Editor
         }
     }
 
+    void SubdivideVerticalChain(SPCRJointDynamicsController controller, int NumInsert)
+    {
+        var rnd = new System.Random();
+        var RootList = new List<SPCRJointDynamicsPoint>(controller._RootPointTbl);
+        var OriginalPoints = controller._SubDivOriginalPoints;
+        var InsertedPoints = controller._SubDivInsertedPoints;
+        var IsFirstSubdivide = (OriginalPoints.Count == 0);
+
+        foreach(var rootPoint in RootList)
+        {
+            if(IsFirstSubdivide)
+                OriginalPoints.Add(rootPoint);
+            
+            var parentPoint = rootPoint;
+
+            while(parentPoint.transform.childCount > 0)
+            {
+                var parentTransform = parentPoint.transform;
+                
+                var points = parentTransform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
+                if(points.Length < 2)
+                {
+                    break;
+                }
+
+                var childPoint = points[1];
+                
+                if(parentPoint == childPoint)
+                {
+                    Debug.LogWarning("Infinite Loop!:" + parentPoint.name);
+                    break;
+                }
+
+                if(IsFirstSubdivide)
+                    OriginalPoints.Add(childPoint);
+
+                var childTransform = childPoint.transform;
+
+                SPCRJointDynamicsPoint newPoint = null;
+                for(int i = 1; i <= NumInsert; i++)
+                {
+                    float weight = i / (NumInsert + 1.0f);
+
+                    newPoint = CreateInterpolatedPoint(parentPoint, childPoint, weight, "VSubdiv_" + rnd.Next());
+                    InsertedPoints.Add(newPoint);
+
+                    newPoint.transform.SetParent(parentTransform);
+                    parentTransform = newPoint.transform;
+                }
+                childTransform.SetParent(newPoint.transform);
+
+                parentPoint = childPoint;
+            }
+        }
+    }
+
+    void SubdivideHorizontalChain(SPCRJointDynamicsController controller, int NumInsert)
+    {
+        var rnd = new System.Random();
+        var RootList = new List<SPCRJointDynamicsPoint>(controller._RootPointTbl);
+        var OriginalPoints = controller._SubDivOriginalPoints;
+        var InsertedPoints = controller._SubDivInsertedPoints;
+        var IsFirstSubdivide = (OriginalPoints.Count == 0);
+
+        int Count = RootList.Count;
+        int Start = controller._IsLoopRootPoints ? Count : (Count - 1);
+
+        for(int iroot = Start; iroot > 0; iroot--)
+        {
+            var root0 = RootList[iroot % Count];
+            var root1 = RootList[iroot - 1];
+
+            for(int iin = 1; iin <= NumInsert; iin++)
+            {
+                var point0 = root0;
+                var point1 = root1;
+                var parentTransform = root0.transform.parent;
+
+                float weight = iin / (NumInsert + 1.0f);
+                SPCRJointDynamicsPoint newRoot = null;
+
+                while(point0 != null && point1 != null)
+                {
+                    if(IsFirstSubdivide && iin == 1)
+                    {
+                        if(!controller._IsLoopRootPoints && iroot == Start)
+                        {
+                            OriginalPoints.Add(point0);
+                        }
+                        OriginalPoints.Add(point1);
+                    }
+
+                    var newPoint = CreateInterpolatedPoint(point0, point1, weight, "HSubdiv_" + rnd.Next());
+                    InsertedPoints.Add(newPoint);
+
+                    var newTransform = newPoint.transform;
+                    newTransform.SetParent(parentTransform);
+                    parentTransform = newTransform;
+                    
+                    SPCRJointDynamicsPoint[] points;
+
+                    points = point0.transform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
+                    point0 = (points.Length > 1) ? points[1] : null;
+
+                    points = point1.transform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
+                    point1 = (points.Length > 1) ? points[1] : null;
+                    
+                    if(newRoot == null)
+                    {
+                        newRoot = newPoint;
+                        RootList.Insert(iroot, newRoot);
+                    }
+                }
+            }
+        }
+        controller._RootPointTbl = RootList.ToArray();
+    }
+
+    SPCRJointDynamicsPoint CreateInterpolatedPoint(SPCRJointDynamicsPoint point0, SPCRJointDynamicsPoint point1, float weight0, string newName="SubDivPoint")
+    {
+        var Transform0 = point0.transform;
+        var Transform1 = point1.transform;
+        var pos = Vector3.Lerp(Transform0.position, Transform1.position, weight0);
+        var rot = Quaternion.Slerp(Transform0.rotation, Transform1.rotation, weight0);
+        var obj = new GameObject(newName);
+        var newPoint = obj.AddComponent<SPCRJointDynamicsPoint>();
+        var objTransform = obj.transform;
+        objTransform.position = pos;
+        objTransform.rotation = rot;
+        return newPoint;
+    }
+
+    void RemoveInsertedPoints(SPCRJointDynamicsController controller)
+    {
+        var OriginalPoints = controller._SubDivOriginalPoints;
+        var InsertedPoints = controller._SubDivInsertedPoints;
+
+        if(OriginalPoints.Count == 0)
+        {
+            return;
+        }
+
+        controller.DeleteJointConnection();
+
+        var originalPoints = new Dictionary<int, SPCRJointDynamicsPoint>(OriginalPoints.Count);
+        foreach(var op in OriginalPoints)
+        {
+            int key = op.GetInstanceID();
+            if(!originalPoints.ContainsKey(key))
+            {
+                originalPoints.Add(key, op);
+            }
+        }
+
+        var rootList = new List<SPCRJointDynamicsPoint>();
+        foreach(var root in controller._RootPointTbl)
+        {
+            if(!originalPoints.ContainsKey(root.GetInstanceID()))
+            {
+                continue;
+            }
+            
+            rootList.Add(root);
+
+            var parentPoint = root;
+            var chainPoint = root;
+            while(chainPoint != null)
+            {
+                var children = chainPoint.GetComponentsInChildren<SPCRJointDynamicsPoint>();
+                if(children.Length < 2)
+                {
+                    break;
+                }
+                var childPoint = children[1];
+                if(originalPoints.ContainsKey(childPoint.GetInstanceID()))
+                {
+                    childPoint.transform.SetParent(parentPoint.transform);
+                    parentPoint = childPoint;
+                }
+                chainPoint = childPoint;
+            }
+        }
+
+        foreach(var point in InsertedPoints)
+        {
+            point._RefChildPoint = null;
+            point.transform.SetParent(null);
+        }
+
+        foreach(var point in InsertedPoints)
+        {
+            DestroyImmediate(point.gameObject);
+        }
+
+        controller._RootPointTbl = rootList.ToArray();
+        controller._SubDivOriginalPoints.Clear();
+        controller._SubDivInsertedPoints.Clear();
+    }
+
+    void PurgeSubdivideOriginalInfo(SPCRJointDynamicsController controller)
+    {
+        controller._SubDivOriginalPoints.Clear();
+        controller._SubDivInsertedPoints.Clear();
+    }
+    
     void CreationSubdivisionJoint(SPCRJointDynamicsController Controller, int HDivCount, int VDivCount)
     {
         var VCurve = new List<CurveData>();
