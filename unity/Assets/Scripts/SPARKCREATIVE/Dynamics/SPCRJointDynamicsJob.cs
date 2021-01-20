@@ -83,6 +83,7 @@ public unsafe class SPCRJointDynamicsJob
     struct PointReadWrite
     {
         public Vector3 Position;
+        public Vector3 TargetDisplacement;
         public Vector3 OldPosition;
         public Vector3 OriginalOldPosition;
         public Vector3 PreviousDirection;
@@ -393,6 +394,11 @@ public unsafe class SPCRJointDynamicsJob
             pDst->Position = _RefGrabbers[i].RefTransform.position;
         }
 
+        var CalculateDisplacement = new JobCalculateDisplacement();
+        CalculateDisplacement.pRWPoints = pRWPoints;
+        _hJob = CalculateDisplacement.Schedule(_PointCount, 8, _hJob);
+
+        float DeltaStepMulDeltaRelax = (1.0f / SubSteps) * (1.0f / Relaxation);
         StepTime /= SubSteps;
 
         for(int iSubStep = 1; iSubStep <= SubSteps; iSubStep++)
@@ -469,7 +475,7 @@ public unsafe class SPCRJointDynamicsJob
             PointUpdate.pRPoints = pRPoints;
             PointUpdate.pRWPoints = pRWPoints;
             PointUpdate.WindForce = WindForce;
-            PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f;
+            PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f * SubSteps;
             PointUpdate.SystemOffset = SystemOffset;
             PointUpdate.SystemRotation = SystemRotation;
             PointUpdate.IsPaused = IsPaused;
@@ -500,6 +506,7 @@ public unsafe class SPCRJointDynamicsJob
                         ConstraintUpdate.pColliders = pColliders;
                         ConstraintUpdate.pColliderExs = pColliderExs;
                         ConstraintUpdate.ColliderCount = IsEnableColliderCollision ? ColliderCount : 0;
+                        ConstraintUpdate.DeltaSubstepMulDeltaRelax = DeltaStepMulDeltaRelax;
                         ConstraintUpdate.SpringK = SpringK;
                         _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
                     }
@@ -601,6 +608,17 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+    struct JobCalculateDisplacement : IJobParallelFor
+    {
+        [NativeDisableUnsafePtrRestriction]
+        public PointReadWrite* pRWPoints;
+        public void Execute(int index)
+        {
+            var pRW = pRWPoints + index;
+            pRW->TargetDisplacement = pRW->Position - pRW->OldPosition;
+        }
+    }
+
     //[BurstCompile]
     struct JobPointUpdate : IJobParallelFor
     {
@@ -663,7 +681,7 @@ public unsafe class SPCRJointDynamicsJob
                 Force += WindForce;
                 Force *= StepTime_x2_Half;
 
-                Displacement = pRW->Position - pRW->OldPosition;
+                Displacement = pRW->TargetDisplacement;
                 Displacement += Force / pR->Mass;
                 Displacement *= pR->Resistance;
                 Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
@@ -741,6 +759,8 @@ public unsafe class SPCRJointDynamicsJob
         public ColliderEx* pColliderExs;
         [ReadOnly]
         public int ColliderCount;
+        [ReadOnly]
+        public float DeltaSubstepMulDeltaRelax;
 
         [ReadOnly]
         public float SpringK;
@@ -765,11 +785,11 @@ public unsafe class SPCRJointDynamicsJob
             float Force = 0.0f;
             if(Distance >= constraint->StretchLength)
             {
-                Force = (Distance - constraint->StretchLength) * SpringK;
+                Force = ((Distance - constraint->StretchLength) * DeltaSubstepMulDeltaRelax) * SpringK;
             }
             else if(Distance <= constraint->Length)
             {
-                Force = (Distance - constraint->Length) * SpringK;
+                Force = ((Distance - constraint->Length) * DeltaSubstepMulDeltaRelax) * SpringK;
             }
             bool IsShrink = Force >= 0.0f;
             float ConstraintPower;
