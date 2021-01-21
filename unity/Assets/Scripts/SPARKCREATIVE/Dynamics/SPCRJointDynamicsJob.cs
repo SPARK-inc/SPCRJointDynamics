@@ -77,6 +77,7 @@ public unsafe class SPCRJointDynamicsJob
         public Vector3 BoneAxis;
         public Vector3 InitialPosition;
         public Quaternion LocalRotation;
+        public Vector3 InitialWorldPosition;
     }
 
     struct PointReadWrite
@@ -188,6 +189,7 @@ public unsafe class SPCRJointDynamicsJob
             PointsR[i].BoneAxis = src.BoneAxis;
             PointsR[i].LocalRotation = src.LocalRotation;
             PointsR[i].InitialPosition = src.InitialPosition;
+            PointsR[i].InitialWorldPosition = src.Position;
             PointsRW[i].Position = src.Position;
             PointsRW[i].OldPosition = src.OldPosition;
             PointsRW[i].OriginalOldPosition = src.OldPosition;
@@ -330,7 +332,8 @@ public unsafe class SPCRJointDynamicsJob
         int Relaxation, float SpringK,
         bool IsEnableFloorCollision, float FloorHeight,
         int DetailHitDivideMax,
-        bool IsEnableColliderCollision)
+        bool IsEnableColliderCollision,
+        Vector3 LockAngles)
     {
         bool IsPaused = StepTime <= 0.0f;
         if(IsPaused)
@@ -520,6 +523,7 @@ public unsafe class SPCRJointDynamicsJob
             PointToTransform.pRPoints = pRPoints;
             PointToTransform.pRWPoints = pRWPoints;
             PointToTransform.UpdateTransform = iSubStep == SubSteps;
+            PointToTransform.lockAngles = LockAngles;
             _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
         }
 
@@ -1225,6 +1229,8 @@ public unsafe class SPCRJointDynamicsJob
         public PointReadWrite* pRWPoints;
         [ReadOnly]
         public bool UpdateTransform;
+        [ReadOnly]
+        public Vector3 lockAngles;
 
         void IJobParallelForTransform.Execute(int index, TransformAccess transform)
         {
@@ -1258,6 +1264,8 @@ public unsafe class SPCRJointDynamicsJob
                     SetRotation(index, transform);
                 }
             }
+
+            LockPosition(pR, pRW);
         }
 
         void SetRotation(int index, TransformAccess transform)
@@ -1278,6 +1286,57 @@ public unsafe class SPCRJointDynamicsJob
                     transform.rotation = AimRotation * transform.rotation;
                 }
             }
+        }
+
+        void LockPosition(PointRead* pR, PointReadWrite* pRW)
+        {
+            if (pR->Parent == -1 || lockAngles == Vector3.one * -1)
+                return;
+
+            var pRp = pRPoints + pR->Parent;
+            var pRWP = pRWPoints + pR->Parent;
+
+            Vector3 initialDeltaPosition = pR->InitialWorldPosition - pRp->InitialWorldPosition;
+            Vector3 currDeltaPosition = pRW->Position - pRWP->Position;
+            Vector3 finalPosition = pRW->Position;
+
+            if (lockAngles.x != -1)
+            {
+                float currAngleX = Mathf.Asin(currDeltaPosition.x / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float initAngleX = Mathf.Asin(initialDeltaPosition.x / initialDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float minAngleX = initAngleX - lockAngles.x;
+                float maxAngleX = initAngleX + lockAngles.x;
+                if (currAngleX <= minAngleX || currAngleX >= maxAngleX)
+                {
+                    float angle = currAngleX <= minAngleX ? minAngleX : maxAngleX;
+                    finalPosition.x = pRWP->Position.x + (Mathf.Sin(angle * Mathf.Deg2Rad) * currDeltaPosition.magnitude);
+                }
+            }
+            if (lockAngles.y != -1)
+            {
+                float currAngleY = Mathf.Acos(currDeltaPosition.y / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float initAngleY = Mathf.Acos(initialDeltaPosition.y / initialDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float minAngleY = initAngleY - lockAngles.y;
+                float maxAngleY = initAngleY + lockAngles.y;
+                if (currAngleY >= maxAngleY || currAngleY <= minAngleY)
+                {
+                    float angle = currAngleY <= minAngleY ? minAngleY : maxAngleY;
+                    finalPosition.y = pRWP->Position.y + (Mathf.Cos(angle * Mathf.Deg2Rad) * currDeltaPosition.magnitude);
+                }
+            }
+            if (lockAngles.z != -1)
+            {
+                float currAngleZ = Mathf.Asin(currDeltaPosition.z / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float initAngleZ = Mathf.Asin(initialDeltaPosition.z / initialDeltaPosition.magnitude) * Mathf.Rad2Deg;
+                float minAngleZ = initAngleZ - lockAngles.z;
+                float maxAngleZ = initAngleZ + lockAngles.z;
+                if (currAngleZ <= minAngleZ || currAngleZ >= maxAngleZ)
+                {
+                    float angle = currAngleZ <= minAngleZ ? minAngleZ : maxAngleZ;
+                    finalPosition.z = pRWP->Position.z + (Mathf.Sin(angle * Mathf.Deg2Rad) * currDeltaPosition.magnitude);
+                }
+            }
+            pRW->Position = finalPosition;
         }
     }
 }

@@ -179,6 +179,24 @@ public class SPCRJointDynamicsControllerInspector : Editor
             EditorGUILayout.LabelField("※ 無効 ※");
         }
 
+        Titlebar("ロック軸角度", new Color(0.7f, 1.0f, 0.7f));
+
+        controller._UseLockAngles = EditorGUILayout.Toggle("ロック角度", controller._UseLockAngles);
+        if (controller._UseLockAngles)
+        {
+            if (controller._UseSeperateLockAxis)
+            {
+                controller._UseSeperateLockAxis = EditorGUILayout.Toggle("個々の軸をロック", controller._UseSeperateLockAxis);
+                controller._LockAngleX = EditorGUILayout.IntSlider("ロック角度-X", controller._LockAngleX, -1, 180);
+                controller._LockAngleY = EditorGUILayout.IntSlider("ロック角度-Y", controller._LockAngleY, -1, 180);
+                controller._LockAngleZ = EditorGUILayout.IntSlider("ロック角度-Z", controller._LockAngleZ, -1, 180);
+            }
+            else
+            {
+                controller._LockAngle = EditorGUILayout.IntSlider("ロック角度", controller._LockAngle, 0, 180);
+                controller._UseSeperateLockAxis = EditorGUILayout.Toggle("個々の軸をロック", controller._UseSeperateLockAxis);
+            }
+        }
         Titlebar("オプション", new Color(0.7f, 1.0f, 0.7f));
         if (GUILayout.Button("物理初期化"))
         {

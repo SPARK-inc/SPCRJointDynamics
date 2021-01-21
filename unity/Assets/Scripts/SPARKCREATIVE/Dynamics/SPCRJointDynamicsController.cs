@@ -145,6 +145,12 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsCollideBendingVertical = false;
     public bool _IsCollideBendingHorizontal = false;
 
+    public bool _UseLockAngles = false;
+    public int _LockAngle = -1;// Negative value is disable
+    public bool _UseSeperateLockAxis = false;
+    public int _LockAngleX = -1;// Negative value is disable
+    public int _LockAngleY = -1;// Negative value is disable
+    public int _LockAngleZ = -1;// Negative value is disable
     [SerializeField]
     SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
     [SerializeField]
@@ -194,6 +200,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
+    Vector3 LockAngles;
+
     void Awake()
     {
         var PointTransforms = new Transform[_PointTbl.Length];
@@ -220,7 +228,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].PreviousDirection = PointTransforms[i].parent.position - PointTransforms[i].position;
             Points[i].ParentLength = Points[i].PreviousDirection.magnitude;
             Points[i].LocalRotation = PointTransforms[i].localRotation;
-
             Points[i].StructuralShrinkVertical = _StructuralShrinkVerticalScaleCurve.Evaluate(rate);
             Points[i].StructuralStretchVertical = _StructuralStretchVerticalScaleCurve.Evaluate(rate);
             Points[i].StructuralShrinkHorizontal = _StructuralShrinkHorizontalScaleCurve.Evaluate(rate);
@@ -258,6 +265,15 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Job.Initialize(_RootTransform, Points, PointTransforms, _ConstraintTable, _ColliderTbl, _PointGrabberTbl);
 
         _Delay = 15.0f / 60.0f;
+
+        LockAngles = GetLockAngles();
+    }
+
+    Vector3 GetLockAngles()
+    {
+        if (!_UseLockAngles)
+            return Vector3.one * -1;
+        return _UseSeperateLockAxis ? new Vector3(_LockAngleX, _LockAngleY, _LockAngleZ) : Vector3.one * _LockAngle;
     }
 
     void OnDestroy()
@@ -301,7 +317,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _Relaxation, _SpringK,
             _IsEnableFloorCollision, _FloorHeight,
             _DetailHitDivideMax,
-            _IsEnableColliderCollision);
+            _IsEnableColliderCollision,
+            LockAngles);
     }
 
     void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)
