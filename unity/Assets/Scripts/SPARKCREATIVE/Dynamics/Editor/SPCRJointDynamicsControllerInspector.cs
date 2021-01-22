@@ -26,9 +26,51 @@ public class SPCRJointDynamicsControllerInspector : Editor
         SortNearPointXZ_FixedBeginEnd,
     }
 
+    /*
     int _SubdivisionJointCountH = 12;
     int _SubdivisionJointCountV = 6;
     float _BoneStretchScale = 1.0f;
+    */
+
+    public static bool Foldout(bool display, string title, Color color)
+    {
+        var backgroundColor = GUI.backgroundColor;
+        GUI.backgroundColor = color;
+
+        var style = new GUIStyle("ShurikenModuleTitle");
+        style.font = new GUIStyle(EditorStyles.label).font;
+        style.border = new RectOffset(15, 7, 4, 4);
+        style.fixedHeight = 22;
+        style.contentOffset = new Vector2(20f, -2f);
+
+        var rect = GUILayoutUtility.GetRect(16f, 22f, style);
+        GUI.Box(rect, title, style);
+
+        var e = Event.current;
+
+        var toggleRect = new Rect(rect.x + 4f, rect.y + 2f, 13f, 13f);
+        if (e.type == EventType.Repaint)
+        {
+            EditorStyles.foldout.Draw(toggleRect, false, false, display, false);
+        }
+
+        if (e.type == EventType.MouseDown && rect.Contains(e.mousePosition))
+        {
+            display = !display;
+            e.Use();
+        }
+
+        GUI.backgroundColor = backgroundColor;
+
+        return display;
+    }
+
+    bool _Opened_BaseSettings = false;
+    bool _Opened_PhysicsSettings = false;
+    bool _Opened_ConstraintSettings = false;
+    bool _Opened_AngleLockSettings = false;
+    bool _Opened_OptionSettings = false;
+    bool _Opened_PreSettings = false;
 
     public override void OnInspectorGUI()
     {
@@ -39,308 +81,406 @@ public class SPCRJointDynamicsControllerInspector : Editor
         GUILayout.Space(8);
         controller.Name = EditorGUILayout.TextField("名称", controller.Name);
 
-        Titlebar("基本設定", new Color(0.7f, 1.0f, 0.7f));
-        controller._RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent("親Transform"), controller._RootTransform, typeof(Transform), true);
-
-        if (GUILayout.Button("ルートの点群自動検出", GUILayout.Height(22.0f)))
+        _Opened_BaseSettings = Foldout(_Opened_BaseSettings, "基本設定", new Color(1.0f, 0.7f, 1.0f));
+        if (_Opened_BaseSettings)
         {
-            SearchRootPoints(controller);
-        }
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("_RootPointTbl"), new GUIContent("ルートの点群"), true);
-        GUILayout.Space(5);
-
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("_ColliderTbl"), new GUIContent("コライダー"), true);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("_PointGrabberTbl"), new GUIContent("グラバー"), true);
-
-        Titlebar("物理設定", new Color(0.7f, 1.0f, 0.7f));
-
-        controller._UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
-        controller._Relaxation = EditorGUILayout.IntSlider("演算繰り返し回数", controller._Relaxation, 1, 16);
-        controller._SubSteps = EditorGUILayout.IntSlider("演算分割数", controller._SubSteps, 1, 16);
-        
-        GUILayout.Space(8);
-        controller._IsCancelResetPhysics = EditorGUILayout.Toggle("物理リセットを拒否", controller._IsCancelResetPhysics);
-        GUILayout.Space(8);
-        controller._IsEnableColliderCollision = EditorGUILayout.Toggle("質点とコライダーの衝突判定をする", controller._IsEnableColliderCollision);
-        GUILayout.Space(8);
-        controller._IsEnableFloorCollision = EditorGUILayout.Toggle("質点と床の衝突判定をする", controller._IsEnableFloorCollision);
-        if (controller._IsEnableFloorCollision)
-        {
-            controller._FloorHeight = EditorGUILayout.FloatField("床の高さ", controller._FloorHeight);
-        }
-        GUILayout.Space(8);
-        controller._DetailHitDivideMax = EditorGUILayout.IntSlider("詳細な衝突判定の最大分割数", controller._DetailHitDivideMax, 0, 16);
-
-        GUILayout.Space(8);
-        controller._RootSlideLimit = EditorGUILayout.FloatField("ルートの最大移動距離", controller._RootSlideLimit);
-        controller._RootRotateLimit = EditorGUILayout.FloatField("ルートの最大回転角", controller._RootRotateLimit);
-
-        GUILayout.Space(8);
-        controller._SpringK = EditorGUILayout.Slider("バネ係数", controller._SpringK, 0.0f, 1.0f);
-
-        GUILayout.Space(8);
-        controller._Gravity = EditorGUILayout.Vector3Field("重力", controller._Gravity);
-        controller._WindForce = EditorGUILayout.Vector3Field("風力", controller._WindForce);
-
-        GUILayout.Space(8);
-        controller._MassScaleCurve = EditorGUILayout.CurveField("質量", controller._MassScaleCurve);
-        controller._GravityScaleCurve = EditorGUILayout.CurveField("重力", controller._GravityScaleCurve);
-        controller._ResistanceCurve = EditorGUILayout.CurveField("空気抵抗", controller._ResistanceCurve);
-        controller._HardnessCurve = EditorGUILayout.CurveField("硬さ", controller._HardnessCurve);
-        controller._FrictionCurve = EditorGUILayout.CurveField("摩擦", controller._FrictionCurve);
-
-        Titlebar("拘束設定", new Color(0.7f, 1.0f, 0.7f));
-        EditorGUILayout.LabelField("=============== 拘束（一括）");
-        controller._AllShrinkScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._AllShrinkScaleCurve);
-        controller._AllStretchScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._AllStretchScaleCurve);
-        GUILayout.Space(5);
-        EditorGUILayout.LabelField("=============== 構成拘束（垂直）");
-        if (controller._IsComputeStructuralVertical)
-        {
-            controller._StructuralShrinkVertical = EditorGUILayout.Slider("伸びた時縮む力", controller._StructuralShrinkVertical, 0.0f, 1.0f);
-            controller._StructuralStretchVertical = EditorGUILayout.Slider("縮む時伸びる力", controller._StructuralStretchVertical, 0.0f, 1.0f);
-            GUILayout.Space(5);
-            controller._StructuralShrinkVerticalScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._StructuralShrinkVerticalScaleCurve);
-            controller._StructuralStretchVerticalScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._StructuralStretchVerticalScaleCurve);
-            GUILayout.Space(5);
-            controller._IsAllStructuralShrinkVertical = EditorGUILayout.Toggle("伸びた時縮む力（一括設定）", controller._IsAllStructuralShrinkVertical);
-            controller._IsAllStructuralStretchVertical = EditorGUILayout.Toggle("縮む時伸びる力（一括設定）", controller._IsAllStructuralStretchVertical);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("※ 無効 ※");
-        }
-
-        EditorGUILayout.LabelField("=============== 構成拘束（水平）");
-        if (controller._IsComputeStructuralHorizontal)
-        {
-            controller._StructuralShrinkHorizontal = EditorGUILayout.Slider("伸びた時縮む力", controller._StructuralShrinkHorizontal, 0.0f, 1.0f);
-            controller._StructuralStretchHorizontal = EditorGUILayout.Slider("縮む時伸びる力", controller._StructuralStretchHorizontal, 0.0f, 1.0f);
-            GUILayout.Space(5);
-            controller._StructuralShrinkHorizontalScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._StructuralShrinkHorizontalScaleCurve);
-            controller._StructuralStretchHorizontalScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._StructuralStretchHorizontalScaleCurve);
-            GUILayout.Space(5);
-            controller._IsAllStructuralShrinkHorizontal = EditorGUILayout.Toggle("伸びた時縮む力（一括設定）", controller._IsAllStructuralShrinkHorizontal);
-            controller._IsAllStructuralStretchHorizontal = EditorGUILayout.Toggle("縮む時伸びる力（一括設定）", controller._IsAllStructuralStretchHorizontal);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("※ 無効 ※");
-        }
-
-        EditorGUILayout.LabelField("=============== せん断拘束");
-        if (controller._IsComputeShear)
-        {
-            controller._ShearShrink = EditorGUILayout.Slider("伸びた時縮む力", controller._ShearShrink, 0.0f, 1.0f);
-            controller._ShearStretch = EditorGUILayout.Slider("縮む時伸びる力", controller._ShearStretch, 0.0f, 1.0f);
-            GUILayout.Space(5);
-            controller._ShearShrinkScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._ShearShrinkScaleCurve);
-            controller._ShearStretchScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._ShearStretchScaleCurve);
-            GUILayout.Space(5);
-            controller._IsAllShearShrink = EditorGUILayout.Toggle("伸びた時縮む力（一括設定）", controller._IsAllShearShrink);
-            controller._IsAllShearStretch = EditorGUILayout.Toggle("縮む時伸びる力（一括設定）", controller._IsAllShearStretch);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("※ 無効 ※");
-        }
-
-        EditorGUILayout.LabelField("=============== 曲げ拘束（垂直）");
-        if (controller._IsComputeBendingVertical)
-        {
-            controller._BendingingShrinkVertical = EditorGUILayout.Slider("伸びた時縮む力", controller._BendingingShrinkVertical, 0.0f, 1.0f);
-            controller._BendingingStretchVertical = EditorGUILayout.Slider("縮む時伸びる力", controller._BendingingStretchVertical, 0.0f, 1.0f);
-            GUILayout.Space(5);
-            controller._BendingShrinkVerticalScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._BendingShrinkVerticalScaleCurve);
-            controller._BendingStretchVerticalScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._BendingStretchVerticalScaleCurve);
-            GUILayout.Space(5);
-            controller._IsAllBendingingShrinkVertical = EditorGUILayout.Toggle("伸びた時縮む力（一括設定）", controller._IsAllBendingingShrinkVertical);
-            controller._IsAllBendingingStretchVertical = EditorGUILayout.Toggle("縮む時伸びる力（一括設定）", controller._IsAllBendingingStretchVertical);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("※ 無効 ※");
-        }
-
-        EditorGUILayout.LabelField("=============== 曲げ拘束（水平）");
-        if (controller._IsComputeBendingHorizontal)
-        {
-            controller._BendingingShrinkHorizontal = EditorGUILayout.Slider("伸びた時縮む力", controller._BendingingShrinkHorizontal, 0.0f, 1.0f);
-            controller._BendingingStretchHorizontal = EditorGUILayout.Slider("縮む時伸びる力", controller._BendingingStretchHorizontal, 0.0f, 1.0f);
-            GUILayout.Space(5);
-            controller._BendingShrinkHorizontalScaleCurve = EditorGUILayout.CurveField("伸びた時縮む力", controller._BendingShrinkHorizontalScaleCurve);
-            controller._BendingStretchHorizontalScaleCurve = EditorGUILayout.CurveField("縮む時伸びる力", controller._BendingStretchHorizontalScaleCurve);
-            GUILayout.Space(5);
-            controller._IsAllBendingingShrinkHorizontal = EditorGUILayout.Toggle("伸びた時縮む力（一括設定）", controller._IsAllBendingingShrinkHorizontal);
-            controller._IsAllBendingingStretchHorizontal = EditorGUILayout.Toggle("縮む時伸びる力（一括設定）", controller._IsAllBendingingStretchHorizontal);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("※ 無効 ※");
-        }
-
-        Titlebar("ロック軸角度", new Color(0.7f, 1.0f, 0.7f));
-
-        controller._UseLockAngles = EditorGUILayout.Toggle("ロック角度", controller._UseLockAngles);
-        if (controller._UseLockAngles)
-        {
-            if (controller._UseSeperateLockAxis)
+            var _RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent("親Transform"), controller._RootTransform, typeof(Transform), true);
+            if (controller._RootTransform != _RootTransform)
             {
-                controller._UseSeperateLockAxis = EditorGUILayout.Toggle("個々の軸をロック", controller._UseSeperateLockAxis);
-                controller._LockAngleX = EditorGUILayout.IntSlider("ロック角度-X", controller._LockAngleX, -1, 180);
-                controller._LockAngleY = EditorGUILayout.IntSlider("ロック角度-Y", controller._LockAngleY, -1, 180);
-                controller._LockAngleZ = EditorGUILayout.IntSlider("ロック角度-Z", controller._LockAngleZ, -1, 180);
+                controller._RootTransform = _RootTransform;
+                EditorUtility.SetDirty(controller);
+            }
+
+            if (GUILayout.Button("ルートの点群自動検出", GUILayout.Height(22.0f)))
+            {
+                SearchRootPoints(controller);
+            }
+
+            if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_RootPointTbl"), new GUIContent("ルートの点群"), true))
+            {
+                EditorUtility.SetDirty(controller);
+            }
+            GUILayout.Space(5);
+
+            if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_ColliderTbl"), new GUIContent("コライダー"), true))
+            {
+                EditorUtility.SetDirty(controller);
+            }
+            if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_PointGrabberTbl"), new GUIContent("グラバー"), true))
+            {
+                EditorUtility.SetDirty(controller);
+            }
+        }
+
+        _Opened_PhysicsSettings = Foldout(_Opened_PhysicsSettings, "物理設定", new Color(1.0f, 1.0f, 0.7f));
+        if (_Opened_PhysicsSettings)
+        {
+            var _UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
+            if (controller._UpdateTiming != _UpdateTiming)
+            {
+                controller._UpdateTiming = _UpdateTiming;
+                EditorUtility.SetDirty(controller);
+            }
+            UpdateIntSlider("演算繰り返し回数", controller, ref controller._Relaxation, 1, 16);
+            UpdateIntSlider("演算分割数", controller, ref controller._SubSteps, 1, 16);
+
+            GUILayout.Space(8);
+            UpdateToggle("物理リセットを拒否", controller, ref controller._IsCancelResetPhysics);
+            GUILayout.Space(8);
+            UpdateToggle("質点とコライダーの衝突判定をする", controller, ref controller._IsEnableColliderCollision);
+            GUILayout.Space(8);
+            UpdateToggle("質点と床の衝突判定をする", controller, ref controller._IsEnableFloorCollision);
+            if (controller._IsEnableFloorCollision)
+            {
+                UpdateFloat("床の高さ", controller, ref controller._FloorHeight);
+            }
+            GUILayout.Space(8);
+            UpdateIntSlider("詳細な衝突判定の最大分割数", controller, ref controller._DetailHitDivideMax, 0, 16);
+
+            GUILayout.Space(8);
+            UpdateFloat("ルートの最大移動距離", controller, ref controller._RootSlideLimit);
+            UpdateFloat("ルートの最大回転角", controller, ref controller._RootRotateLimit);
+
+            GUILayout.Space(8);
+            UpdateSlider("バネ係数", controller, ref controller._SpringK, 0.0f, 1.0f);
+
+            GUILayout.Space(8);
+            UpdateVector3("重力", controller, ref controller._Gravity);
+            UpdateVector3("風力", controller, ref controller._WindForce);
+
+            GUILayout.Space(8);
+            UpdateCurve("質量", controller, ref controller._MassScaleCurve);
+            UpdateCurve("重力", controller, ref controller._GravityScaleCurve);
+            UpdateCurve("空気抵抗", controller, ref controller._ResistanceCurve);
+            UpdateCurve("硬さ", controller, ref controller._HardnessCurve);
+            UpdateCurve("摩擦", controller, ref controller._FrictionCurve);
+        }
+
+        _Opened_ConstraintSettings = Foldout(_Opened_ConstraintSettings, "拘束設定", new Color(0.7f, 1.0f, 1.0f));
+        if (_Opened_ConstraintSettings)
+        {
+            EditorGUILayout.LabelField("=============== 拘束（一括）");
+            UpdateCurve("伸びた時縮む力", controller, ref controller._AllShrinkScaleCurve);
+            UpdateCurve("縮む時伸びる力", controller, ref controller._AllStretchScaleCurve);
+            GUILayout.Space(5);
+            EditorGUILayout.LabelField("=============== 構成拘束（垂直）");
+            if (controller._IsComputeStructuralVertical)
+            {
+                UpdateSlider("伸びた時縮む力", controller, ref controller._StructuralShrinkVertical, 0.0f, 1.0f);
+                UpdateSlider("縮む時伸びる力", controller, ref controller._StructuralStretchVertical, 0.0f, 1.0f);
+                GUILayout.Space(5);
+                UpdateCurve("伸びた時縮む力", controller, ref controller._StructuralShrinkVerticalScaleCurve);
+                UpdateCurve("縮む時伸びる力", controller, ref controller._StructuralStretchVerticalScaleCurve);
+                GUILayout.Space(5);
+                UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllStructuralShrinkVertical);
+                UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllStructuralStretchVertical);
             }
             else
             {
-                controller._LockAngle = EditorGUILayout.IntSlider("ロック角度", controller._LockAngle, 0, 180);
-                controller._UseSeperateLockAxis = EditorGUILayout.Toggle("個々の軸をロック", controller._UseSeperateLockAxis);
+                EditorGUILayout.LabelField("※ 無効 ※");
+            }
+
+            EditorGUILayout.LabelField("=============== 構成拘束（水平）");
+            if (controller._IsComputeStructuralHorizontal)
+            {
+                UpdateSlider("伸びた時縮む力", controller, ref controller._StructuralShrinkHorizontal, 0.0f, 1.0f);
+                UpdateSlider("縮む時伸びる力", controller, ref controller._StructuralStretchHorizontal, 0.0f, 1.0f);
+                GUILayout.Space(5);
+                UpdateCurve("伸びた時縮む力", controller, ref controller._StructuralShrinkHorizontalScaleCurve);
+                UpdateCurve("縮む時伸びる力", controller, ref controller._StructuralStretchHorizontalScaleCurve);
+                GUILayout.Space(5);
+                UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllStructuralShrinkHorizontal);
+                UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllStructuralStretchHorizontal);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("※ 無効 ※");
+            }
+
+            EditorGUILayout.LabelField("=============== せん断拘束");
+            if (controller._IsComputeShear)
+            {
+                UpdateSlider("伸びた時縮む力", controller, ref controller._ShearShrink, 0.0f, 1.0f);
+                UpdateSlider("縮む時伸びる力", controller, ref controller._ShearStretch, 0.0f, 1.0f);
+                GUILayout.Space(5);
+                UpdateCurve("伸びた時縮む力", controller, ref controller._ShearShrinkScaleCurve);
+                UpdateCurve("縮む時伸びる力", controller, ref controller._ShearStretchScaleCurve);
+                GUILayout.Space(5);
+                UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllShearShrink);
+                UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllShearStretch);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("※ 無効 ※");
+            }
+
+            EditorGUILayout.LabelField("=============== 曲げ拘束（垂直）");
+            if (controller._IsComputeBendingVertical)
+            {
+                UpdateSlider("伸びた時縮む力", controller, ref controller._BendingingShrinkVertical, 0.0f, 1.0f);
+                UpdateSlider("縮む時伸びる力", controller, ref controller._BendingingStretchVertical, 0.0f, 1.0f);
+                GUILayout.Space(5);
+                UpdateCurve("伸びた時縮む力", controller, ref controller._BendingShrinkVerticalScaleCurve);
+                UpdateCurve("縮む時伸びる力", controller, ref controller._BendingStretchVerticalScaleCurve);
+                GUILayout.Space(5);
+                UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllBendingingShrinkVertical);
+                UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllBendingingStretchVertical);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("※ 無効 ※");
+            }
+
+            EditorGUILayout.LabelField("=============== 曲げ拘束（水平）");
+            if (controller._IsComputeBendingHorizontal)
+            {
+                UpdateSlider("伸びた時縮む力", controller, ref controller._BendingingShrinkHorizontal, 0.0f, 1.0f);
+                UpdateSlider("縮む時伸びる力", controller, ref controller._BendingingStretchHorizontal, 0.0f, 1.0f);
+                GUILayout.Space(5);
+                UpdateCurve("伸びた時縮む力", controller, ref controller._BendingShrinkHorizontalScaleCurve);
+                UpdateCurve("縮む時伸びる力", controller, ref controller._BendingStretchHorizontalScaleCurve);
+                GUILayout.Space(5);
+                UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllBendingingShrinkHorizontal);
+                UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllBendingingStretchHorizontal);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("※ 無効 ※");
             }
         }
-        Titlebar("オプション", new Color(0.7f, 1.0f, 0.7f));
-        if (GUILayout.Button("物理初期化"))
-        {
-            controller.ResetPhysics(0.3f);
-        }
-        
-        GUILayout.Space(8);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent("一時停止"), true);
 
-        Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
-        controller._IsDebugDraw_StructuralVertical = EditorGUILayout.Toggle("垂直構造", controller._IsDebugDraw_StructuralVertical);
-        controller._IsDebugDraw_StructuralHorizontal = EditorGUILayout.Toggle("水平構造", controller._IsDebugDraw_StructuralHorizontal);
-        controller._IsDebugDraw_Shear = EditorGUILayout.Toggle("せん断", controller._IsDebugDraw_Shear);
-        controller._IsDebugDraw_BendingVertical = EditorGUILayout.Toggle("垂直曲げ", controller._IsDebugDraw_BendingVertical);
-        controller._IsDebugDraw_BendingHorizontal = EditorGUILayout.Toggle("水平曲げ", controller._IsDebugDraw_BendingHorizontal);
-        controller._IsDebugDraw_RuntimeColliderBounds = EditorGUILayout.Toggle("実行中のコリジョン情報", controller._IsDebugDraw_RuntimeColliderBounds);
-
-        Titlebar("事前設定", new Color(1.0f, 1.0f, 0.7f));
-        controller._IsLoopRootPoints = EditorGUILayout.Toggle("拘束のループ", controller._IsLoopRootPoints);
-        GUILayout.Space(5);
-        EditorGUILayout.LabelField("=============== 拘束の有無");
-        controller._IsComputeStructuralVertical = EditorGUILayout.Toggle("拘束：垂直構造", controller._IsComputeStructuralVertical);
-        controller._IsComputeStructuralHorizontal = EditorGUILayout.Toggle("拘束：水平構造", controller._IsComputeStructuralHorizontal);
-        controller._IsComputeShear = EditorGUILayout.Toggle("拘束：せん断", controller._IsComputeShear);
-        controller._IsComputeBendingVertical = EditorGUILayout.Toggle("拘束：垂直曲げ", controller._IsComputeBendingVertical);
-        controller._IsComputeBendingHorizontal = EditorGUILayout.Toggle("拘束：水平曲げ", controller._IsComputeBendingHorizontal);
-        GUILayout.Space(5);
-        EditorGUILayout.LabelField("=============== コリジョン");
-        controller._IsCollideStructuralVertical = EditorGUILayout.Toggle("衝突：垂直構造", controller._IsCollideStructuralVertical);
-        controller._IsCollideStructuralHorizontal = EditorGUILayout.Toggle("衝突：水平構造", controller._IsCollideStructuralHorizontal);
-        controller._IsCollideShear = EditorGUILayout.Toggle("衝突：せん断", controller._IsCollideShear);
-        controller._IsCollideBendingVertical = EditorGUILayout.Toggle("衝突：垂直曲げ", controller._IsCollideBendingVertical);
-        controller._IsCollideBendingHorizontal = EditorGUILayout.Toggle("衝突：水平曲げ", controller._IsCollideBendingHorizontal);
-        GUILayout.Space(10);
-
-        if (GUILayout.Button("自動設定"))
+        _Opened_AngleLockSettings = Foldout(_Opened_AngleLockSettings, "ロック軸角度", new Color(0.7f, 0.7f, 1.0f));
+        if (_Opened_AngleLockSettings)
         {
-            controller.UpdateJointConnection();
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("自動設定（近ポイント自動検索XYZ）"))
-        {
-            SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ);
-            controller.UpdateJointConnection();
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("自動設定（近ポイント自動検索XZ）"))
-        {
-            SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ);
-            controller.UpdateJointConnection();
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("自動設定（近ポイント自動検索XYZ：先端終端固定）"))
-        {
-            SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd);
-            controller.UpdateJointConnection();
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("自動設定（近ポイント自動検索XZ：先端終端固定）"))
-        {
-            SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd);
-            controller.UpdateJointConnection();
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("拘束長さ再計算"))
-        {
-            controller.UpdateJointDistance();
-            EditorUtility.SetDirty(controller);
-        }
-        {
-            var bgColor = GUI.backgroundColor;
-            var contentColor = GUI.contentColor;
-            GUI.contentColor = Color.yellow;
-            GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
-            if (GUILayout.Button("拘束の設定を破棄"))
+            UpdateToggle("ロック角度", controller, ref controller._UseLockAngles);
+            if (controller._UseLockAngles)
             {
-                controller.DeleteJointConnection();
+                if (controller._UseSeperateLockAxis)
+                {
+                    UpdateToggle("個々の軸をロック", controller, ref controller._UseSeperateLockAxis);
+                    UpdateIntSlider("ロック角度-X", controller, ref controller._LockAngleX, -1, 180);
+                    UpdateIntSlider("ロック角度-Y", controller, ref controller._LockAngleY, -1, 180);
+                    UpdateIntSlider("ロック角度-Z", controller, ref controller._LockAngleZ, -1, 180);
+                }
+                else
+                {
+                    UpdateIntSlider("ロック角度", controller, ref controller._LockAngle, 0, 180);
+                    UpdateToggle("個々の軸をロック", controller, ref controller._UseSeperateLockAxis);
+                }
+            }
+        }
+
+        _Opened_OptionSettings = Foldout(_Opened_OptionSettings, "オプション", new Color(0.7f, 1.0f, 0.7f));
+        if (_Opened_OptionSettings)
+        {
+            if (GUILayout.Button("物理初期化"))
+            {
+                controller.ResetPhysics(0.3f);
+            }
+
+            GUILayout.Space(8);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent("一時停止"), true);
+
+            Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
+            UpdateToggle("垂直構造", controller, ref controller._IsDebugDraw_StructuralVertical);
+            UpdateToggle("水平構造", controller, ref controller._IsDebugDraw_StructuralHorizontal);
+            UpdateToggle("せん断", controller, ref controller._IsDebugDraw_Shear);
+            UpdateToggle("垂直曲げ", controller, ref controller._IsDebugDraw_BendingVertical);
+            UpdateToggle("水平曲げ", controller, ref controller._IsDebugDraw_BendingHorizontal);
+            UpdateToggle("実行中のコリジョン情報", controller, ref controller._IsDebugDraw_RuntimeColliderBounds);
+        }
+
+        _Opened_PreSettings = Foldout(_Opened_PreSettings, "事前設定", new Color(1.0f, 0.7f, 0.7f));
+        if (_Opened_PreSettings)
+        {
+            UpdateToggle("拘束のループ", controller, ref controller._IsLoopRootPoints);
+            GUILayout.Space(5);
+            EditorGUILayout.LabelField("=============== 拘束の有無");
+            UpdateToggle("拘束：垂直構造", controller, ref controller._IsComputeStructuralVertical);
+            UpdateToggle("拘束：水平構造", controller, ref controller._IsComputeStructuralHorizontal);
+            UpdateToggle("拘束：せん断", controller, ref controller._IsComputeShear);
+            UpdateToggle("拘束：垂直曲げ", controller, ref controller._IsComputeBendingVertical);
+            UpdateToggle("拘束：水平曲げ", controller, ref controller._IsComputeBendingHorizontal);
+            GUILayout.Space(5);
+            EditorGUILayout.LabelField("=============== コリジョン");
+            UpdateToggle("衝突：垂直構造", controller, ref controller._IsCollideStructuralVertical);
+            UpdateToggle("衝突：水平構造", controller, ref controller._IsCollideStructuralHorizontal);
+            UpdateToggle("衝突：せん断", controller, ref controller._IsCollideShear);
+            UpdateToggle("衝突：垂直曲げ", controller, ref controller._IsCollideBendingVertical);
+            UpdateToggle("衝突：水平曲げ", controller, ref controller._IsCollideBendingHorizontal);
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("自動設定"))
+            {
+                controller.UpdateJointConnection();
                 EditorUtility.SetDirty(controller);
             }
-            GUI.backgroundColor = bgColor;
-            GUI.contentColor = contentColor;
-        }
-
-        Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
-        GUILayout.Space(3);
-        _SubdivisionJointCountH = EditorGUILayout.IntSlider("水平骨分割数", _SubdivisionJointCountH, 2, 256);
-        _SubdivisionJointCountV = EditorGUILayout.IntSlider("垂直骨分割数", _SubdivisionJointCountV, 2, 256);
-        GUILayout.Space(3);
-        if (GUILayout.Button("骨構造からポリゴンを生成する"))
-        {
-            CreationSubdivisionJoint(controller, _SubdivisionJointCountH, _SubdivisionJointCountV);
-        }
-        GUILayout.Space(3);
-        _BoneStretchScale = EditorGUILayout.Slider("伸縮比率", _BoneStretchScale, -5.0f, +5.0f);
-        if (GUILayout.Button("垂直方向にボーンを伸縮する"))
-        {
-            controller.StretchBoneLength(_BoneStretchScale);
-        }
-
-        GUILayout.Space(5);
-        EditorGUILayout.LabelField("=============== 細分化");
-        if (GUILayout.Button("水平の拘束を挿入"))
-        {
-            SubdivideVerticalChain(controller, 1);
-            EditorUtility.SetDirty(controller);
-        }
-        if (GUILayout.Button("垂直の拘束を挿入"))
-        {
-            SubdivideHorizontalChain(controller, 1);
-            EditorUtility.SetDirty(controller);
-        }
-        if(controller._SubDivInsertedPoints.Count > 0)
-        {
-            if (GUILayout.Button("細分化を元に戻す"))
+            if (GUILayout.Button("自動設定（近ポイント自動検索XYZ）"))
             {
-                RemoveInsertedPoints(controller);
+                SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ);
+                controller.UpdateJointConnection();
+                EditorUtility.SetDirty(controller);
+            }
+            if (GUILayout.Button("自動設定（近ポイント自動検索XZ）"))
+            {
+                SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ);
+                controller.UpdateJointConnection();
+                EditorUtility.SetDirty(controller);
+            }
+            if (GUILayout.Button("自動設定（近ポイント自動検索XYZ：先端終端固定）"))
+            {
+                SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd);
+                controller.UpdateJointConnection();
+                EditorUtility.SetDirty(controller);
+            }
+            if (GUILayout.Button("自動設定（近ポイント自動検索XZ：先端終端固定）"))
+            {
+                SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd);
+                controller.UpdateJointConnection();
+                EditorUtility.SetDirty(controller);
+            }
+            if (GUILayout.Button("拘束長さ再計算"))
+            {
+                controller.UpdateJointDistance();
                 EditorUtility.SetDirty(controller);
             }
             {
                 var bgColor = GUI.backgroundColor;
                 var contentColor = GUI.contentColor;
                 GUI.contentColor = Color.yellow;
-                GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
-                if (GUILayout.Button("細分化の確定"))
+                GUI.backgroundColor = new Color(1.0f, 0.5f, 0.5f);
+                if (GUILayout.Button("拘束の設定を破棄"))
                 {
-                    PurgeSubdivideOriginalInfo(controller);
+                    controller.DeleteJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
                 GUI.backgroundColor = bgColor;
                 GUI.contentColor = contentColor;
             }
-            // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
-            // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
-            
+            /*
+            Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
+            GUILayout.Space(3);
+            UpdateIntSlider("水平骨分割数", _SubdivisionJointCountH, 2, 256);
+            UpdateIntSlider("垂直骨分割数", _SubdivisionJointCountV, 2, 256);
+            GUILayout.Space(3);
+            if (GUILayout.Button("骨構造からポリゴンを生成する"))
             {
-                var message = string.Format(
-                    "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
-                    controller._SubDivOriginalPoints.Count,
-                    controller._SubDivInsertedPoints.Count);
-                EditorGUILayout.HelpBox(message, MessageType.Warning);
+                CreationSubdivisionJoint(controller, _SubdivisionJointCountH, _SubdivisionJointCountV);
             }
+            GUILayout.Space(3);
+            UpdateSlider("伸縮比率", _BoneStretchScale, -5.0f, +5.0f);
+            if (GUILayout.Button("垂直方向にボーンを伸縮する"))
+            {
+                controller.StretchBoneLength(_BoneStretchScale);
+            }
+
+            GUILayout.Space(5);
+            EditorGUILayout.LabelField("=============== 細分化");
+            if (GUILayout.Button("水平の拘束を挿入"))
+            {
+                SubdivideVerticalChain(controller, 1);
+                EditorUtility.SetDirty(controller);
+            }
+            if (GUILayout.Button("垂直の拘束を挿入"))
+            {
+                SubdivideHorizontalChain(controller, 1);
+                EditorUtility.SetDirty(controller);
+            }
+            if (controller._SubDivInsertedPoints.Count > 0)
+            {
+                if (GUILayout.Button("細分化を元に戻す"))
+                {
+                    RemoveInsertedPoints(controller);
+                    EditorUtility.SetDirty(controller);
+                }
+                {
+                    var bgColor = GUI.backgroundColor;
+                    var contentColor = GUI.contentColor;
+                    GUI.contentColor = Color.yellow;
+                    GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
+                    if (GUILayout.Button("細分化の確定"))
+                    {
+                        PurgeSubdivideOriginalInfo(controller);
+                        EditorUtility.SetDirty(controller);
+                    }
+                    GUI.backgroundColor = bgColor;
+                    GUI.contentColor = contentColor;
+                }
+                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
+                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
+
+                {
+                    var message = string.Format(
+                        "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
+                        controller._SubDivOriginalPoints.Count,
+                        controller._SubDivInsertedPoints.Count);
+                    EditorGUILayout.HelpBox(message, MessageType.Warning);
+                }
+            }
+            */
         }
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    void UpdateToggle(string Label, SPCRJointDynamicsController Source, ref bool Value)
+    {
+        var Result = EditorGUILayout.Toggle(Label, Value);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
+    }
+
+    void UpdateIntSlider(string Label, SPCRJointDynamicsController Source, ref int Value, int Min, int Max)
+    {
+        var Result = EditorGUILayout.IntSlider(Label, Value, Min, Max);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
+    }
+
+    void UpdateSlider(string Label, SPCRJointDynamicsController Source, ref float Value, float Min, float Max)
+    {
+        var Result = EditorGUILayout.Slider(Label, Value, Min, Max);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
+    }
+
+    void UpdateFloat(string Label, SPCRJointDynamicsController Source, ref float Value)
+    {
+        var Result = EditorGUILayout.FloatField(Label, Value);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
+    }
+
+    void UpdateVector3(string Label, SPCRJointDynamicsController Source, ref Vector3 Value)
+    {
+        var Result = EditorGUILayout.Vector3Field(Label, Value);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
+    }
+
+    void UpdateCurve(string Label, SPCRJointDynamicsController Source, ref AnimationCurve Value)
+    {
+        var Result = EditorGUILayout.CurveField(Label, Value);
+        if (Value != Result)
+        {
+            Value = Result;
+            EditorUtility.SetDirty(Source);
+        }
     }
 
     void Titlebar(string text, Color color)
@@ -401,94 +541,94 @@ public class SPCRJointDynamicsControllerInspector : Editor
     {
         switch (Type)
         {
-        case UpdateJointConnectionType.Default:
-            {
-            }
-            break;
-        case UpdateJointConnectionType.SortNearPointXYZ:
-            {
-                var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                var EdgeA = controller._RootPointTbl[0];
-                for (int i = 1; i < controller._RootPointTbl.Length; ++i)
+            case UpdateJointConnectionType.Default:
                 {
-                    SourcePoints.Add(controller._RootPointTbl[i]);
                 }
-                var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                SortedPoints.Add(EdgeA);
-                while (SourcePoints.Count > 0)
+                break;
+            case UpdateJointConnectionType.SortNearPointXYZ:
                 {
-                    SortedPoints.Add(GetNearestPoint(
-                        SortedPoints[SortedPoints.Count - 1].transform.position,
-                        ref SourcePoints,
-                        false));
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = controller._RootPointTbl[0];
+                    for (int i = 1; i < controller._RootPointTbl.Length; ++i)
+                    {
+                        SourcePoints.Add(controller._RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            false));
+                    }
+                    controller._RootPointTbl = SortedPoints.ToArray();
                 }
-                controller._RootPointTbl = SortedPoints.ToArray();
-            }
-            break;
-        case UpdateJointConnectionType.SortNearPointXZ:
-            {
-                var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                var EdgeA = controller._RootPointTbl[0];
-                for (int i = 1; i < controller._RootPointTbl.Length; ++i)
+                break;
+            case UpdateJointConnectionType.SortNearPointXZ:
                 {
-                    SourcePoints.Add(controller._RootPointTbl[i]);
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = controller._RootPointTbl[0];
+                    for (int i = 1; i < controller._RootPointTbl.Length; ++i)
+                    {
+                        SourcePoints.Add(controller._RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            true));
+                    }
+                    controller._RootPointTbl = SortedPoints.ToArray();
                 }
-                var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                SortedPoints.Add(EdgeA);
-                while (SourcePoints.Count > 0)
+                break;
+            case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
                 {
-                    SortedPoints.Add(GetNearestPoint(
-                        SortedPoints[SortedPoints.Count - 1].transform.position,
-                        ref SourcePoints,
-                        true));
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = controller._RootPointTbl[0];
+                    var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
+                    for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
+                    {
+                        SourcePoints.Add(controller._RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            false));
+                    }
+                    SortedPoints.Add(EdgeB);
+                    controller._RootPointTbl = SortedPoints.ToArray();
                 }
-                controller._RootPointTbl = SortedPoints.ToArray();
-            }
-            break;
-        case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
-            {
-                var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                var EdgeA = controller._RootPointTbl[0];
-                var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
-                for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
+                break;
+            case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
                 {
-                    SourcePoints.Add(controller._RootPointTbl[i]);
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = controller._RootPointTbl[0];
+                    var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
+                    for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
+                    {
+                        SourcePoints.Add(controller._RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            true));
+                    }
+                    SortedPoints.Add(EdgeB);
+                    controller._RootPointTbl = SortedPoints.ToArray();
                 }
-                var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                SortedPoints.Add(EdgeA);
-                while (SourcePoints.Count > 0)
-                {
-                    SortedPoints.Add(GetNearestPoint(
-                        SortedPoints[SortedPoints.Count - 1].transform.position,
-                        ref SourcePoints,
-                        false));
-                }
-                SortedPoints.Add(EdgeB);
-                controller._RootPointTbl = SortedPoints.ToArray();
-            }
-            break;
-        case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
-            {
-                var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                var EdgeA = controller._RootPointTbl[0];
-                var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
-                for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
-                {
-                    SourcePoints.Add(controller._RootPointTbl[i]);
-                }
-                var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                SortedPoints.Add(EdgeA);
-                while (SourcePoints.Count > 0)
-                {
-                    SortedPoints.Add(GetNearestPoint(
-                        SortedPoints[SortedPoints.Count - 1].transform.position,
-                        ref SourcePoints,
-                        true));
-                }
-                SortedPoints.Add(EdgeB);
-                controller._RootPointTbl = SortedPoints.ToArray();
-            }
-            break;
+                break;
         }
     }
 
@@ -500,38 +640,38 @@ public class SPCRJointDynamicsControllerInspector : Editor
         var InsertedPoints = controller._SubDivInsertedPoints;
         var IsFirstSubdivide = (OriginalPoints.Count == 0);
 
-        foreach(var rootPoint in RootList)
+        foreach (var rootPoint in RootList)
         {
-            if(IsFirstSubdivide)
+            if (IsFirstSubdivide)
                 OriginalPoints.Add(rootPoint);
-            
+
             var parentPoint = rootPoint;
 
-            while(parentPoint.transform.childCount > 0)
+            while (parentPoint.transform.childCount > 0)
             {
                 var parentTransform = parentPoint.transform;
-                
+
                 var points = parentTransform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
-                if(points.Length < 2)
+                if (points.Length < 2)
                 {
                     break;
                 }
 
                 var childPoint = points[1];
-                
-                if(parentPoint == childPoint)
+
+                if (parentPoint == childPoint)
                 {
                     Debug.LogWarning("Infinite Loop!:" + parentPoint.name);
                     break;
                 }
 
-                if(IsFirstSubdivide)
+                if (IsFirstSubdivide)
                     OriginalPoints.Add(childPoint);
 
                 var childTransform = childPoint.transform;
 
                 SPCRJointDynamicsPoint newPoint = null;
-                for(int i = 1; i <= NumInsert; i++)
+                for (int i = 1; i <= NumInsert; i++)
                 {
                     float weight = i / (NumInsert + 1.0f);
 
@@ -559,12 +699,12 @@ public class SPCRJointDynamicsControllerInspector : Editor
         int Count = RootList.Count;
         int Start = controller._IsLoopRootPoints ? Count : (Count - 1);
 
-        for(int iroot = Start; iroot > 0; iroot--)
+        for (int iroot = Start; iroot > 0; iroot--)
         {
             var root0 = RootList[iroot % Count];
             var root1 = RootList[iroot - 1];
 
-            for(int iin = 1; iin <= NumInsert; iin++)
+            for (int iin = 1; iin <= NumInsert; iin++)
             {
                 var point0 = root0;
                 var point1 = root1;
@@ -573,11 +713,11 @@ public class SPCRJointDynamicsControllerInspector : Editor
                 float weight = iin / (NumInsert + 1.0f);
                 SPCRJointDynamicsPoint newRoot = null;
 
-                while(point0 != null && point1 != null)
+                while (point0 != null && point1 != null)
                 {
-                    if(IsFirstSubdivide && iin == 1)
+                    if (IsFirstSubdivide && iin == 1)
                     {
-                        if(!controller._IsLoopRootPoints && iroot == Start)
+                        if (!controller._IsLoopRootPoints && iroot == Start)
                         {
                             OriginalPoints.Add(point0);
                         }
@@ -590,7 +730,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
                     var newTransform = newPoint.transform;
                     newTransform.SetParent(parentTransform);
                     parentTransform = newTransform;
-                    
+
                     SPCRJointDynamicsPoint[] points;
 
                     points = point0.transform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
@@ -598,8 +738,8 @@ public class SPCRJointDynamicsControllerInspector : Editor
 
                     points = point1.transform.GetComponentsInChildren<SPCRJointDynamicsPoint>();
                     point1 = (points.Length > 1) ? points[1] : null;
-                    
-                    if(newRoot == null)
+
+                    if (newRoot == null)
                     {
                         newRoot = newPoint;
                         RootList.Insert(iroot, newRoot);
@@ -610,7 +750,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller._RootPointTbl = RootList.ToArray();
     }
 
-    SPCRJointDynamicsPoint CreateInterpolatedPoint(SPCRJointDynamicsPoint point0, SPCRJointDynamicsPoint point1, float weight0, string newName="SubDivPoint")
+    SPCRJointDynamicsPoint CreateInterpolatedPoint(SPCRJointDynamicsPoint point0, SPCRJointDynamicsPoint point1, float weight0, string newName = "SubDivPoint")
     {
         var Transform0 = point0.transform;
         var Transform1 = point1.transform;
@@ -629,7 +769,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         var OriginalPoints = controller._SubDivOriginalPoints;
         var InsertedPoints = controller._SubDivInsertedPoints;
 
-        if(OriginalPoints.Count == 0)
+        if (OriginalPoints.Count == 0)
         {
             return;
         }
@@ -637,36 +777,36 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller.DeleteJointConnection();
 
         var originalPoints = new Dictionary<int, SPCRJointDynamicsPoint>(OriginalPoints.Count);
-        foreach(var op in OriginalPoints)
+        foreach (var op in OriginalPoints)
         {
             int key = op.GetInstanceID();
-            if(!originalPoints.ContainsKey(key))
+            if (!originalPoints.ContainsKey(key))
             {
                 originalPoints.Add(key, op);
             }
         }
 
         var rootList = new List<SPCRJointDynamicsPoint>();
-        foreach(var root in controller._RootPointTbl)
+        foreach (var root in controller._RootPointTbl)
         {
-            if(!originalPoints.ContainsKey(root.GetInstanceID()))
+            if (!originalPoints.ContainsKey(root.GetInstanceID()))
             {
                 continue;
             }
-            
+
             rootList.Add(root);
 
             var parentPoint = root;
             var chainPoint = root;
-            while(chainPoint != null)
+            while (chainPoint != null)
             {
                 var children = chainPoint.GetComponentsInChildren<SPCRJointDynamicsPoint>();
-                if(children.Length < 2)
+                if (children.Length < 2)
                 {
                     break;
                 }
                 var childPoint = children[1];
-                if(originalPoints.ContainsKey(childPoint.GetInstanceID()))
+                if (originalPoints.ContainsKey(childPoint.GetInstanceID()))
                 {
                     childPoint.transform.SetParent(parentPoint.transform);
                     parentPoint = childPoint;
@@ -675,13 +815,13 @@ public class SPCRJointDynamicsControllerInspector : Editor
             }
         }
 
-        foreach(var point in InsertedPoints)
+        foreach (var point in InsertedPoints)
         {
             point._RefChildPoint = null;
             point.transform.SetParent(null);
         }
 
-        foreach(var point in InsertedPoints)
+        foreach (var point in InsertedPoints)
         {
             DestroyImmediate(point.gameObject);
         }
@@ -696,7 +836,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
         controller._SubDivOriginalPoints.Clear();
         controller._SubDivInsertedPoints.Clear();
     }
-    
+
     void CreationSubdivisionJoint(SPCRJointDynamicsController Controller, int HDivCount, int VDivCount)
     {
         var VCurve = new List<CurveData>();
@@ -773,7 +913,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             }
         }
 
-        for (int i = 0; i < RootTbl.Length;++i)
+        for (int i = 0; i < RootTbl.Length; ++i)
         {
             SetTransformScaleZero(RootTbl[i].transform);
         }
