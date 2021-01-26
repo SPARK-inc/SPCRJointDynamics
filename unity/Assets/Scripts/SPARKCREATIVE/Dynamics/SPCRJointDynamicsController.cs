@@ -51,15 +51,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
             UpdateLength();
         }
 
-        public SPCRJointDynamicsConstraint(SPCRJointDynamicsConstraint spceJointDynamicsConstraint)
-        {
-            _Type = spceJointDynamicsConstraint._Type;
-            _PointA = spceJointDynamicsConstraint._PointA;
-            _PointB = spceJointDynamicsConstraint._PointB;
-            _PointC = spceJointDynamicsConstraint._PointC;
-            UpdateLength();
-        }
-
         public void UpdateLength()
         {
             _Length = (_PointA.transform.position - _PointB.transform.position).magnitude;
