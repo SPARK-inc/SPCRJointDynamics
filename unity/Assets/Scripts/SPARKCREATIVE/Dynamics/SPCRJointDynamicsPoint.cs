@@ -14,6 +14,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SPCRJointDynamicsPoint : MonoBehaviour
 {
+    [SerializeField][HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID { get => uniqueGUIID; }
+
     [Header("=== 物理設定項目 ===")]
     public float _Mass = 1.0f;
 
@@ -26,4 +30,10 @@ public class SPCRJointDynamicsPoint : MonoBehaviour
     public float _Depth;
     [HideInInspector]
     public int _Index;
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            uniqueGUIID = System.Guid.NewGuid().ToString();
+    }
 }

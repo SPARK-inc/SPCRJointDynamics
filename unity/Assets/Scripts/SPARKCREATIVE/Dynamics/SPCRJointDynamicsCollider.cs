@@ -13,12 +13,19 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
+    [SerializeField][HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID { get => uniqueGUIID; }
+
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
+    public float Radius { get { return _Radius; } set { _Radius = value; } }
     [SerializeField, Range(0.0f, 5.0f)]
     float _HeadRadiusScale = 1.0f;
+    public float HeadRadiusScale { get { return _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
     [SerializeField, Range(0.0f, 5.0f)]
     float _TailRadiusScale = 1.0f;
+    public float TailRadiusScale { get { return _TailRadiusScale; } set { _TailRadiusScale = value; } }
     [SerializeField, Range(0.0f, 5.0f)]
     float _Height = 0.0f;
     [SerializeField, Range(0.0f, 1.0f)]
@@ -30,8 +37,8 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
     public float RadiusHead { get { return _Radius * _HeadRadiusScale; } }
     public float RadiusTail { get { return _Radius * _TailRadiusScale; } }
     public float Height { get { return _Height; } set { _Height = value; } }
-    public float Friction { get { return _Friction; } }
-    public float PushOutRate { get { return _PushOutRate; } }
+    public float Friction { get { return _Friction; } set { _Friction = value; } }
+    public float PushOutRate { get { return _PushOutRate; } set { _PushOutRate = value; } }
 
     public bool IsCapsule { get { return _Height > 0.0f; } }
 
@@ -99,5 +106,11 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             Gizmos.DrawLine(from, to);
             from = to;
         }
+    }
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }

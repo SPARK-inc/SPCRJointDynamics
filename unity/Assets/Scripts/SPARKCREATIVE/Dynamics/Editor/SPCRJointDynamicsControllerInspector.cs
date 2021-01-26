@@ -357,6 +357,17 @@ public class SPCRJointDynamicsControllerInspector : Editor
                 GUI.backgroundColor = bgColor;
                 GUI.contentColor = contentColor;
             }
+
+        Titlebar("設定保存", new Color(1.0f, 0.7f, 0.7f));
+        if (GUILayout.Button("設定を保存する"))
+        {
+            SPCRJointSettingLocalSave.Save(controller);
+        }
+        if (GUILayout.Button("設定をロードする"))
+        {
+            SPCRJointSettingLocalSave.Load(controller);
+        }
+
             /*
             Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
             GUILayout.Space(3);

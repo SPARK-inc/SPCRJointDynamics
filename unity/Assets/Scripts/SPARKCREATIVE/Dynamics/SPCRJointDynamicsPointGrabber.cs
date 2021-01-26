@@ -13,6 +13,10 @@ using UnityEngine;
 
 public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 {
+    [SerializeField][HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID { get => uniqueGUIID; }
+
     [SerializeField]
     bool _IsEnabled = true;
     [SerializeField, Range(0.0f, 5.0f)]
@@ -21,9 +25,9 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
     float _Force = 0.5f;
 
     public Transform RefTransform { get; private set; }
-    public bool IsEnabled { get { return enabled && _IsEnabled; } }
-    public float Radius { get { return _Radius; } }
-    public float Force { get { return _Force; } }
+    public bool IsEnabled { get { return enabled && _IsEnabled; } set { _IsEnabled = value; } }
+    public float Radius { get { return _Radius; } set { _Radius = value; } }
+    public float Force { get { return _Force; } set { _Force = value; } }
 
     void Awake()
     {
@@ -34,5 +38,11 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, _Radius);
+    }
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }

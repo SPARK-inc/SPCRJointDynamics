@@ -51,6 +51,15 @@ public class SPCRJointDynamicsController : MonoBehaviour
             UpdateLength();
         }
 
+        public SPCRJointDynamicsConstraint(SPCRJointDynamicsConstraint spceJointDynamicsConstraint)
+        {
+            _Type = spceJointDynamicsConstraint._Type;
+            _PointA = spceJointDynamicsConstraint._PointA;
+            _PointB = spceJointDynamicsConstraint._PointB;
+            _PointC = spceJointDynamicsConstraint._PointC;
+            UpdateLength();
+        }
+
         public void UpdateLength()
         {
             _Length = (_PointA.transform.position - _PointB.transform.position).magnitude;
@@ -66,6 +75,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
             }
         }
     }
+
+    [SerializeField]
+    [HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID { get => uniqueGUIID; }
 
     public string Name;
 
@@ -153,16 +167,22 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public int _LockAngleZ = -1;// Negative value is disable
     [SerializeField]
     SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
+    public SPCRJointDynamicsPoint[] PointTbl { get => _PointTbl; set => _PointTbl = value; }
     [SerializeField]
     SPCRJointDynamicsConstraint[] _ConstraintsStructuralVertical = new SPCRJointDynamicsConstraint[0];
+    public SPCRJointDynamicsConstraint[] ConstraintsStructuralVertical { get => _ConstraintsStructuralVertical; set => _ConstraintsStructuralVertical = value; }
     [SerializeField]
     SPCRJointDynamicsConstraint[] _ConstraintsStructuralHorizontal = new SPCRJointDynamicsConstraint[0];
+    public SPCRJointDynamicsConstraint[] ConstraintsStructuralHorizontal { get => _ConstraintsStructuralHorizontal; set => _ConstraintsStructuralHorizontal = value; }
     [SerializeField]
     SPCRJointDynamicsConstraint[] _ConstraintsShear = new SPCRJointDynamicsConstraint[0];
+    public SPCRJointDynamicsConstraint[] ConstraintsShear { get => _ConstraintsShear; set => _ConstraintsShear = value; }
     [SerializeField]
     SPCRJointDynamicsConstraint[] _ConstraintsBendingVertical = new SPCRJointDynamicsConstraint[0];
+    public SPCRJointDynamicsConstraint[] ConstraintsBendingVertical { get => _ConstraintsBendingVertical; set => _ConstraintsBendingVertical = value; }
     [SerializeField]
     SPCRJointDynamicsConstraint[] _ConstraintsBendingHorizontal = new SPCRJointDynamicsConstraint[0];
+    public SPCRJointDynamicsConstraint[] ConstraintsBendingHorizontal { get => _ConstraintsBendingHorizontal; set => _ConstraintsBendingHorizontal = value; }
 
     public bool _IsLoopRootPoints = false;
     public bool _IsComputeStructuralVertical = true;
@@ -180,9 +200,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     [SerializeField]
     SPCRJointDynamicsJob.Constraint[][] _ConstraintTable;
+    public SPCRJointDynamicsJob.Constraint[][] ConstraintTable { get => _ConstraintTable; set => _ConstraintTable = value; }
 
     [SerializeField]
     int _MaxPointDepth = 0;
+    public int MaxPointDepth { get => _MaxPointDepth; set => _MaxPointDepth = value; }
 
     [SerializeField]
     public bool _IsPaused = false;
@@ -196,7 +218,9 @@ public class SPCRJointDynamicsController : MonoBehaviour
 #endif
 
     float _Accel;
+    public　float Accel { get => _Accel; set => _Accel = value; }
     float _Delay;
+    public float Delay { get => _Delay; set => _Delay = value; }
 
     SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
@@ -920,5 +944,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Gizmos.color = new Color(0.4f, 0.8f, 0.8f);
             OnDrawGizms_Constraint(_ConstraintsBendingHorizontal);
         }
+    }
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }
