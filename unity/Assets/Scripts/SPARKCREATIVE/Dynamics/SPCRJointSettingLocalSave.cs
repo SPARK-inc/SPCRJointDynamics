@@ -374,7 +374,7 @@ public static class SPCRJointSettingLocalSave
         }
 
         SPCRJointDynamicsPointGrabber[] spcrJointDynamicsGrabber = SPCRJointDynamicsContoller.GetComponentsInChildren<SPCRJointDynamicsPointGrabber>();
-        spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList = new SPCRJointDynamicsPointGrabberSave[spcrJointDynamicsCollider.Length];
+        spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList = new SPCRJointDynamicsPointGrabberSave[spcrJointDynamicsGrabber.Length];
         for (int i = 0; i < spcrJointDynamicsGrabber.Length; i++)
         {
             spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i] = new SPCRJointDynamicsPointGrabberSave(spcrJointDynamicsGrabber[i]);
@@ -649,9 +649,9 @@ public static class SPCRJointSettingLocalSave
         globalUniqueIdList = GetGlobalUniqueIdComponentList(SPCRJointDynamicsContoller);
 
         SPCRJointDynamicsContoller.Name = spcrJointDynamicsSave.name;
-        Object RootTransform = SPCRJointDynamicsContoller.transform.GetChild(spcrJointDynamicsSave.rootTransformChildIndex);
+        Transform RootTransform = SPCRJointDynamicsContoller.transform.GetChild(spcrJointDynamicsSave.rootTransformChildIndex);
         if (RootTransform != null)
-            SPCRJointDynamicsContoller._RootTransform = (Transform)RootTransform;
+            SPCRJointDynamicsContoller._RootTransform = RootTransform;
 
 
         if(spcrJointDynamicsSave.spcrChildJointDynamicsPointList != null)
