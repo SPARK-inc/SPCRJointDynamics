@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SPCRJointSettingLocalSave
 {
-    public static readonly string INVALID_ID = "-1";
+    public static readonly string INVALID_ID = "INV";
 
     [System.Serializable]
     public class SPCRvec3
@@ -238,7 +238,7 @@ public static class SPCRJointSettingLocalSave
 
         public string uniqueGUIID { get; set; }
         public string name { get; set; }
-        public int rootTransformChildIndex { get; set; }
+        public string rootTransformName { get; set; }
         public string[] RootPointTbl { get; set; }
         public string[] ColliderTbl { get; set; }
         public string[] PointGrabberTbl { get; set; }
@@ -357,7 +357,7 @@ public static class SPCRJointSettingLocalSave
 
         spcrJointDynamicsSave.uniqueGUIID = SPCRJointDynamicsContoller.UniqueGUIID;
         spcrJointDynamicsSave.name = SPCRJointDynamicsContoller.Name;
-        spcrJointDynamicsSave.rootTransformChildIndex = SPCRJointDynamicsContoller._RootTransform.GetSiblingIndex();
+        spcrJointDynamicsSave.rootTransformName = SPCRJointDynamicsContoller._RootTransform.name;
 
         SPCRJointDynamicsPoint[] spcrJointDynamicsPoints = SPCRJointDynamicsContoller.GetComponentsInChildren<SPCRJointDynamicsPoint>();
         spcrJointDynamicsSave.spcrChildJointDynamicsPointList = new SPCRJointDynamicsPointSave[spcrJointDynamicsPoints.Length];
@@ -649,7 +649,8 @@ public static class SPCRJointSettingLocalSave
         globalUniqueIdList = GetGlobalUniqueIdComponentList(SPCRJointDynamicsContoller);
 
         SPCRJointDynamicsContoller.Name = spcrJointDynamicsSave.name;
-        Transform RootTransform = SPCRJointDynamicsContoller.transform.GetChild(spcrJointDynamicsSave.rootTransformChildIndex);
+        Transform RootTransform = null;
+        RecursiveChildSearch(SPCRJointDynamicsContoller.transform, spcrJointDynamicsSave.rootTransformName, ref RootTransform);
         if (RootTransform != null)
             SPCRJointDynamicsContoller._RootTransform = RootTransform;
 
@@ -833,6 +834,7 @@ public static class SPCRJointSettingLocalSave
         {
             SPCRJointDynamicsContoller.ConstraintsStructuralVertical = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[0];
         }
+
         if (spcrJointDynamicsSave.ConstraintsStructuralHorizontal != null)
         {
             SPCRJointDynamicsContoller.ConstraintsStructuralHorizontal = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[spcrJointDynamicsSave.ConstraintsStructuralHorizontal.Length];
@@ -845,6 +847,7 @@ public static class SPCRJointSettingLocalSave
         {
             SPCRJointDynamicsContoller.ConstraintsStructuralHorizontal = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[0];
         }
+
         if (spcrJointDynamicsSave.ConstraintsShear != null)
         {
             SPCRJointDynamicsContoller.ConstraintsShear = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[spcrJointDynamicsSave.ConstraintsShear.Length];
@@ -857,6 +860,7 @@ public static class SPCRJointSettingLocalSave
         {
             SPCRJointDynamicsContoller.ConstraintsShear = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[0];
         }
+
         if (spcrJointDynamicsSave.ConstraintsBendingVertical != null)
         {
             SPCRJointDynamicsContoller.ConstraintsBendingVertical = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[spcrJointDynamicsSave.ConstraintsBendingVertical.Length];
@@ -869,6 +873,7 @@ public static class SPCRJointSettingLocalSave
         {
             SPCRJointDynamicsContoller.ConstraintsBendingVertical = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[0];
         }
+
         if (spcrJointDynamicsSave.ConstraintsBendingHorizontal != null)
         {
             SPCRJointDynamicsContoller.ConstraintsBendingHorizontal = new SPCRJointDynamicsController.SPCRJointDynamicsConstraint[spcrJointDynamicsSave.ConstraintsBendingHorizontal.Length];
@@ -929,7 +934,20 @@ public static class SPCRJointSettingLocalSave
         globalUniqueIdList.Clear();
     }
 
-    static System.Collections.Generic.List<Component> GetGlobalUniqueIdComponentList(SPCRJointDynamicsController SPCRJointDynamicsContoller)
+    private static void RecursiveChildSearch(Transform parent, string searchName, ref Transform output)
+    {
+        if (parent.name.Equals(searchName))
+        {
+            output = parent;
+            return;
+        }
+        foreach(Transform trans in parent)
+        {
+            RecursiveChildSearch(trans, searchName, ref output);
+        }
+    }
+
+    private static System.Collections.Generic.List<Component> GetGlobalUniqueIdComponentList(SPCRJointDynamicsController SPCRJointDynamicsContoller)
     {
         System.Collections.Generic.List<Component> globalUniqueIdList = new System.Collections.Generic.List<Component>();
 
