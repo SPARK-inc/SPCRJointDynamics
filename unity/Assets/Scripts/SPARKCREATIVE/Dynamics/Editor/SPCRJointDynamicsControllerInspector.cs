@@ -26,12 +26,6 @@ public class SPCRJointDynamicsControllerInspector : Editor
         SortNearPointXZ_FixedBeginEnd,
     }
 
-    /*
-    int _SubdivisionJointCountH = 12;
-    int _SubdivisionJointCountV = 6;
-    float _BoneStretchScale = 1.0f;
-    */
-
     public static bool Foldout(bool display, string title, Color color)
     {
         var backgroundColor = GUI.backgroundColor;
@@ -358,77 +352,20 @@ public class SPCRJointDynamicsControllerInspector : Editor
                 GUI.contentColor = contentColor;
             }
 
-        Titlebar("設定保存", new Color(1.0f, 0.7f, 0.7f));
-        if (GUILayout.Button("設定を保存する"))
-        {
-            SPCRJointSettingLocalSave.Save(controller);
+            Titlebar("設定保存", new Color(1.0f, 0.7f, 0.7f));
+            if (GUILayout.Button("設定を保存する"))
+            {
+                SPCRJointSettingLocalSave.Save(controller);
+            }
+            if (GUILayout.Button("設定をロードする"))
+            {
+                SPCRJointSettingLocalSave.Load(controller);
+            }
         }
-        if (GUILayout.Button("設定をロードする"))
+
+        if (GUI.changed)
         {
-            SPCRJointSettingLocalSave.Load(controller);
-        }
-
-            /*
-            Titlebar("拡張設定", new Color(1.0f, 0.7f, 0.7f));
-            GUILayout.Space(3);
-            UpdateIntSlider("水平骨分割数", _SubdivisionJointCountH, 2, 256);
-            UpdateIntSlider("垂直骨分割数", _SubdivisionJointCountV, 2, 256);
-            GUILayout.Space(3);
-            if (GUILayout.Button("骨構造からポリゴンを生成する"))
-            {
-                CreationSubdivisionJoint(controller, _SubdivisionJointCountH, _SubdivisionJointCountV);
-            }
-            GUILayout.Space(3);
-            UpdateSlider("伸縮比率", _BoneStretchScale, -5.0f, +5.0f);
-            if (GUILayout.Button("垂直方向にボーンを伸縮する"))
-            {
-                controller.StretchBoneLength(_BoneStretchScale);
-            }
-
-            GUILayout.Space(5);
-            EditorGUILayout.LabelField("=============== 細分化");
-            if (GUILayout.Button("水平の拘束を挿入"))
-            {
-                SubdivideVerticalChain(controller, 1);
-                EditorUtility.SetDirty(controller);
-            }
-            if (GUILayout.Button("垂直の拘束を挿入"))
-            {
-                SubdivideHorizontalChain(controller, 1);
-                EditorUtility.SetDirty(controller);
-            }
-            if (controller._SubDivInsertedPoints.Count > 0)
-            {
-                if (GUILayout.Button("細分化を元に戻す"))
-                {
-                    RemoveInsertedPoints(controller);
-                    EditorUtility.SetDirty(controller);
-                }
-                {
-                    var bgColor = GUI.backgroundColor;
-                    var contentColor = GUI.contentColor;
-                    GUI.contentColor = Color.yellow;
-                    GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
-                    if (GUILayout.Button("細分化の確定"))
-                    {
-                        PurgeSubdivideOriginalInfo(controller);
-                        EditorUtility.SetDirty(controller);
-                    }
-                    GUI.backgroundColor = bgColor;
-                    GUI.contentColor = contentColor;
-                }
-                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
-                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
-
-                {
-                    var message = string.Format(
-                        "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
-                        controller._SubDivOriginalPoints.Count,
-                        controller._SubDivInsertedPoints.Count);
-                    EditorGUILayout.HelpBox(message, MessageType.Warning);
-                }
-            }
-            */
+            EditorUtility.SetDirty(controller);
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -436,62 +373,32 @@ public class SPCRJointDynamicsControllerInspector : Editor
 
     void UpdateToggle(string Label, SPCRJointDynamicsController Source, ref bool Value)
     {
-        var Result = EditorGUILayout.Toggle(Label, Value);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.Toggle(Label, Value);
     }
 
     void UpdateIntSlider(string Label, SPCRJointDynamicsController Source, ref int Value, int Min, int Max)
     {
-        var Result = EditorGUILayout.IntSlider(Label, Value, Min, Max);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.IntSlider(Label, Value, Min, Max);
     }
 
     void UpdateSlider(string Label, SPCRJointDynamicsController Source, ref float Value, float Min, float Max)
     {
-        var Result = EditorGUILayout.Slider(Label, Value, Min, Max);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.Slider(Label, Value, Min, Max);
     }
 
     void UpdateFloat(string Label, SPCRJointDynamicsController Source, ref float Value)
     {
-        var Result = EditorGUILayout.FloatField(Label, Value);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.FloatField(Label, Value);
     }
 
     void UpdateVector3(string Label, SPCRJointDynamicsController Source, ref Vector3 Value)
     {
-        var Result = EditorGUILayout.Vector3Field(Label, Value);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.Vector3Field(Label, Value);
     }
 
     void UpdateCurve(string Label, SPCRJointDynamicsController Source, ref AnimationCurve Value)
     {
-        var Result = EditorGUILayout.CurveField(Label, Value);
-        if (Value != Result)
-        {
-            Value = Result;
-            EditorUtility.SetDirty(Source);
-        }
+        Value = EditorGUILayout.CurveField(Label, Value);
     }
 
     void Titlebar(string text, Color color)
