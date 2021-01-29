@@ -13,7 +13,8 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
-    [SerializeField][HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     private string uniqueGUIID;
     public string UniqueGUIID { get => uniqueGUIID; }
 

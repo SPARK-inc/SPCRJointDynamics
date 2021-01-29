@@ -14,7 +14,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SPCRJointDynamicsPoint : MonoBehaviour
 {
-    [SerializeField][HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     private string uniqueGUIID;
     public string UniqueGUIID { get => uniqueGUIID; }
 

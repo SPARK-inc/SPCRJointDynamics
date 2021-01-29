@@ -79,7 +79,8 @@ public static class SPCRJointSettingLocalSave
                 Height = spcrJoinDynamicsCollider.Height;
                 Friction = spcrJoinDynamicsCollider.Friction;
                 PushOutRate = spcrJoinDynamicsCollider.PushOutRate;
-            }else
+            }
+            else
             {
                 RefUniqueId = INVALID_ID;
             }
@@ -103,7 +104,8 @@ public static class SPCRJointSettingLocalSave
                 IsEnabled = spcrJointDynamicsPointGrabber.IsEnabled;
                 Radius = spcrJointDynamicsPointGrabber.Radius;
                 Force = spcrJointDynamicsPointGrabber.Force;
-            }else
+            }
+            else
             {
                 RefUniqueGUIID = INVALID_ID;
             }
@@ -182,12 +184,13 @@ public static class SPCRJointSettingLocalSave
         {
             Type = (int)spcrConstraint._Type;
 
-            if(spcrConstraint._PointA != null)
+            if (spcrConstraint._PointA != null)
             {
                 if (string.IsNullOrEmpty(spcrConstraint._PointA.UniqueGUIID))
                     spcrConstraint._PointA.Reset();
                 PointA_ID = spcrConstraint._PointA.UniqueGUIID;
-            }else
+            }
+            else
             {
                 PointA_ID = INVALID_ID;
             }
@@ -484,7 +487,7 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.LockAngleZ = SPCRJointDynamicsContoller._LockAngleZ;
 
         spcrJointDynamicsSave.PointTblIDs = new string[SPCRJointDynamicsContoller.PointTbl.Length];
-        for(int i = 0; i < SPCRJointDynamicsContoller.PointTbl.Length; i++)
+        for (int i = 0; i < SPCRJointDynamicsContoller.PointTbl.Length; i++)
         {
             if (string.IsNullOrEmpty(SPCRJointDynamicsContoller.PointTbl[i].UniqueGUIID))
                 SPCRJointDynamicsContoller.PointTbl[i].Reset();
@@ -492,7 +495,7 @@ public static class SPCRJointSettingLocalSave
         }
 
         spcrJointDynamicsSave.ConstraintsStructuralVertical = new SPCRJointDynamicsConstraintSave[SPCRJointDynamicsContoller.ConstraintsStructuralVertical.Length];
-        for(int i = 0; i < SPCRJointDynamicsContoller.ConstraintsStructuralVertical.Length; i++)
+        for (int i = 0; i < SPCRJointDynamicsContoller.ConstraintsStructuralVertical.Length; i++)
         {
             spcrJointDynamicsSave.ConstraintsStructuralVertical[i] = new SPCRJointDynamicsConstraintSave(SPCRJointDynamicsContoller.ConstraintsStructuralVertical[i]);
         }
@@ -552,7 +555,7 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.IsPaused = SPCRJointDynamicsContoller._IsPaused;
 
         spcrJointDynamicsSave.SubDivInsertedPoints = new System.Collections.Generic.List<string>();
-        for(int i = 0; i < SPCRJointDynamicsContoller._SubDivInsertedPoints.Count; i++)
+        for (int i = 0; i < SPCRJointDynamicsContoller._SubDivInsertedPoints.Count; i++)
         {
             spcrJointDynamicsSave.SubDivInsertedPoints.Add(SPCRJointDynamicsContoller._SubDivInsertedPoints[i].UniqueGUIID);
         }
@@ -655,7 +658,7 @@ public static class SPCRJointSettingLocalSave
             SPCRJointDynamicsContoller._RootTransform = RootTransform;
 
 
-        if(spcrJointDynamicsSave.spcrChildJointDynamicsPointList != null)
+        if (spcrJointDynamicsSave.spcrChildJointDynamicsPointList != null)
         {
             for (int i = 0; i < spcrJointDynamicsSave.spcrChildJointDynamicsPointList.Length; i++)
             {
@@ -705,7 +708,8 @@ public static class SPCRJointSettingLocalSave
             {
                 SPCRJointDynamicsContoller._RootPointTbl[i] = (SPCRJointDynamicsPoint)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPoint) && ((SPCRJointDynamicsPoint)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.RootPointTbl[i]));
             }
-        }else
+        }
+        else
         {
             SPCRJointDynamicsContoller._RootPointTbl = new SPCRJointDynamicsPoint[0];
         }
@@ -717,19 +721,21 @@ public static class SPCRJointSettingLocalSave
             {
                 SPCRJointDynamicsContoller._ColliderTbl[i] = (SPCRJointDynamicsCollider)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsCollider) && ((SPCRJointDynamicsCollider)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.ColliderTbl[i]));
             }
-        }else
+        }
+        else
         {
             SPCRJointDynamicsContoller._ColliderTbl = new SPCRJointDynamicsCollider[0];
         }
 
-        if(spcrJointDynamicsSave.PointGrabberTbl != null)
+        if (spcrJointDynamicsSave.PointGrabberTbl != null)
         {
             SPCRJointDynamicsContoller._PointGrabberTbl = new SPCRJointDynamicsPointGrabber[spcrJointDynamicsSave.PointGrabberTbl.Length];
             for (int i = 0; i < spcrJointDynamicsSave.PointGrabberTbl.Length; i++)
             {
                 SPCRJointDynamicsContoller._PointGrabberTbl[i] = (SPCRJointDynamicsPointGrabber)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPointGrabber) && ((SPCRJointDynamicsPointGrabber)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.PointGrabberTbl[i]));
             }
-        }else
+        }
+        else
         {
             SPCRJointDynamicsContoller._PointGrabberTbl = new SPCRJointDynamicsPointGrabber[0];
         }
@@ -817,7 +823,8 @@ public static class SPCRJointSettingLocalSave
             {
                 SPCRJointDynamicsContoller.PointTbl[i] = (SPCRJointDynamicsPoint)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPoint) && ((SPCRJointDynamicsPoint)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.PointTblIDs[i]));
             }
-        }else
+        }
+        else
         {
             SPCRJointDynamicsContoller.PointTbl = new SPCRJointDynamicsPoint[0];
         }
@@ -941,7 +948,7 @@ public static class SPCRJointSettingLocalSave
             output = parent;
             return;
         }
-        foreach(Transform trans in parent)
+        foreach (Transform trans in parent)
         {
             RecursiveChildSearch(trans, searchName, ref output);
         }

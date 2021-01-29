@@ -42,7 +42,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         public float _Length;
         public float _LengthACB;
 
-        public SPCRJointDynamicsConstraint(ConstraintType Type, SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB, SPCRJointDynamicsPoint PointC=null)
+        public SPCRJointDynamicsConstraint(ConstraintType Type, SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB, SPCRJointDynamicsPoint PointC = null)
         {
             _Type = Type;
             _PointA = PointA;
@@ -95,9 +95,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
-    public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
+    public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.05f) });
     public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
     public AnimationCurve _FrictionCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.7f), new Keyframe(1.0f, 0.7f) });
+    public AnimationCurve _SliderJointLengthCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
+    public AnimationCurve _SliderJointSpringCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.05f), new Keyframe(1.0f, 0.01f) });
 
     public AnimationCurve _AllShrinkScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _AllStretchScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -203,13 +205,13 @@ public class SPCRJointDynamicsController : MonoBehaviour
 #if UNITY_EDITOR
     [SerializeField]
     public List<SPCRJointDynamicsPoint> _SubDivInsertedPoints = new List<SPCRJointDynamicsPoint>();
-    
+
     [SerializeField]
     public List<SPCRJointDynamicsPoint> _SubDivOriginalPoints = new List<SPCRJointDynamicsPoint>();
 #endif
 
     float _Accel;
-    public　float Accel { get => _Accel; set => _Accel = value; }
+    public float Accel { get => _Accel; set => _Accel = value; }
     float _Delay;
     public float Delay { get => _Delay; set => _Delay = value; }
 
@@ -236,6 +238,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].Hardness = _HardnessCurve.Evaluate(rate);
             Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
             Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
+            Points[i].SliderJointLength = _SliderJointLengthCurve.Evaluate(rate);
+            Points[i].SliderJointSpring = _SliderJointSpringCurve.Evaluate(rate);
             Points[i].BoneAxis = src._BoneAxis;
             Points[i].Position = PointTransforms[i].position;
             Points[i].OldPosition = PointTransforms[i].position;
@@ -544,11 +548,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
         UpdateJointDistance();
     }
-    
+
     public void DeleteJointConnection()
     {
 #if UNITY_EDITOR
-        if(!UnityEditor.EditorApplication.isPlaying)
+        if (!UnityEditor.EditorApplication.isPlaying)
         {
             _PointTbl = new SPCRJointDynamicsPoint[0];
             _ConstraintsStructuralVertical = new SPCRJointDynamicsConstraint[0];
@@ -723,7 +727,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         var childPointB = GetChildJointDynamicsPoint(PointB);
         var childPointC = (PointC == null) ? null : GetChildJointDynamicsPoint(PointC);
 
-        if(childPointC == null)
+        if (childPointC == null)
         {
             childPointC = PointC;
         }
@@ -884,7 +888,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
     }
 
-    void OnDrawGizms_Constraint(SPCRJointDynamicsConstraint [] constraints)
+    void OnDrawGizms_Constraint(SPCRJointDynamicsConstraint[] constraints)
     {
         for (int i = 0; i < constraints.Length; i++)
         {
@@ -897,7 +901,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if(!this.enabled)
+        if (!this.enabled)
         {
             return;
         }
@@ -905,7 +909,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
         Gizmos.color = Color.magenta;
         _Job.DrawGizmos_Points();
 
-        if(_IsDebugDraw_RuntimeColliderBounds && _ColliderTbl.Length > 0)
+        if (_IsDebugDraw_RuntimeColliderBounds && _ColliderTbl.Length > 0)
         {
             _Job.DrawGizmos_ColliderEx();
         }

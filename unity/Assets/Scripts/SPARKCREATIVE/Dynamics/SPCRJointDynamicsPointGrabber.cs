@@ -13,7 +13,8 @@ using UnityEngine;
 
 public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 {
-    [SerializeField][HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     private string uniqueGUIID;
     public string UniqueGUIID { get => uniqueGUIID; }
 

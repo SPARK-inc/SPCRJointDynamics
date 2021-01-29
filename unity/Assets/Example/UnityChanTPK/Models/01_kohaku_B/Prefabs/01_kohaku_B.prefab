@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 4121858156790032}
   - component: {fileID: 114654575771554712}
   m_Layer: 0
-  m_Name: jointCollider
+  m_Name: col_chest1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1321,12 +1321,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1032753810271560}
-  m_LocalRotation: {x: -0.114416935, y: 0, z: 0, w: 0.9934328}
-  m_LocalPosition: {x: 1.8152146e-16, y: 0.1488, z: -0.0168}
+  m_LocalRotation: {x: -0.11441693, y: -0, z: -0, w: 0.9934328}
+  m_LocalPosition: {x: 0, y: 0.0688, z: -0.0168}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4101570564587464}
-  m_RootOrder: 2
+  m_Father: {fileID: 4415447140615780}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -13.14, y: 0, z: 0}
 --- !u!114 &114654575771554712
 MonoBehaviour:
@@ -1537,7 +1537,6 @@ Transform:
   m_Children:
   - {fileID: 4415447140615780}
   - {fileID: 4569654752257934}
-  - {fileID: 4121858156790032}
   m_Father: {fileID: 4585894650711860}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7581,7 +7580,7 @@ MonoBehaviour:
   - {fileID: 114975348119711880}
   _PointGrabberTbl: []
   _UpdateTiming: 0
-  _Relaxation: 3
+  _Relaxation: 2
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
@@ -7641,20 +7640,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 0.05
+      outSlope: 0.05
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      value: 0.05
+      inSlope: 0.05
+      outSlope: 0.05
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -7707,27 +7706,75 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.1
+      outSlope: 0.1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.1
+      inSlope: 0.1
+      outSlope: 0.1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: -0.04
+      outSlope: -0.04
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.01
+      inSlope: -0.04
+      outSlope: -0.04
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _AllShrinkScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -2.9251251
-      outSlope: -2.9251251
-      tangentMode: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.034965035
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.15
-      inSlope: -0.029617468
-      outSlope: -0.029617468
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.07925409
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -7737,21 +7784,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -2.9251251
-      outSlope: -2.9251251
-      tangentMode: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.034965035
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.08
-      inSlope: -0.029617468
-      outSlope: -0.029617468
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.07925409
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -8005,13 +8052,13 @@ MonoBehaviour:
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
-  _ShearShrink: 0.2
-  _ShearStretch: 0.2
+  _ShearShrink: 1
+  _ShearStretch: 1
   _BendingingShrinkVertical: 1
   _BendingingStretchVertical: 1
   _BendingingShrinkHorizontal: 1
   _BendingingStretchHorizontal: 1
-  _IsAllStructuralShrinkVertical: 0
+  _IsAllStructuralShrinkVertical: 1
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
@@ -8027,7 +8074,7 @@ MonoBehaviour:
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
   _UseLockAngles: 0
-  _LockAngle: -1
+  _LockAngle: 45
   _UseSeperateLockAxis: 0
   _LockAngleX: -1
   _LockAngleY: -1
@@ -10247,18 +10294,19 @@ MonoBehaviour:
   - {fileID: 114037912383156542}
   _ColliderTbl:
   - {fileID: 114654575771554712}
+  - {fileID: 4419552887337071877}
   - {fileID: 114456223301457562}
-  - {fileID: 114902970664034410}
   - {fileID: 114603589932950748}
-  - {fileID: 114928456240700302}
+  - {fileID: 114902970664034410}
   - {fileID: 114244116996685078}
+  - {fileID: 114928456240700302}
   _PointGrabberTbl: []
   _UpdateTiming: 0
   _Relaxation: 1
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
-  _IsEnableColliderCollision: 0
+  _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
   _MassScaleCurve:
     serializedVersion: 2
@@ -10322,7 +10370,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.03
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -10371,6 +10419,54 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -11471,7 +11567,7 @@ MonoBehaviour:
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
-  _IsEnableColliderCollision: 0
+  _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
   _MassScaleCurve:
     serializedVersion: 2
@@ -11535,7 +11631,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.03
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -11584,6 +11680,54 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12525,9 +12669,9 @@ MonoBehaviour:
   _IsComputeShear: 1
   _IsComputeBendingVertical: 0
   _IsComputeBendingHorizontal: 0
-  _IsDebugDraw_StructuralVertical: 0
-  _IsDebugDraw_StructuralHorizontal: 0
-  _IsDebugDraw_Shear: 0
+  _IsDebugDraw_StructuralVertical: 1
+  _IsDebugDraw_StructuralHorizontal: 1
+  _IsDebugDraw_Shear: 1
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
@@ -12558,13 +12702,15 @@ MonoBehaviour:
   - {fileID: 114603589932950748}
   - {fileID: 114244116996685078}
   - {fileID: 114928456240700302}
+  - {fileID: 114654575771554712}
+  - {fileID: 4419552887337071877}
   _PointGrabberTbl: []
   _UpdateTiming: 0
   _Relaxation: 1
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
-  _IsEnableColliderCollision: 0
+  _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
   _MassScaleCurve:
     serializedVersion: 2
@@ -12628,7 +12774,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12643,7 +12789,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12652,7 +12798,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.01
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12677,6 +12823,54 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -13189,7 +13383,7 @@ MonoBehaviour:
   _IsComputeShear: 0
   _IsComputeBendingVertical: 1
   _IsComputeBendingHorizontal: 0
-  _IsDebugDraw_StructuralVertical: 0
+  _IsDebugDraw_StructuralVertical: 1
   _IsDebugDraw_StructuralHorizontal: 0
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
@@ -13294,7 +13488,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.03
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -13309,7 +13503,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -13318,7 +13512,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
+      value: 0.02
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -13343,6 +13537,54 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -13668,7 +13910,7 @@ MonoBehaviour:
   _IsAllBendingingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
-  _IsCollideShear: 1
+  _IsCollideShear: 0
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
   _UseLockAngles: 0
@@ -14229,7 +14471,7 @@ MonoBehaviour:
   _IsComputeBendingHorizontal: 1
   _IsDebugDraw_StructuralVertical: 1
   _IsDebugDraw_StructuralHorizontal: 1
-  _IsDebugDraw_Shear: 0
+  _IsDebugDraw_Shear: 1
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
@@ -14363,7 +14605,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1434530527548718}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.07, y: -0.012, z: 0}
+  m_LocalPosition: {x: -0.0466, y: -0.012, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 4411859694833450}
@@ -14385,7 +14627,7 @@ MonoBehaviour:
   _Radius: 0.06
   _HeadRadiusScale: 1
   _TailRadiusScale: 1
-  _Height: 0.2
+  _Height: 0.15
   _Friction: 0.5
   _PushOutRate: 1
 --- !u!1 &1435654512272692
@@ -20989,6 +21231,8 @@ Transform:
   - {fileID: 4520663104041466}
   - {fileID: 4876708280129070}
   - {fileID: 4330128090437356}
+  - {fileID: 4121858156790032}
+  - {fileID: 1649721983893184723}
   m_Father: {fileID: 4101570564587464}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23369,7 +23613,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943185768993734}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.068, y: -0.012000084, z: -0.0000000081490725}
+  m_LocalPosition: {x: 0.0467, y: -0.012000084, z: -0.0000000081490725}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 4562305988267556}
@@ -23391,7 +23635,7 @@ MonoBehaviour:
   _Radius: 0.06
   _HeadRadiusScale: 1
   _TailRadiusScale: 1
-  _Height: 0.2
+  _Height: 0.15
   _Friction: 0.5
   _PushOutRate: 1
 --- !u!1 &1944509681708552
@@ -24476,3 +24720,53 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 19
+--- !u!1 &7868215005010336209
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1649721983893184723}
+  - component: {fileID: 4419552887337071877}
+  m_Layer: 0
+  m_Name: col_chest2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1649721983893184723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868215005010336209}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.1014, z: -0.0325}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4415447140615780}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &4419552887337071877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868215005010336209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386afa894c2644e4aad6c19b79ef08d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 
+  _Radius: 0.075
+  _HeadRadiusScale: 1
+  _TailRadiusScale: 1
+  _Height: 0.15
+  _Friction: 0.5
+  _PushOutRate: 1

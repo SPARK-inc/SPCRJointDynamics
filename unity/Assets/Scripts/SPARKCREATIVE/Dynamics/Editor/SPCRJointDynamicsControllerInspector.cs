@@ -153,9 +153,15 @@ public class SPCRJointDynamicsControllerInspector : Editor
         _Opened_ConstraintSettings = Foldout(_Opened_ConstraintSettings, "拘束設定", new Color(0.7f, 1.0f, 1.0f));
         if (_Opened_ConstraintSettings)
         {
+            EditorGUILayout.LabelField("=============== スライダージョイント長さ（一括）");
+            UpdateCurve("水平方向への伸び", controller, ref controller._SliderJointLengthCurve);
+            UpdateCurve("ジョイント内バネ", controller, ref controller._SliderJointSpringCurve);
+
+            GUILayout.Space(5);
             EditorGUILayout.LabelField("=============== 拘束（一括）");
             UpdateCurve("伸びた時縮む力", controller, ref controller._AllShrinkScaleCurve);
             UpdateCurve("縮む時伸びる力", controller, ref controller._AllStretchScaleCurve);
+
             GUILayout.Space(5);
             EditorGUILayout.LabelField("=============== 構成拘束（垂直）");
             if (controller._IsComputeStructuralVertical)
@@ -459,94 +465,94 @@ public class SPCRJointDynamicsControllerInspector : Editor
     {
         switch (Type)
         {
-            case UpdateJointConnectionType.Default:
+        case UpdateJointConnectionType.Default:
+            {
+            }
+            break;
+        case UpdateJointConnectionType.SortNearPointXYZ:
+            {
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var EdgeA = controller._RootPointTbl[0];
+                for (int i = 1; i < controller._RootPointTbl.Length; ++i)
                 {
+                    SourcePoints.Add(controller._RootPointTbl[i]);
                 }
-                break;
-            case UpdateJointConnectionType.SortNearPointXYZ:
+                var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                SortedPoints.Add(EdgeA);
+                while (SourcePoints.Count > 0)
                 {
-                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                    var EdgeA = controller._RootPointTbl[0];
-                    for (int i = 1; i < controller._RootPointTbl.Length; ++i)
-                    {
-                        SourcePoints.Add(controller._RootPointTbl[i]);
-                    }
-                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                    SortedPoints.Add(EdgeA);
-                    while (SourcePoints.Count > 0)
-                    {
-                        SortedPoints.Add(GetNearestPoint(
-                            SortedPoints[SortedPoints.Count - 1].transform.position,
-                            ref SourcePoints,
-                            false));
-                    }
-                    controller._RootPointTbl = SortedPoints.ToArray();
+                    SortedPoints.Add(GetNearestPoint(
+                        SortedPoints[SortedPoints.Count - 1].transform.position,
+                        ref SourcePoints,
+                        false));
                 }
-                break;
-            case UpdateJointConnectionType.SortNearPointXZ:
+                controller._RootPointTbl = SortedPoints.ToArray();
+            }
+            break;
+        case UpdateJointConnectionType.SortNearPointXZ:
+            {
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var EdgeA = controller._RootPointTbl[0];
+                for (int i = 1; i < controller._RootPointTbl.Length; ++i)
                 {
-                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                    var EdgeA = controller._RootPointTbl[0];
-                    for (int i = 1; i < controller._RootPointTbl.Length; ++i)
-                    {
-                        SourcePoints.Add(controller._RootPointTbl[i]);
-                    }
-                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                    SortedPoints.Add(EdgeA);
-                    while (SourcePoints.Count > 0)
-                    {
-                        SortedPoints.Add(GetNearestPoint(
-                            SortedPoints[SortedPoints.Count - 1].transform.position,
-                            ref SourcePoints,
-                            true));
-                    }
-                    controller._RootPointTbl = SortedPoints.ToArray();
+                    SourcePoints.Add(controller._RootPointTbl[i]);
                 }
-                break;
-            case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
+                var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                SortedPoints.Add(EdgeA);
+                while (SourcePoints.Count > 0)
                 {
-                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                    var EdgeA = controller._RootPointTbl[0];
-                    var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
-                    for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
-                    {
-                        SourcePoints.Add(controller._RootPointTbl[i]);
-                    }
-                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                    SortedPoints.Add(EdgeA);
-                    while (SourcePoints.Count > 0)
-                    {
-                        SortedPoints.Add(GetNearestPoint(
-                            SortedPoints[SortedPoints.Count - 1].transform.position,
-                            ref SourcePoints,
-                            false));
-                    }
-                    SortedPoints.Add(EdgeB);
-                    controller._RootPointTbl = SortedPoints.ToArray();
+                    SortedPoints.Add(GetNearestPoint(
+                        SortedPoints[SortedPoints.Count - 1].transform.position,
+                        ref SourcePoints,
+                        true));
                 }
-                break;
-            case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
+                controller._RootPointTbl = SortedPoints.ToArray();
+            }
+            break;
+        case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
+            {
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var EdgeA = controller._RootPointTbl[0];
+                var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
+                for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
                 {
-                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
-                    var EdgeA = controller._RootPointTbl[0];
-                    var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
-                    for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
-                    {
-                        SourcePoints.Add(controller._RootPointTbl[i]);
-                    }
-                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
-                    SortedPoints.Add(EdgeA);
-                    while (SourcePoints.Count > 0)
-                    {
-                        SortedPoints.Add(GetNearestPoint(
-                            SortedPoints[SortedPoints.Count - 1].transform.position,
-                            ref SourcePoints,
-                            true));
-                    }
-                    SortedPoints.Add(EdgeB);
-                    controller._RootPointTbl = SortedPoints.ToArray();
+                    SourcePoints.Add(controller._RootPointTbl[i]);
                 }
-                break;
+                var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                SortedPoints.Add(EdgeA);
+                while (SourcePoints.Count > 0)
+                {
+                    SortedPoints.Add(GetNearestPoint(
+                        SortedPoints[SortedPoints.Count - 1].transform.position,
+                        ref SourcePoints,
+                        false));
+                }
+                SortedPoints.Add(EdgeB);
+                controller._RootPointTbl = SortedPoints.ToArray();
+            }
+            break;
+        case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
+            {
+                var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                var EdgeA = controller._RootPointTbl[0];
+                var EdgeB = controller._RootPointTbl[controller._RootPointTbl.Length - 1];
+                for (int i = 1; i < controller._RootPointTbl.Length - 1; ++i)
+                {
+                    SourcePoints.Add(controller._RootPointTbl[i]);
+                }
+                var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                SortedPoints.Add(EdgeA);
+                while (SourcePoints.Count > 0)
+                {
+                    SortedPoints.Add(GetNearestPoint(
+                        SortedPoints[SortedPoints.Count - 1].transform.position,
+                        ref SourcePoints,
+                        true));
+                }
+                SortedPoints.Add(EdgeB);
+                controller._RootPointTbl = SortedPoints.ToArray();
+            }
+            break;
         }
     }
 
