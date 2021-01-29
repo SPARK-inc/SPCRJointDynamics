@@ -584,7 +584,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00007518884, z: -0.000056655503}
   _Depth: 3
-  _Index: 33
+  _Index: 8
 --- !u!1 &1010006093569788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,7 +2404,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000015102526, z: 0.00000035239233}
   _Depth: 2
-  _Index: 32
+  _Index: 7
 --- !u!1 &1132145287736946
 GameObject:
   m_ObjectHideFlags: 0
@@ -3594,7 +3594,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: -0.00000018109054, z: -0.00000010348031}
   _Depth: 0
-  _Index: 30
+  _Index: 5
 --- !u!1 &1196578582838596
 GameObject:
   m_ObjectHideFlags: 0
@@ -5615,7 +5615,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
-  _Index: 34
+  _Index: 9
 --- !u!1 &1304039332090680
 GameObject:
   m_ObjectHideFlags: 0
@@ -7502,6 +7502,7 @@ GameObject:
   - component: {fileID: 114587009034388468}
   - component: {fileID: 114505712486649304}
   - component: {fileID: 114352902991239934}
+  - component: {fileID: 6891379459228230725}
   m_Layer: 0
   m_Name: 01_kohaku_B
   m_TagString: Untagged
@@ -7712,20 +7713,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.1
-      outSlope: 0.1
-      tangentMode: 34
+      inSlope: 0.029662283
+      outSlope: 0.029662283
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.100137174
     - serializedVersion: 3
       time: 1
       value: 0.1
-      inSlope: 0.1
-      outSlope: 0.1
-      tangentMode: 34
+      inSlope: 0.20533472
+      outSlope: 0.20533472
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.039780498
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -14476,6 +14477,714 @@ MonoBehaviour:
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 3
+  _IsPaused: 0
+  _SubDivInsertedPoints: []
+  _SubDivOriginalPoints: []
+--- !u!114 &6891379459228230725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425925625858106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: d3244580-b048-456b-b148-4fc1969001d4
+  Name: "\u30EA\u30DC\u30F3"
+  _RootTransform: {fileID: 4840837466078988}
+  _RootPointTbl:
+  - {fileID: 114172629759796326}
+  - {fileID: 114322537385054682}
+  _ColliderTbl: []
+  _PointGrabberTbl: []
+  _UpdateTiming: 0
+  _Relaxation: 3
+  _SubSteps: 1
+  _IsEnableFloorCollision: 1
+  _FloorHeight: 0.02
+  _IsEnableColliderCollision: 1
+  _IsCancelResetPhysics: 0
+  _MassScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ResistanceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.2
+      inSlope: 0.3520886
+      outSlope: 0.3520886
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.056241453
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _HardnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.1
+      inSlope: -0.0019161562
+      outSlope: -0.0019161562
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15500689
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FrictionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.01
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AllShrinkScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AllStretchScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralShrinkVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralStretchVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralShrinkHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralStretchHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ShearShrinkScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ShearStretchScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingShrinkVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingStretchVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingShrinkHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingStretchHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _Gravity: {x: 0, y: 0, z: 0}
+  _WindForce: {x: 0, y: 0, z: 0}
+  _SpringK: 1
+  _RootSlideLimit: -1
+  _RootRotateLimit: -1
+  _DetailHitDivideMax: 0
+  _StructuralShrinkVertical: 1
+  _StructuralStretchVertical: 1
+  _StructuralShrinkHorizontal: 1
+  _StructuralStretchHorizontal: 1
+  _ShearShrink: 1
+  _ShearStretch: 1
+  _BendingingShrinkVertical: 1
+  _BendingingStretchVertical: 1
+  _BendingingShrinkHorizontal: 1
+  _BendingingStretchHorizontal: 1
+  _IsAllStructuralShrinkVertical: 0
+  _IsAllStructuralStretchVertical: 1
+  _IsAllStructuralShrinkHorizontal: 1
+  _IsAllStructuralStretchHorizontal: 1
+  _IsAllShearShrink: 1
+  _IsAllShearStretch: 1
+  _IsAllBendingingShrinkVertical: 1
+  _IsAllBendingingStretchVertical: 1
+  _IsAllBendingingShrinkHorizontal: 1
+  _IsAllBendingingStretchHorizontal: 1
+  _IsCollideStructuralVertical: 1
+  _IsCollideStructuralHorizontal: 0
+  _IsCollideShear: 0
+  _IsCollideBendingVertical: 0
+  _IsCollideBendingHorizontal: 0
+  _UseLockAngles: 0
+  _LockAngle: 10
+  _UseSeperateLockAxis: 0
+  _LockAngleX: -1
+  _LockAngleY: -1
+  _LockAngleZ: -1
+  _PointTbl:
+  - {fileID: 114172629759796326}
+  - {fileID: 114036122444029814}
+  - {fileID: 114260964056193262}
+  - {fileID: 114247948041437388}
+  - {fileID: 114943330109304322}
+  - {fileID: 114322537385054682}
+  - {fileID: 114565133266402620}
+  - {fileID: 114813499861231550}
+  - {fileID: 114349606536085624}
+  - {fileID: 114421419669476258}
+  _ConstraintsStructuralVertical:
+  - _Type: 0
+    _PointA: {fileID: 114172629759796326}
+    _PointB: {fileID: 114036122444029814}
+    _PointC: {fileID: 0}
+    _Length: 0.072000004
+    _LengthACB: 0.072000004
+  - _Type: 0
+    _PointA: {fileID: 114036122444029814}
+    _PointB: {fileID: 114260964056193262}
+    _PointC: {fileID: 0}
+    _Length: 0.04700001
+    _LengthACB: 0.04700001
+  - _Type: 0
+    _PointA: {fileID: 114260964056193262}
+    _PointB: {fileID: 114247948041437388}
+    _PointC: {fileID: 0}
+    _Length: 0.036999997
+    _LengthACB: 0.036999997
+  - _Type: 0
+    _PointA: {fileID: 114247948041437388}
+    _PointB: {fileID: 114943330109304322}
+    _PointC: {fileID: 0}
+    _Length: 0.029999996
+    _LengthACB: 0.029999996
+  - _Type: 0
+    _PointA: {fileID: 114322537385054682}
+    _PointB: {fileID: 114565133266402620}
+    _PointC: {fileID: 0}
+    _Length: 0.072
+    _LengthACB: 0.072
+  - _Type: 0
+    _PointA: {fileID: 114565133266402620}
+    _PointB: {fileID: 114813499861231550}
+    _PointC: {fileID: 0}
+    _Length: 0.047000013
+    _LengthACB: 0.047000013
+  - _Type: 0
+    _PointA: {fileID: 114813499861231550}
+    _PointB: {fileID: 114349606536085624}
+    _PointC: {fileID: 0}
+    _Length: 0.036999997
+    _LengthACB: 0.036999997
+  - _Type: 0
+    _PointA: {fileID: 114349606536085624}
+    _PointB: {fileID: 114421419669476258}
+    _PointC: {fileID: 0}
+    _Length: 0.02999996
+    _LengthACB: 0.02999996
+  _ConstraintsStructuralHorizontal:
+  - _Type: 1
+    _PointA: {fileID: 114036122444029814}
+    _PointB: {fileID: 114565133266402620}
+    _PointC: {fileID: 0}
+    _Length: 0.16903459
+    _LengthACB: 0.16903459
+  - _Type: 1
+    _PointA: {fileID: 114260964056193262}
+    _PointB: {fileID: 114813499861231550}
+    _PointC: {fileID: 0}
+    _Length: 0.21722016
+    _LengthACB: 0.21722016
+  - _Type: 1
+    _PointA: {fileID: 114247948041437388}
+    _PointB: {fileID: 114349606536085624}
+    _PointC: {fileID: 0}
+    _Length: 0.18113118
+    _LengthACB: 0.18113118
+  - _Type: 1
+    _PointA: {fileID: 114943330109304322}
+    _PointB: {fileID: 114421419669476258}
+    _PointC: {fileID: 0}
+    _Length: 0.19087747
+    _LengthACB: 0.19087747
+  _ConstraintsShear:
+  - _Type: 2
+    _PointA: {fileID: 114036122444029814}
+    _PointB: {fileID: 114322537385054682}
+    _PointC: {fileID: 0}
+    _Length: 0.14587392
+    _LengthACB: 0.14587392
+  - _Type: 2
+    _PointA: {fileID: 114172629759796326}
+    _PointB: {fileID: 114565133266402620}
+    _PointC: {fileID: 0}
+    _Length: 0.14587392
+    _LengthACB: 0.14587392
+  - _Type: 2
+    _PointA: {fileID: 114260964056193262}
+    _PointB: {fileID: 114565133266402620}
+    _PointC: {fileID: 0}
+    _Length: 0.19729854
+    _LengthACB: 0.19729854
+  - _Type: 2
+    _PointA: {fileID: 114036122444029814}
+    _PointB: {fileID: 114813499861231550}
+    _PointC: {fileID: 0}
+    _Length: 0.19729857
+    _LengthACB: 0.19729857
+  - _Type: 2
+    _PointA: {fileID: 114247948041437388}
+    _PointB: {fileID: 114813499861231550}
+    _PointC: {fileID: 0}
+    _Length: 0.20177796
+    _LengthACB: 0.20177796
+  - _Type: 2
+    _PointA: {fileID: 114260964056193262}
+    _PointB: {fileID: 114349606536085624}
+    _PointC: {fileID: 0}
+    _Length: 0.20177796
+    _LengthACB: 0.20177796
+  - _Type: 2
+    _PointA: {fileID: 114943330109304322}
+    _PointB: {fileID: 114349606536085624}
+    _PointC: {fileID: 0}
+    _Length: 0.18834506
+    _LengthACB: 0.18834506
+  - _Type: 2
+    _PointA: {fileID: 114247948041437388}
+    _PointB: {fileID: 114421419669476258}
+    _PointC: {fileID: 0}
+    _Length: 0.18834507
+    _LengthACB: 0.18834507
+  _ConstraintsBendingVertical:
+  - _Type: 3
+    _PointA: {fileID: 114172629759796326}
+    _PointB: {fileID: 114260964056193262}
+    _PointC: {fileID: 114036122444029814}
+    _Length: 0.11900002
+    _LengthACB: 0.11900002
+  - _Type: 3
+    _PointA: {fileID: 114036122444029814}
+    _PointB: {fileID: 114247948041437388}
+    _PointC: {fileID: 114260964056193262}
+    _Length: 0.06531044
+    _LengthACB: 0.08400001
+  - _Type: 3
+    _PointA: {fileID: 114260964056193262}
+    _PointB: {fileID: 114943330109304322}
+    _PointC: {fileID: 114247948041437388}
+    _Length: 0.060795415
+    _LengthACB: 0.066999994
+  - _Type: 3
+    _PointA: {fileID: 114322537385054682}
+    _PointB: {fileID: 114813499861231550}
+    _PointC: {fileID: 114565133266402620}
+    _Length: 0.11900002
+    _LengthACB: 0.11900001
+  - _Type: 3
+    _PointA: {fileID: 114565133266402620}
+    _PointB: {fileID: 114349606536085624}
+    _PointC: {fileID: 114813499861231550}
+    _Length: 0.06531044
+    _LengthACB: 0.08400001
+  - _Type: 3
+    _PointA: {fileID: 114813499861231550}
+    _PointB: {fileID: 114421419669476258}
+    _PointC: {fileID: 114349606536085624}
+    _Length: 0.060795408
+    _LengthACB: 0.06699996
+  _ConstraintsBendingHorizontal: []
+  _IsLoopRootPoints: 0
+  _IsComputeStructuralVertical: 1
+  _IsComputeStructuralHorizontal: 0
+  _IsComputeShear: 0
+  _IsComputeBendingVertical: 0
+  _IsComputeBendingHorizontal: 0
+  _IsDebugDraw_StructuralVertical: 1
+  _IsDebugDraw_StructuralHorizontal: 0
+  _IsDebugDraw_Shear: 0
+  _IsDebugDraw_BendingVertical: 0
+  _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_RuntimeColliderBounds: 0
+  _MaxPointDepth: 4
   _IsPaused: 0
   _SubDivInsertedPoints: []
   _SubDivOriginalPoints: []
@@ -23978,7 +24687,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000023778449, z: -0.00000023778449}
   _Depth: 1
-  _Index: 31
+  _Index: 6
 --- !u!1 &1959625319105806
 GameObject:
   m_ObjectHideFlags: 0
