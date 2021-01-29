@@ -371,45 +371,52 @@ public class SPCRJointDynamicsControllerInspector : Editor
             GUILayout.Space(5);
 
             Titlebar("細分化", new Color(0.7f, 1.0f, 0.7f));
-            if (GUILayout.Button("垂直の拘束を挿入"))
+            if (PrefabUtility.IsPartOfAnyPrefab(controller.gameObject))
             {
-                SubdivideVerticalChain(controller, 1);
-                EditorUtility.SetDirty(controller);
+                EditorGUILayout.HelpBox("UnpackされていないPrefabは細分化できません", MessageType.Warning);
             }
-            if (GUILayout.Button("水平の拘束を挿入"))
+            else
             {
-                SubdivideHorizontalChain(controller, 1);
-                EditorUtility.SetDirty(controller);
-            }
-            if (controller._SubDivInsertedPoints.Count > 0)
-            {
-                if (GUILayout.Button("細分化を元に戻す"))
+                if (GUILayout.Button("垂直の拘束を挿入"))
                 {
-                    RemoveInsertedPoints(controller);
+                    SubdivideVerticalChain(controller, 1);
                     EditorUtility.SetDirty(controller);
                 }
+                if (GUILayout.Button("水平の拘束を挿入"))
                 {
-                    var bgColor = GUI.backgroundColor;
-                    var contentColor = GUI.contentColor;
-                    GUI.contentColor = Color.yellow;
-                    GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
-                    if (GUILayout.Button("細分化の確定"))
+                    SubdivideHorizontalChain(controller, 1);
+                    EditorUtility.SetDirty(controller);
+                }
+                if (controller._SubDivInsertedPoints.Count > 0)
+                {
+                    if (GUILayout.Button("細分化を元に戻す"))
                     {
-                        PurgeSubdivideOriginalInfo(controller);
+                        RemoveInsertedPoints(controller);
                         EditorUtility.SetDirty(controller);
                     }
-                    GUI.backgroundColor = bgColor;
-                    GUI.contentColor = contentColor;
-                }
-                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
-                // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
+                    {
+                        var bgColor = GUI.backgroundColor;
+                        var contentColor = GUI.contentColor;
+                        GUI.contentColor = Color.yellow;
+                        GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
+                        if (GUILayout.Button("細分化の確定"))
+                        {
+                            PurgeSubdivideOriginalInfo(controller);
+                            EditorUtility.SetDirty(controller);
+                        }
+                        GUI.backgroundColor = bgColor;
+                        GUI.contentColor = contentColor;
+                    }
+                    // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
+                    // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
 
-                {
-                    var message = string.Format(
-                        "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
-                        controller._SubDivOriginalPoints.Count,
-                        controller._SubDivInsertedPoints.Count);
-                    EditorGUILayout.HelpBox(message, MessageType.Warning);
+                    {
+                        var message = string.Format(
+                            "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
+                            controller._SubDivOriginalPoints.Count,
+                            controller._SubDivInsertedPoints.Count);
+                        EditorGUILayout.HelpBox(message, MessageType.Warning);
+                    }
                 }
             }
         }
