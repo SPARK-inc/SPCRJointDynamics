@@ -511,7 +511,7 @@ public unsafe class SPCRJointDynamicsJob
                         ConstraintUpdate.pRWPoints = pRWPoints;
                         ConstraintUpdate.pColliders = pColliders;
                         ConstraintUpdate.pColliderExs = pColliderExs;
-                        ConstraintUpdate.ColliderCount = IsEnableColliderCollision ? ColliderCount : 0;
+                        ConstraintUpdate.ColliderCount = ColliderCount;
                         ConstraintUpdate.DeltaSubstepMulDeltaRelax = DeltaStepMulDeltaRelax;
                         ConstraintUpdate.SpringK = SpringK;
                         _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
