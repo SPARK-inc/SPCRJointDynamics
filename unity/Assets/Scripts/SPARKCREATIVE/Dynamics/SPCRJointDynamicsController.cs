@@ -89,7 +89,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsEnableFloorCollision = true;
     public float _FloorHeight = 0.02f;
 
-    public bool _IsEnableColliderCollision = false;
+    public bool _IsEnableColliderCollision = true;
 
     public bool _IsCancelResetPhysics = false;
 

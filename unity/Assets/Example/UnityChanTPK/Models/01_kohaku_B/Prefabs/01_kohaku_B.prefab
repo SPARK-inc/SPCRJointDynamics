@@ -13424,7 +13424,7 @@ MonoBehaviour:
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
-  _IsEnableColliderCollision: 0
+  _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
   _MassScaleCurve:
     serializedVersion: 2
