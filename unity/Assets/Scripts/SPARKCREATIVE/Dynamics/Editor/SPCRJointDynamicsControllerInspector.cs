@@ -371,12 +371,12 @@ public class SPCRJointDynamicsControllerInspector : Editor
             GUILayout.Space(5);
 
             Titlebar("細分化", new Color(0.7f, 1.0f, 0.7f));
-            if (GUILayout.Button("水平の拘束を挿入"))
+            if (GUILayout.Button("垂直の拘束を挿入"))
             {
                 SubdivideVerticalChain(controller, 1);
                 EditorUtility.SetDirty(controller);
             }
-            if (GUILayout.Button("垂直の拘束を挿入"))
+            if (GUILayout.Button("水平の拘束を挿入"))
             {
                 SubdivideHorizontalChain(controller, 1);
                 EditorUtility.SetDirty(controller);
