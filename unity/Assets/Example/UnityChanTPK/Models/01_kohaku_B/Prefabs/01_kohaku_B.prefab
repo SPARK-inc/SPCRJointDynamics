@@ -150,6 +150,56 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 6
   _Index: 41
+--- !u!1 &379101618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 379101619}
+  - component: {fileID: 379101620}
+  m_Layer: 0
+  m_Name: col_chest3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &379101619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379101618}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.0177, z: 0.0623}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4415447140615780}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &379101620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379101618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386afa894c2644e4aad6c19b79ef08d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 
+  _Radius: 0.04
+  _HeadRadiusScale: 1
+  _TailRadiusScale: 1
+  _Height: 0.13
+  _Friction: 0.5
+  _PushOutRate: 1
 --- !u!1 &388464749
 GameObject:
   m_ObjectHideFlags: 0
@@ -7503,6 +7553,7 @@ GameObject:
   - component: {fileID: 114505712486649304}
   - component: {fileID: 114352902991239934}
   - component: {fileID: 6891379459228230725}
+  - component: {fileID: 1574401320}
   m_Layer: 0
   m_Name: 01_kohaku_B
   m_TagString: Untagged
@@ -7582,7 +7633,7 @@ MonoBehaviour:
   _PointGrabberTbl: []
   _UpdateTiming: 0
   _Relaxation: 2
-  _SubSteps: 1
+  _SubSteps: 2
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
@@ -8048,27 +8099,27 @@ MonoBehaviour:
   _SpringK: 1
   _RootSlideLimit: -1
   _RootRotateLimit: -1
-  _DetailHitDivideMax: 0
+  _DetailHitDivideMax: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingingShrinkVertical: 0.1
+  _BendingingStretchVertical: 0.2
+  _BendingingShrinkHorizontal: 0.1
+  _BendingingStretchHorizontal: 0.2
   _IsAllStructuralShrinkVertical: 1
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingingShrinkVertical: 0
+  _IsAllBendingingStretchVertical: 0
+  _IsAllBendingingShrinkHorizontal: 0
+  _IsAllBendingingStretchHorizontal: 0
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
@@ -10262,8 +10313,8 @@ MonoBehaviour:
   _IsComputeShear: 1
   _IsComputeBendingVertical: 1
   _IsComputeBendingHorizontal: 1
-  _IsDebugDraw_StructuralVertical: 1
-  _IsDebugDraw_StructuralHorizontal: 1
+  _IsDebugDraw_StructuralVertical: 0
+  _IsDebugDraw_StructuralHorizontal: 0
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
@@ -11526,8 +11577,8 @@ MonoBehaviour:
   _IsComputeShear: 1
   _IsComputeBendingVertical: 0
   _IsComputeBendingHorizontal: 0
-  _IsDebugDraw_StructuralVertical: 1
-  _IsDebugDraw_StructuralHorizontal: 1
+  _IsDebugDraw_StructuralVertical: 0
+  _IsDebugDraw_StructuralHorizontal: 0
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
@@ -12670,9 +12721,9 @@ MonoBehaviour:
   _IsComputeShear: 1
   _IsComputeBendingVertical: 0
   _IsComputeBendingHorizontal: 0
-  _IsDebugDraw_StructuralVertical: 1
-  _IsDebugDraw_StructuralHorizontal: 1
-  _IsDebugDraw_Shear: 1
+  _IsDebugDraw_StructuralVertical: 0
+  _IsDebugDraw_StructuralHorizontal: 0
+  _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
@@ -13384,7 +13435,7 @@ MonoBehaviour:
   _IsComputeShear: 0
   _IsComputeBendingVertical: 1
   _IsComputeBendingHorizontal: 0
-  _IsDebugDraw_StructuralVertical: 1
+  _IsDebugDraw_StructuralVertical: 0
   _IsDebugDraw_StructuralHorizontal: 0
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
@@ -14470,9 +14521,9 @@ MonoBehaviour:
   _IsComputeShear: 1
   _IsComputeBendingVertical: 1
   _IsComputeBendingHorizontal: 1
-  _IsDebugDraw_StructuralVertical: 1
-  _IsDebugDraw_StructuralHorizontal: 1
-  _IsDebugDraw_Shear: 1
+  _IsDebugDraw_StructuralVertical: 0
+  _IsDebugDraw_StructuralHorizontal: 0
+  _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
@@ -15171,6 +15222,597 @@ MonoBehaviour:
     _PointC: {fileID: 114349606536085624}
     _Length: 0.060795408
     _LengthACB: 0.06699996
+  _ConstraintsBendingHorizontal: []
+  _IsLoopRootPoints: 0
+  _IsComputeStructuralVertical: 1
+  _IsComputeStructuralHorizontal: 0
+  _IsComputeShear: 0
+  _IsComputeBendingVertical: 0
+  _IsComputeBendingHorizontal: 0
+  _IsDebugDraw_StructuralVertical: 1
+  _IsDebugDraw_StructuralHorizontal: 0
+  _IsDebugDraw_Shear: 0
+  _IsDebugDraw_BendingVertical: 0
+  _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_RuntimeColliderBounds: 0
+  _MaxPointDepth: 4
+  _IsPaused: 0
+  _SubDivInsertedPoints: []
+  _SubDivOriginalPoints: []
+--- !u!114 &1574401320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425925625858106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 58128c9f-e342-4df6-8e31-2679f1490177
+  Name: "\u80F8\u30EA\u30DC\u30F3"
+  _RootTransform: {fileID: 4415447140615780}
+  _RootPointTbl:
+  - {fileID: 534202194}
+  _ColliderTbl:
+  - {fileID: 379101620}
+  - {fileID: 114456223301457562}
+  - {fileID: 114370441630096742}
+  _PointGrabberTbl: []
+  _UpdateTiming: 0
+  _Relaxation: 3
+  _SubSteps: 1
+  _IsEnableFloorCollision: 1
+  _FloorHeight: 0.02
+  _IsEnableColliderCollision: 1
+  _IsCancelResetPhysics: 0
+  _MassScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ResistanceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _HardnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.02
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.02674684
+      outSlope: -0.02674684
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.37916666
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FrictionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointLengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SliderJointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.01
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AllShrinkScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AllStretchScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralShrinkVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralStretchVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralShrinkHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _StructuralStretchHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ShearShrinkScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ShearStretchScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingShrinkVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingStretchVerticalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingShrinkHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _BendingStretchHorizontalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _Gravity: {x: 0, y: -10, z: 0}
+  _WindForce: {x: 0, y: 0, z: 0}
+  _SpringK: 1
+  _RootSlideLimit: -1
+  _RootRotateLimit: -1
+  _DetailHitDivideMax: 0
+  _StructuralShrinkVertical: 1
+  _StructuralStretchVertical: 1
+  _StructuralShrinkHorizontal: 1
+  _StructuralStretchHorizontal: 1
+  _ShearShrink: 1
+  _ShearStretch: 1
+  _BendingingShrinkVertical: 1
+  _BendingingStretchVertical: 1
+  _BendingingShrinkHorizontal: 1
+  _BendingingStretchHorizontal: 1
+  _IsAllStructuralShrinkVertical: 0
+  _IsAllStructuralStretchVertical: 1
+  _IsAllStructuralShrinkHorizontal: 1
+  _IsAllStructuralStretchHorizontal: 1
+  _IsAllShearShrink: 1
+  _IsAllShearStretch: 1
+  _IsAllBendingingShrinkVertical: 1
+  _IsAllBendingingStretchVertical: 1
+  _IsAllBendingingShrinkHorizontal: 1
+  _IsAllBendingingStretchHorizontal: 1
+  _IsCollideStructuralVertical: 1
+  _IsCollideStructuralHorizontal: 0
+  _IsCollideShear: 0
+  _IsCollideBendingVertical: 0
+  _IsCollideBendingHorizontal: 0
+  _UseLockAngles: 0
+  _LockAngle: -1
+  _UseSeperateLockAxis: 0
+  _LockAngleX: -1
+  _LockAngleY: -1
+  _LockAngleZ: -1
+  _PointTbl:
+  - {fileID: 534202194}
+  - {fileID: 1647070468}
+  - {fileID: 1349413788}
+  - {fileID: 559243195}
+  - {fileID: 1648177420}
+  _ConstraintsStructuralVertical:
+  - _Type: 0
+    _PointA: {fileID: 534202194}
+    _PointB: {fileID: 1647070468}
+    _PointC: {fileID: 0}
+    _Length: 0.020000027
+    _LengthACB: 0.020000027
+  - _Type: 0
+    _PointA: {fileID: 1647070468}
+    _PointB: {fileID: 1349413788}
+    _PointC: {fileID: 0}
+    _Length: 0.059999954
+    _LengthACB: 0.059999954
+  - _Type: 0
+    _PointA: {fileID: 1349413788}
+    _PointB: {fileID: 559243195}
+    _PointC: {fileID: 0}
+    _Length: 0.054999996
+    _LengthACB: 0.054999996
+  - _Type: 0
+    _PointA: {fileID: 559243195}
+    _PointB: {fileID: 1648177420}
+    _PointC: {fileID: 0}
+    _Length: 0.030000012
+    _LengthACB: 0.030000012
+  _ConstraintsStructuralHorizontal: []
+  _ConstraintsShear: []
+  _ConstraintsBendingVertical:
+  - _Type: 3
+    _PointA: {fileID: 534202194}
+    _PointB: {fileID: 1349413788}
+    _PointC: {fileID: 1647070468}
+    _Length: 0.07999484
+    _LengthACB: 0.07999998
+  - _Type: 3
+    _PointA: {fileID: 1647070468}
+    _PointB: {fileID: 559243195}
+    _PointC: {fileID: 1349413788}
+    _Length: 0.11449993
+    _LengthACB: 0.11499995
+  - _Type: 3
+    _PointA: {fileID: 1349413788}
+    _PointB: {fileID: 1648177420}
+    _PointC: {fileID: 559243195}
+    _Length: 0.08500001
+    _LengthACB: 0.08500001
   _ConstraintsBendingHorizontal: []
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
@@ -16219,6 +16861,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4397841211805492}
+  - component: {fileID: 1648177420}
   m_Layer: 0
   m_Name: J_1_C_scarf_03_end
   m_TagString: Untagged
@@ -16240,6 +16883,25 @@ Transform:
   m_Father: {fileID: 4868371294845116}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1648177420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500202224293464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: c5586b14-f35f-452b-87db-a6c8f1f7c7e8
+  _Mass: 1
+  _RefChildPoint: {fileID: 0}
+  _IsFixed: 0
+  _BoneAxis: {x: -1, y: 0, z: 0}
+  _Depth: 4
+  _Index: 4
 --- !u!1 &1508206545523662
 GameObject:
   m_ObjectHideFlags: 0
@@ -16689,6 +17351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4507160225745498}
+  - component: {fileID: 1647070468}
   m_Layer: 0
   m_Name: J_1_C_scarf_01
   m_TagString: Untagged
@@ -16711,6 +17374,25 @@ Transform:
   m_Father: {fileID: 4520663104041466}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1647070468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543570387233734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 79c27f02-ecd3-4ae9-803a-23993889ee5f
+  _Mass: 1
+  _RefChildPoint: {fileID: 1349413788}
+  _IsFixed: 0
+  _BoneAxis: {x: -1, y: 9.714447e-17, z: -0.0000001749526}
+  _Depth: 1
+  _Index: 1
 --- !u!1 &1547980835047002
 GameObject:
   m_ObjectHideFlags: 0
@@ -20948,6 +21630,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4868371294845116}
+  - component: {fileID: 559243195}
   m_Layer: 0
   m_Name: J_1_C_scarf_03
   m_TagString: Untagged
@@ -20970,6 +21653,25 @@ Transform:
   m_Father: {fileID: 4234019128638474}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &559243195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764460839283052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 4503b3e5-90b5-4c6b-9266-a18901810c15
+  _Mass: 1
+  _RefChildPoint: {fileID: 1648177420}
+  _IsFixed: 0
+  _BoneAxis: {x: -1, y: 3.0924303e-15, z: 0.000014827416}
+  _Depth: 3
+  _Index: 3
 --- !u!1 &1765321373272804
 GameObject:
   m_ObjectHideFlags: 0
@@ -21143,6 +21845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4234019128638474}
+  - component: {fileID: 1349413788}
   m_Layer: 0
   m_Name: J_1_C_scarf_02
   m_TagString: Untagged
@@ -21165,6 +21868,25 @@ Transform:
   m_Father: {fileID: 4507160225745498}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1349413788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771427011213780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 28427918-310b-4542-8b11-551a0c8cafa8
+  _Mass: 1
+  _RefChildPoint: {fileID: 559243195}
+  _IsFixed: 0
+  _BoneAxis: {x: -1, y: 9.134102e-16, z: -0.000000009524884}
+  _Depth: 2
+  _Index: 2
 --- !u!1 &1772098335154724
 GameObject:
   m_ObjectHideFlags: 0
@@ -21942,6 +22664,7 @@ Transform:
   - {fileID: 4330128090437356}
   - {fileID: 4121858156790032}
   - {fileID: 1649721983893184723}
+  - {fileID: 379101619}
   m_Father: {fileID: 4101570564587464}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21954,6 +22677,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4520663104041466}
+  - component: {fileID: 534202194}
   m_Layer: 0
   m_Name: J_1_C_scarf_00
   m_TagString: Untagged
@@ -21976,6 +22700,25 @@ Transform:
   m_Father: {fileID: 4415447140615780}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &534202194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821658462819576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 996993cc-f1a6-47e6-a801-443ccdba2428
+  _Mass: 1
+  _RefChildPoint: {fileID: 1647070468}
+  _IsFixed: 1
+  _BoneAxis: {x: -1, y: 0, z: -0.0000006286408}
+  _Depth: 0
+  _Index: 0
 --- !u!1 &1824986780559702
 GameObject:
   m_ObjectHideFlags: 0
