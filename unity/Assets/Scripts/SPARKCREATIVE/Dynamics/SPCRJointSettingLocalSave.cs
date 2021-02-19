@@ -311,12 +311,11 @@ public static class SPCRJointSettingLocalSave
         public bool IsCollideBendingVertical { get; set; }
         public bool IsCollideBendingHorizontal { get; set; }
 
-        public bool UseLockAngles { get; set; }
-        public int LockAngle { get; set; }
-        public bool UseSeperateLockAxis { get; set; }
-        public int LockAngleX { get; set; }
-        public int LockAngleY { get; set; }
-        public int LockAngleZ { get; set; }
+        public bool UseLimitAngles { get; set; }
+        public int LimitAngle { get; set; }
+        public SPCRAnimCurveKeyFrameSave[] LimitPowerCurve { get; set; }
+        public bool LimitFromRoot { get; set; }
+
         public string[] PointTblIDs { get; set; }
 
         public SPCRJointDynamicsConstraintSave[] ConstraintsStructuralVertical { get; set; }
@@ -479,12 +478,10 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.IsCollideBendingVertical = SPCRJointDynamicsContoller._IsCollideBendingVertical;
         spcrJointDynamicsSave.IsCollideBendingHorizontal = SPCRJointDynamicsContoller._IsCollideBendingHorizontal;
 
-        spcrJointDynamicsSave.UseLockAngles = SPCRJointDynamicsContoller._UseLockAngles;
-        spcrJointDynamicsSave.LockAngle = SPCRJointDynamicsContoller._LockAngle;
-        spcrJointDynamicsSave.UseSeperateLockAxis = SPCRJointDynamicsContoller._UseSeperateLockAxis;
-        spcrJointDynamicsSave.LockAngleX = SPCRJointDynamicsContoller._LockAngleX;
-        spcrJointDynamicsSave.LockAngleY = SPCRJointDynamicsContoller._LockAngleY;
-        spcrJointDynamicsSave.LockAngleZ = SPCRJointDynamicsContoller._LockAngleZ;
+        spcrJointDynamicsSave.UseLimitAngles = SPCRJointDynamicsContoller._UseLimitAngles;
+        spcrJointDynamicsSave.LimitAngle = SPCRJointDynamicsContoller._LimitAngle;
+        spcrJointDynamicsSave.LimitPowerCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._LimitPowerCurve);
+        spcrJointDynamicsSave.LimitFromRoot = SPCRJointDynamicsContoller._LimitFromRoot;
 
         spcrJointDynamicsSave.PointTblIDs = new string[SPCRJointDynamicsContoller.PointTbl.Length];
         for (int i = 0; i < SPCRJointDynamicsContoller.PointTbl.Length; i++)
@@ -809,12 +806,10 @@ public static class SPCRJointSettingLocalSave
         SPCRJointDynamicsContoller._IsCollideBendingVertical = spcrJointDynamicsSave.IsCollideBendingVertical;
         SPCRJointDynamicsContoller._IsCollideBendingHorizontal = spcrJointDynamicsSave.IsCollideBendingHorizontal;
 
-        SPCRJointDynamicsContoller._UseLockAngles = spcrJointDynamicsSave.UseLockAngles;
-        SPCRJointDynamicsContoller._LockAngle = spcrJointDynamicsSave.LockAngle;
-        SPCRJointDynamicsContoller._UseSeperateLockAxis = spcrJointDynamicsSave.UseSeperateLockAxis;
-        SPCRJointDynamicsContoller._LockAngleX = spcrJointDynamicsSave.LockAngleX;
-        SPCRJointDynamicsContoller._LockAngleY = spcrJointDynamicsSave.LockAngleY;
-        SPCRJointDynamicsContoller._LockAngleZ = spcrJointDynamicsSave.LockAngleZ;
+        SPCRJointDynamicsContoller._UseLimitAngles = spcrJointDynamicsSave.UseLimitAngles;
+        SPCRJointDynamicsContoller._LimitAngle = spcrJointDynamicsSave.LimitAngle;
+        SPCRJointDynamicsContoller._LimitPowerCurve = GetAnimCurve(spcrJointDynamicsSave.LimitPowerCurve);
+        SPCRJointDynamicsContoller._LimitFromRoot = spcrJointDynamicsSave.LimitFromRoot;
 
         if (spcrJointDynamicsSave.PointTblIDs != null)
         {

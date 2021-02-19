@@ -1,155 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &204817692
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 204817693}
-  - component: {fileID: 204817694}
-  m_Layer: 0
-  m_Name: J_1_R_SkirtBack_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &204817693
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204817692}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4323427625998194}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &204817694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204817692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 69
---- !u!1 &240627465
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 240627466}
-  - component: {fileID: 240627467}
-  m_Layer: 0
-  m_Name: J_1_L_SkirtFront_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &240627466
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 240627465}
-  m_LocalRotation: {x: -0, y: -0, z: 0.000000014901161, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4021218479703074}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &240627467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 240627465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 34
---- !u!1 &280250706
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 280250707}
-  - component: {fileID: 280250708}
-  m_Layer: 0
-  m_Name: J_1_R_SkirtFront_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &280250707
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 280250706}
-  m_LocalRotation: {x: -0, y: -0, z: 0.000000014901161, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4636488144276138}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &280250708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 280250706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 41
 --- !u!1 &379101618
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,358 +50,6 @@ MonoBehaviour:
   _Height: 0.13
   _Friction: 0.5
   _PushOutRate: 1
---- !u!1 &388464749
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 388464750}
-  - component: {fileID: 388464751}
-  m_Layer: 0
-  m_Name: J_1_L_SkirtSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &388464750
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388464749}
-  m_LocalRotation: {x: -0, y: -0, z: -0.000000014901161, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4069518029004882}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &388464751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388464749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 20
---- !u!1 &437835664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 437835665}
-  - component: {fileID: 437835666}
-  m_Layer: 0
-  m_Name: J_1_R_SkirtFrontSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &437835665
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437835664}
-  m_LocalRotation: {x: -0.000000016332606, y: -0.00000002235174, z: -0.000000029042535,
-    w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4922429076387648}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &437835666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437835664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 48
---- !u!1 &548087923
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 548087924}
-  - component: {fileID: 548087925}
-  m_Layer: 0
-  m_Name: J_1_L_SkirtBack_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &548087924
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 548087923}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4134043474826436}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &548087925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 548087923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 6
---- !u!1 &862917788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 862917789}
-  - component: {fileID: 862917790}
-  m_Layer: 0
-  m_Name: J_1_R_SkirtBackSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &862917789
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862917788}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4764436283480736}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &862917790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862917788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 62
---- !u!1 &1137088287
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1137088288}
-  - component: {fileID: 1137088289}
-  m_Layer: 0
-  m_Name: J_1_R_SkirtSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1137088288
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137088287}
-  m_LocalRotation: {x: -0, y: -0, z: 0.000000014901158, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4091742024638594}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1137088289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137088287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 55
---- !u!1 &1144672397
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1144672398}
-  - component: {fileID: 1144672399}
-  m_Layer: 0
-  m_Name: J_1_L_SkirtFrontSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1144672398
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144672397}
-  m_LocalRotation: {x: 0.0000000014490702, y: -0.00000001862645, z: 0.00000002976707,
-    w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4224860805532994}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1144672399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144672397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 27
---- !u!1 &1974518453
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1974518454}
-  - component: {fileID: 1974518455}
-  m_Layer: 0
-  m_Name: J_1_L_SkirtBackSide_04_end (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1974518454
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974518453}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4038607131781252}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1974518455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974518453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150f77f9abb16734384361c1574ff4a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueGUIID: 
-  _Mass: 1
-  _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
-  _BoneAxis: {x: -1, y: 0, z: 0}
-  _Depth: 6
-  _Index: 13
 --- !u!1 &1000801649037170
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +244,7 @@ Transform:
   m_Children:
   - {fileID: 4442118475705980}
   - {fileID: 4215933750610892}
+  - {fileID: 4921045917885865541}
   m_Father: {fileID: 4927924021798734}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1163,7 +662,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000085149304, z: 0.0000015965494}
   _Depth: 3
-  _Index: 52
+  _Index: 45
 --- !u!1 &1020927202352564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,7 +743,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000009934103, z: -0.000000049670515}
   _Depth: 1
-  _Index: 36
+  _Index: 31
 --- !u!1 &1029554880087428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,7 +794,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000020500308, z: 0.00000024337243}
   _Depth: 4
-  _Index: 60
+  _Index: 52
 --- !u!1 &1029980657620200
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,7 +1505,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000080104957, z: 0.00000039238395}
   _Depth: 4
-  _Index: 67
+  _Index: 58
 --- !u!1 &1075633128944666
 GameObject:
   m_ObjectHideFlags: 0
@@ -2329,8 +1828,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1144672398}
+  m_Children: []
   m_Father: {fileID: 4645987189523444}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2348,11 +1846,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 1144672399}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 7.930197e-18, z: -0.00000019561915}
   _Depth: 5
-  _Index: 26
+  _Index: 23
 --- !u!1 &1125541715915034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,7 +1901,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.000002128737, z: 0.0000029802316}
   _Depth: 3
-  _Index: 59
+  _Index: 51
 --- !u!1 &1129001476528998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2482,8 +1980,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1974518454}
+  m_Children: []
   m_Father: {fileID: 4808329302874234}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2501,11 +1998,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 1974518455}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000005721784, z: 0.0000003867112}
   _Depth: 5
-  _Index: 12
+  _Index: 11
 --- !u!1 &1134232417248534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2722,8 +2219,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: -0.00000006572381, z: -0.0000005496579}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 548087924}
+  m_Children: []
   m_Father: {fileID: 4305711414969760}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2741,7 +2237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 548087925}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000010853411, z: -0.00000016954587}
   _Depth: 5
@@ -2796,7 +2292,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: -0.000000082784204, z: -0.00000022765656}
   _Depth: 0
-  _Index: 14
+  _Index: 12
 --- !u!1 &1165708306090048
 GameObject:
   m_ObjectHideFlags: 0
@@ -3399,7 +2895,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000011920914, z: -0.000006183974}
   _Depth: 4
-  _Index: 32
+  _Index: 28
 --- !u!1 &1179233134342006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3450,7 +2946,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000043237728, z: 0.0000011975479}
   _Depth: 4
-  _Index: 53
+  _Index: 46
 --- !u!1 &1184945959852144
 GameObject:
   m_ObjectHideFlags: 0
@@ -4254,7 +3750,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000021287364, z: -0.00000030101663}
   _Depth: 3
-  _Index: 24
+  _Index: 21
 --- !u!1 &1240573654091688
 GameObject:
   m_ObjectHideFlags: 0
@@ -4305,7 +3801,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0, z: -0.000000064975985}
   _Depth: 0
-  _Index: 35
+  _Index: 30
 --- !u!1 &1241681506718676
 GameObject:
   m_ObjectHideFlags: 0
@@ -4407,7 +3903,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 7.179441e-16, z: -0.00000004967053}
   _Depth: 3
-  _Index: 31
+  _Index: 27
 --- !u!1 &1245661750457620
 GameObject:
   m_ObjectHideFlags: 0
@@ -4842,7 +4338,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000040825066, z: -0.000000102062664}
   _Depth: 2
-  _Index: 65
+  _Index: 56
 --- !u!1 &1258373997704046
 GameObject:
   m_ObjectHideFlags: 0
@@ -5087,7 +4583,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0.0000001732692, z: -0.0000000866346}
   _Depth: 0
-  _Index: 42
+  _Index: 36
 --- !u!1 &1293248407373508
 GameObject:
   m_ObjectHideFlags: 0
@@ -5251,7 +4747,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 7.179441e-16, z: -0.00000004967053}
   _Depth: 3
-  _Index: 38
+  _Index: 33
 --- !u!1 &1298883125315910
 GameObject:
   m_ObjectHideFlags: 0
@@ -6191,7 +5687,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000009934103, z: -0.000000049670515}
   _Depth: 1
-  _Index: 29
+  _Index: 25
 --- !u!1 &1317120670161584
 GameObject:
   m_ObjectHideFlags: 0
@@ -6421,7 +5917,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -1.0700948e-16, z: -0.00000013464908}
   _Depth: 1
-  _Index: 15
+  _Index: 13
 --- !u!1 &1337553389220704
 GameObject:
   m_ObjectHideFlags: 0
@@ -6650,7 +6146,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356312162714464}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.16079998, z: 0.0103}
+  m_LocalPosition: {x: 0, y: -0.075, z: 0.0032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4378768646289908}
@@ -6670,9 +6166,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Radius: 0.075
-  _HeadRadiusScale: 1
+  _HeadRadiusScale: 1.2
   _TailRadiusScale: 1
-  _Height: 0.33
+  _Height: 0.12
   _Friction: 0.5
   _PushOutRate: 1
 --- !u!1 &1365563229865902
@@ -6957,7 +6453,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.000000087653895, z: 0.00000006574042}
   _Depth: 1
-  _Index: 57
+  _Index: 49
 --- !u!1 &1381025211798152
 GameObject:
   m_ObjectHideFlags: 0
@@ -7008,7 +6504,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.9542969e-15, z: -0.00000020412551}
   _Depth: 2
-  _Index: 16
+  _Index: 14
 --- !u!1 &1384071299921252
 GameObject:
   m_ObjectHideFlags: 0
@@ -7059,7 +6555,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.2767561e-15, z: -0.00000009323617}
   _Depth: 2
-  _Index: 23
+  _Index: 20
 --- !u!1 &1384587401201864
 GameObject:
   m_ObjectHideFlags: 0
@@ -7630,6 +7126,8 @@ MonoBehaviour:
   - {fileID: 114456223301457562}
   - {fileID: 114370441630096742}
   - {fileID: 114975348119711880}
+  - {fileID: 5931319503818163906}
+  - {fileID: 2497436939730105415}
   _PointGrabberTbl: []
   _UpdateTiming: 0
   _Relaxation: 2
@@ -7668,21 +7166,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -0.45922014
-      outSlope: -0.45922014
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.12354312
-    - serializedVersion: 3
-      time: 1
-      value: 0.7
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -7692,20 +7190,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.05
-      outSlope: 0.05
-      tangentMode: 34
+      inSlope: 0.0037330524
+      outSlope: 0.0037330524
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.06666667
     - serializedVersion: 3
       time: 1
-      value: 0.05
-      inSlope: 0.05
-      outSlope: 0.05
-      tangentMode: 34
+      value: 0.01
+      inSlope: 0.040813785
+      outSlope: 0.040813785
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.07816094
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -7715,21 +7213,21 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.1
-      inSlope: -0.3248021
-      outSlope: -0.3248021
-      tangentMode: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.041152265
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -7764,20 +7262,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.029662283
-      outSlope: 0.029662283
+      inSlope: 0.030477298
+      outSlope: 0.030477298
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.100137174
+      outWeight: 0.07126437
     - serializedVersion: 3
       time: 1
-      value: 0.1
-      inSlope: 0.20533472
-      outSlope: 0.20533472
+      value: 0.12
+      inSlope: 0.31718215
+      outSlope: 0.31718215
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.039780498
+      inWeight: 0.040229857
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -7787,18 +7285,18 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.05
-      inSlope: -0.04
-      outSlope: -0.04
+      value: 0.025
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 0.01
-      inSlope: -0.04
-      outSlope: -0.04
+      value: 0.025
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -8106,10 +7604,10 @@ MonoBehaviour:
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 0.1
-  _BendingingStretchVertical: 0.2
-  _BendingingShrinkHorizontal: 0.1
-  _BendingingStretchHorizontal: 0.2
+  _BendingingShrinkVertical: 1
+  _BendingingStretchVertical: 1
+  _BendingingShrinkHorizontal: 1
+  _BendingingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 1
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
@@ -8138,70 +7636,60 @@ MonoBehaviour:
   - {fileID: 114670340736751058}
   - {fileID: 114497933673226702}
   - {fileID: 114125444936628706}
-  - {fileID: 548087925}
   - {fileID: 114037169873914594}
   - {fileID: 114289996551026366}
   - {fileID: 114274176942523122}
   - {fileID: 114987183659859276}
   - {fileID: 114418573493124854}
   - {fileID: 114276029505196596}
-  - {fileID: 1974518455}
   - {fileID: 114101467275166342}
   - {fileID: 114423645987516078}
   - {fileID: 114533239009961778}
   - {fileID: 114526365507079660}
   - {fileID: 114023082546126286}
   - {fileID: 114073753776856832}
-  - {fileID: 388464751}
   - {fileID: 114043206255366274}
   - {fileID: 114006314904043290}
   - {fileID: 114525888646778502}
   - {fileID: 114338910826715890}
   - {fileID: 114949897385755158}
   - {fileID: 114163207740994782}
-  - {fileID: 1144672399}
   - {fileID: 114349886424933334}
   - {fileID: 114751838583187220}
   - {fileID: 114714384967531478}
   - {fileID: 114775903993878888}
   - {fileID: 114869733218258472}
   - {fileID: 114795908778839468}
-  - {fileID: 240627467}
   - {fileID: 114649704536829566}
   - {fileID: 114168326601062744}
   - {fileID: 114686585982691042}
   - {fileID: 114165279748110772}
   - {fileID: 114488213358956964}
   - {fileID: 114431888588568542}
-  - {fileID: 280250708}
   - {fileID: 114771173440662302}
   - {fileID: 114574496442146750}
   - {fileID: 114875278228453948}
   - {fileID: 114403199016981706}
   - {fileID: 114751263474387756}
   - {fileID: 114641997065207364}
-  - {fileID: 437835666}
   - {fileID: 114357406141485620}
   - {fileID: 114689770284702812}
   - {fileID: 114146752944617558}
   - {fileID: 114159860878184814}
   - {fileID: 114771973082362634}
   - {fileID: 114372673874225662}
-  - {fileID: 1137088289}
   - {fileID: 114149730132643542}
   - {fileID: 114186316140663724}
   - {fileID: 114580127466902024}
   - {fileID: 114331791277164226}
   - {fileID: 114520626428414470}
   - {fileID: 114145000699141488}
-  - {fileID: 862917790}
   - {fileID: 114687251291009736}
   - {fileID: 114716694142250124}
   - {fileID: 114357916277480542}
   - {fileID: 114467676964829180}
   - {fileID: 114773611384029248}
   - {fileID: 114305812170196904}
-  - {fileID: 204817694}
   _ConstraintsStructuralVertical:
   - _Type: 0
     _PointA: {fileID: 114791030858528614}
@@ -8234,12 +7722,6 @@ MonoBehaviour:
     _Length: 0.04999996
     _LengthACB: 0.04999996
   - _Type: 0
-    _PointA: {fileID: 114125444936628706}
-    _PointB: {fileID: 548087925}
-    _PointC: {fileID: 0}
-    _Length: 0.07000008
-    _LengthACB: 0.07000008
-  - _Type: 0
     _PointA: {fileID: 114037169873914594}
     _PointB: {fileID: 114289996551026366}
     _PointC: {fileID: 0}
@@ -8269,12 +7751,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.04999998
     _LengthACB: 0.04999998
-  - _Type: 0
-    _PointA: {fileID: 114276029505196596}
-    _PointB: {fileID: 1974518455}
-    _PointC: {fileID: 0}
-    _Length: 0.06999997
-    _LengthACB: 0.06999997
   - _Type: 0
     _PointA: {fileID: 114101467275166342}
     _PointB: {fileID: 114423645987516078}
@@ -8306,12 +7782,6 @@ MonoBehaviour:
     _Length: 0.049999967
     _LengthACB: 0.049999967
   - _Type: 0
-    _PointA: {fileID: 114073753776856832}
-    _PointB: {fileID: 388464751}
-    _PointC: {fileID: 0}
-    _Length: 0.070000015
-    _LengthACB: 0.070000015
-  - _Type: 0
     _PointA: {fileID: 114043206255366274}
     _PointB: {fileID: 114006314904043290}
     _PointC: {fileID: 0}
@@ -8341,12 +7811,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.050000023
     _LengthACB: 0.050000023
-  - _Type: 0
-    _PointA: {fileID: 114163207740994782}
-    _PointB: {fileID: 1144672399}
-    _PointC: {fileID: 0}
-    _Length: 0.06999998
-    _LengthACB: 0.06999998
   - _Type: 0
     _PointA: {fileID: 114349886424933334}
     _PointB: {fileID: 114751838583187220}
@@ -8378,12 +7842,6 @@ MonoBehaviour:
     _Length: 0.05000001
     _LengthACB: 0.05000001
   - _Type: 0
-    _PointA: {fileID: 114795908778839468}
-    _PointB: {fileID: 240627467}
-    _PointC: {fileID: 0}
-    _Length: 0.06999999
-    _LengthACB: 0.06999999
-  - _Type: 0
     _PointA: {fileID: 114649704536829566}
     _PointB: {fileID: 114168326601062744}
     _PointC: {fileID: 0}
@@ -8413,12 +7871,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.049999993
     _LengthACB: 0.049999993
-  - _Type: 0
-    _PointA: {fileID: 114431888588568542}
-    _PointB: {fileID: 280250708}
-    _PointC: {fileID: 0}
-    _Length: 0.06999999
-    _LengthACB: 0.06999999
   - _Type: 0
     _PointA: {fileID: 114771173440662302}
     _PointB: {fileID: 114574496442146750}
@@ -8450,12 +7902,6 @@ MonoBehaviour:
     _Length: 0.050000012
     _LengthACB: 0.050000012
   - _Type: 0
-    _PointA: {fileID: 114641997065207364}
-    _PointB: {fileID: 437835666}
-    _PointC: {fileID: 0}
-    _Length: 0.06999999
-    _LengthACB: 0.06999999
-  - _Type: 0
     _PointA: {fileID: 114357406141485620}
     _PointB: {fileID: 114689770284702812}
     _PointC: {fileID: 0}
@@ -8485,12 +7931,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.049999975
     _LengthACB: 0.049999975
-  - _Type: 0
-    _PointA: {fileID: 114372673874225662}
-    _PointB: {fileID: 1137088289}
-    _PointC: {fileID: 0}
-    _Length: 0.07000003
-    _LengthACB: 0.07000003
   - _Type: 0
     _PointA: {fileID: 114149730132643542}
     _PointB: {fileID: 114186316140663724}
@@ -8522,12 +7962,6 @@ MonoBehaviour:
     _Length: 0.049999982
     _LengthACB: 0.049999982
   - _Type: 0
-    _PointA: {fileID: 114145000699141488}
-    _PointB: {fileID: 862917790}
-    _PointC: {fileID: 0}
-    _Length: 0.06999997
-    _LengthACB: 0.06999997
-  - _Type: 0
     _PointA: {fileID: 114687251291009736}
     _PointB: {fileID: 114716694142250124}
     _PointC: {fileID: 0}
@@ -8557,12 +7991,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.04999997
     _LengthACB: 0.04999997
-  - _Type: 0
-    _PointA: {fileID: 114305812170196904}
-    _PointB: {fileID: 204817694}
-    _PointC: {fileID: 0}
-    _Length: 0.07000008
-    _LengthACB: 0.07000008
   _ConstraintsStructuralHorizontal:
   - _Type: 1
     _PointA: {fileID: 114818259583863178}
@@ -8595,12 +8023,6 @@ MonoBehaviour:
     _Length: 0.15443191
     _LengthACB: 0.15443191
   - _Type: 1
-    _PointA: {fileID: 548087925}
-    _PointB: {fileID: 1974518455}
-    _PointC: {fileID: 0}
-    _Length: 0.17345713
-    _LengthACB: 0.17345713
-  - _Type: 1
     _PointA: {fileID: 114289996551026366}
     _PointB: {fileID: 114423645987516078}
     _PointC: {fileID: 0}
@@ -8630,12 +8052,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.085083336
     _LengthACB: 0.085083336
-  - _Type: 1
-    _PointA: {fileID: 1974518455}
-    _PointB: {fileID: 388464751}
-    _PointC: {fileID: 0}
-    _Length: 0.09159991
-    _LengthACB: 0.09159991
   - _Type: 1
     _PointA: {fileID: 114423645987516078}
     _PointB: {fileID: 114006314904043290}
@@ -8667,12 +8083,6 @@ MonoBehaviour:
     _Length: 0.08820155
     _LengthACB: 0.08820155
   - _Type: 1
-    _PointA: {fileID: 388464751}
-    _PointB: {fileID: 1144672399}
-    _PointC: {fileID: 0}
-    _Length: 0.09337035
-    _LengthACB: 0.09337035
-  - _Type: 1
     _PointA: {fileID: 114006314904043290}
     _PointB: {fileID: 114751838583187220}
     _PointC: {fileID: 0}
@@ -8702,12 +8112,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.1551722
     _LengthACB: 0.1551722
-  - _Type: 1
-    _PointA: {fileID: 1144672399}
-    _PointB: {fileID: 240627467}
-    _PointC: {fileID: 0}
-    _Length: 0.17697753
-    _LengthACB: 0.17697753
   - _Type: 1
     _PointA: {fileID: 114751838583187220}
     _PointB: {fileID: 114168326601062744}
@@ -8739,12 +8143,6 @@ MonoBehaviour:
     _Length: 0.09621463
     _LengthACB: 0.09621463
   - _Type: 1
-    _PointA: {fileID: 240627467}
-    _PointB: {fileID: 280250708}
-    _PointC: {fileID: 0}
-    _Length: 0.103447415
-    _LengthACB: 0.103447415
-  - _Type: 1
     _PointA: {fileID: 114168326601062744}
     _PointB: {fileID: 114574496442146750}
     _PointC: {fileID: 0}
@@ -8774,12 +8172,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.15517242
     _LengthACB: 0.15517242
-  - _Type: 1
-    _PointA: {fileID: 280250708}
-    _PointB: {fileID: 437835666}
-    _PointC: {fileID: 0}
-    _Length: 0.17697778
-    _LengthACB: 0.17697778
   - _Type: 1
     _PointA: {fileID: 114574496442146750}
     _PointB: {fileID: 114689770284702812}
@@ -8811,12 +8203,6 @@ MonoBehaviour:
     _Length: 0.08820158
     _LengthACB: 0.08820158
   - _Type: 1
-    _PointA: {fileID: 437835666}
-    _PointB: {fileID: 1137088289}
-    _PointC: {fileID: 0}
-    _Length: 0.093370385
-    _LengthACB: 0.093370385
-  - _Type: 1
     _PointA: {fileID: 114689770284702812}
     _PointB: {fileID: 114186316140663724}
     _PointC: {fileID: 0}
@@ -8846,12 +8232,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.08508313
     _LengthACB: 0.08508313
-  - _Type: 1
-    _PointA: {fileID: 1137088289}
-    _PointB: {fileID: 862917790}
-    _PointC: {fileID: 0}
-    _Length: 0.091599725
-    _LengthACB: 0.091599725
   - _Type: 1
     _PointA: {fileID: 114186316140663724}
     _PointB: {fileID: 114716694142250124}
@@ -8883,12 +8263,6 @@ MonoBehaviour:
     _Length: 0.15443227
     _LengthACB: 0.15443227
   - _Type: 1
-    _PointA: {fileID: 862917790}
-    _PointB: {fileID: 204817694}
-    _PointC: {fileID: 0}
-    _Length: 0.17345743
-    _LengthACB: 0.17345743
-  - _Type: 1
     _PointA: {fileID: 114716694142250124}
     _PointB: {fileID: 114818259583863178}
     _PointC: {fileID: 0}
@@ -8918,12 +8292,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.116808265
     _LengthACB: 0.116808265
-  - _Type: 1
-    _PointA: {fileID: 204817694}
-    _PointB: {fileID: 548087925}
-    _PointC: {fileID: 0}
-    _Length: 0.1275532
-    _LengthACB: 0.1275532
   _ConstraintsShear:
   - _Type: 2
     _PointA: {fileID: 114818259583863178}
@@ -8986,18 +8354,6 @@ MonoBehaviour:
     _Length: 0.15408982
     _LengthACB: 0.15408982
   - _Type: 2
-    _PointA: {fileID: 548087925}
-    _PointB: {fileID: 114276029505196596}
-    _PointC: {fileID: 0}
-    _Length: 0.17999198
-    _LengthACB: 0.17999198
-  - _Type: 2
-    _PointA: {fileID: 114125444936628706}
-    _PointB: {fileID: 1974518455}
-    _PointC: {fileID: 0}
-    _Length: 0.1760029
-    _LengthACB: 0.1760029
-  - _Type: 2
     _PointA: {fileID: 114289996551026366}
     _PointB: {fileID: 114101467275166342}
     _PointC: {fileID: 0}
@@ -9057,18 +8413,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.097629055
     _LengthACB: 0.097629055
-  - _Type: 2
-    _PointA: {fileID: 1974518455}
-    _PointB: {fileID: 114073753776856832}
-    _PointC: {fileID: 0}
-    _Length: 0.11148994
-    _LengthACB: 0.11148994
-  - _Type: 2
-    _PointA: {fileID: 114276029505196596}
-    _PointB: {fileID: 388464751}
-    _PointC: {fileID: 0}
-    _Length: 0.11382962
-    _LengthACB: 0.11382962
   - _Type: 2
     _PointA: {fileID: 114423645987516078}
     _PointB: {fileID: 114043206255366274}
@@ -9130,18 +8474,6 @@ MonoBehaviour:
     _Length: 0.09739217
     _LengthACB: 0.09739217
   - _Type: 2
-    _PointA: {fileID: 388464751}
-    _PointB: {fileID: 114163207740994782}
-    _PointC: {fileID: 0}
-    _Length: 0.11743723
-    _LengthACB: 0.11743723
-  - _Type: 2
-    _PointA: {fileID: 114073753776856832}
-    _PointB: {fileID: 1144672399}
-    _PointC: {fileID: 0}
-    _Length: 0.111708544
-    _LengthACB: 0.111708544
-  - _Type: 2
     _PointA: {fileID: 114006314904043290}
     _PointB: {fileID: 114349886424933334}
     _PointC: {fileID: 0}
@@ -9201,18 +8533,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.15725869
     _LengthACB: 0.15725869
-  - _Type: 2
-    _PointA: {fileID: 1144672399}
-    _PointB: {fileID: 114795908778839468}
-    _PointC: {fileID: 0}
-    _Length: 0.17766757
-    _LengthACB: 0.17766757
-  - _Type: 2
-    _PointA: {fileID: 114163207740994782}
-    _PointB: {fileID: 240627467}
-    _PointC: {fileID: 0}
-    _Length: 0.18207447
-    _LengthACB: 0.18207447
   - _Type: 2
     _PointA: {fileID: 114751838583187220}
     _PointB: {fileID: 114649704536829566}
@@ -9274,18 +8594,6 @@ MonoBehaviour:
     _Length: 0.10611395
     _LengthACB: 0.10611395
   - _Type: 2
-    _PointA: {fileID: 240627467}
-    _PointB: {fileID: 114431888588568542}
-    _PointC: {fileID: 0}
-    _Length: 0.12187352
-    _LengthACB: 0.12187352
-  - _Type: 2
-    _PointA: {fileID: 114795908778839468}
-    _PointB: {fileID: 280250708}
-    _PointC: {fileID: 0}
-    _Length: 0.12187351
-    _LengthACB: 0.12187351
-  - _Type: 2
     _PointA: {fileID: 114168326601062744}
     _PointB: {fileID: 114771173440662302}
     _PointC: {fileID: 0}
@@ -9345,18 +8653,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.15361634
     _LengthACB: 0.15361634
-  - _Type: 2
-    _PointA: {fileID: 280250708}
-    _PointB: {fileID: 114641997065207364}
-    _PointC: {fileID: 0}
-    _Length: 0.18207464
-    _LengthACB: 0.18207464
-  - _Type: 2
-    _PointA: {fileID: 114431888588568542}
-    _PointB: {fileID: 437835666}
-    _PointC: {fileID: 0}
-    _Length: 0.17766783
-    _LengthACB: 0.17766783
   - _Type: 2
     _PointA: {fileID: 114574496442146750}
     _PointB: {fileID: 114357406141485620}
@@ -9418,18 +8714,6 @@ MonoBehaviour:
     _Length: 0.10209258
     _LengthACB: 0.10209258
   - _Type: 2
-    _PointA: {fileID: 437835666}
-    _PointB: {fileID: 114372673874225662}
-    _PointC: {fileID: 0}
-    _Length: 0.11170851
-    _LengthACB: 0.11170851
-  - _Type: 2
-    _PointA: {fileID: 114641997065207364}
-    _PointB: {fileID: 1137088289}
-    _PointC: {fileID: 0}
-    _Length: 0.117437325
-    _LengthACB: 0.117437325
-  - _Type: 2
     _PointA: {fileID: 114689770284702812}
     _PointB: {fileID: 114149730132643542}
     _PointC: {fileID: 0}
@@ -9489,18 +8773,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.095680915
     _LengthACB: 0.095680915
-  - _Type: 2
-    _PointA: {fileID: 1137088289}
-    _PointB: {fileID: 114145000699141488}
-    _PointC: {fileID: 0}
-    _Length: 0.11382951
-    _LengthACB: 0.11382951
-  - _Type: 2
-    _PointA: {fileID: 114372673874225662}
-    _PointB: {fileID: 862917790}
-    _PointC: {fileID: 0}
-    _Length: 0.111489736
-    _LengthACB: 0.111489736
   - _Type: 2
     _PointA: {fileID: 114186316140663724}
     _PointB: {fileID: 114687251291009736}
@@ -9562,18 +8834,6 @@ MonoBehaviour:
     _Length: 0.15734681
     _LengthACB: 0.15734681
   - _Type: 2
-    _PointA: {fileID: 862917790}
-    _PointB: {fileID: 114305812170196904}
-    _PointC: {fileID: 0}
-    _Length: 0.17600319
-    _LengthACB: 0.17600319
-  - _Type: 2
-    _PointA: {fileID: 114145000699141488}
-    _PointB: {fileID: 204817694}
-    _PointC: {fileID: 0}
-    _Length: 0.1799923
-    _LengthACB: 0.1799923
-  - _Type: 2
     _PointA: {fileID: 114716694142250124}
     _PointB: {fileID: 114791030858528614}
     _PointC: {fileID: 0}
@@ -9633,18 +8893,6 @@ MonoBehaviour:
     _PointC: {fileID: 0}
     _Length: 0.12348147
     _LengthACB: 0.12348147
-  - _Type: 2
-    _PointA: {fileID: 204817694}
-    _PointB: {fileID: 114125444936628706}
-    _PointC: {fileID: 0}
-    _Length: 0.14070992
-    _LengthACB: 0.14070992
-  - _Type: 2
-    _PointA: {fileID: 114305812170196904}
-    _PointB: {fileID: 548087925}
-    _PointC: {fileID: 0}
-    _Length: 0.1407099
-    _LengthACB: 0.1407099
   _ConstraintsBendingVertical:
   - _Type: 3
     _PointA: {fileID: 114791030858528614}
@@ -9671,12 +8919,6 @@ MonoBehaviour:
     _Length: 0.1249999
     _LengthACB: 0.1249999
   - _Type: 3
-    _PointA: {fileID: 114497933673226702}
-    _PointB: {fileID: 548087925}
-    _PointC: {fileID: 114125444936628706}
-    _Length: 0.120000035
-    _LengthACB: 0.12000004
-  - _Type: 3
     _PointA: {fileID: 114037169873914594}
     _PointB: {fileID: 114274176942523122}
     _PointC: {fileID: 114289996551026366}
@@ -9700,12 +8942,6 @@ MonoBehaviour:
     _PointC: {fileID: 114418573493124854}
     _Length: 0.11999995
     _LengthACB: 0.11999996
-  - _Type: 3
-    _PointA: {fileID: 114418573493124854}
-    _PointB: {fileID: 1974518455}
-    _PointC: {fileID: 114276029505196596}
-    _Length: 0.11999995
-    _LengthACB: 0.119999945
   - _Type: 3
     _PointA: {fileID: 114101467275166342}
     _PointB: {fileID: 114533239009961778}
@@ -9731,12 +8967,6 @@ MonoBehaviour:
     _Length: 0.11999995
     _LengthACB: 0.11999995
   - _Type: 3
-    _PointA: {fileID: 114023082546126286}
-    _PointB: {fileID: 388464751}
-    _PointC: {fileID: 114073753776856832}
-    _Length: 0.11999999
-    _LengthACB: 0.11999998
-  - _Type: 3
     _PointA: {fileID: 114043206255366274}
     _PointB: {fileID: 114525888646778502}
     _PointC: {fileID: 114006314904043290}
@@ -9758,12 +8988,6 @@ MonoBehaviour:
     _PointA: {fileID: 114338910826715890}
     _PointB: {fileID: 114163207740994782}
     _PointC: {fileID: 114949897385755158}
-    _Length: 0.120000005
-    _LengthACB: 0.120000005
-  - _Type: 3
-    _PointA: {fileID: 114949897385755158}
-    _PointB: {fileID: 1144672399}
-    _PointC: {fileID: 114163207740994782}
     _Length: 0.120000005
     _LengthACB: 0.120000005
   - _Type: 3
@@ -9791,12 +9015,6 @@ MonoBehaviour:
     _Length: 0.12500003
     _LengthACB: 0.12500003
   - _Type: 3
-    _PointA: {fileID: 114869733218258472}
-    _PointB: {fileID: 240627467}
-    _PointC: {fileID: 114795908778839468}
-    _Length: 0.120000005
-    _LengthACB: 0.120000005
-  - _Type: 3
     _PointA: {fileID: 114649704536829566}
     _PointB: {fileID: 114686585982691042}
     _PointC: {fileID: 114168326601062744}
@@ -9821,12 +9039,6 @@ MonoBehaviour:
     _Length: 0.12500001
     _LengthACB: 0.12500001
   - _Type: 3
-    _PointA: {fileID: 114488213358956964}
-    _PointB: {fileID: 280250708}
-    _PointC: {fileID: 114431888588568542}
-    _Length: 0.11999999
-    _LengthACB: 0.11999999
-  - _Type: 3
     _PointA: {fileID: 114771173440662302}
     _PointB: {fileID: 114875278228453948}
     _PointC: {fileID: 114574496442146750}
@@ -9848,12 +9060,6 @@ MonoBehaviour:
     _PointA: {fileID: 114403199016981706}
     _PointB: {fileID: 114641997065207364}
     _PointC: {fileID: 114751263474387756}
-    _Length: 0.120000005
-    _LengthACB: 0.120000005
-  - _Type: 3
-    _PointA: {fileID: 114751263474387756}
-    _PointB: {fileID: 437835666}
-    _PointC: {fileID: 114641997065207364}
     _Length: 0.120000005
     _LengthACB: 0.120000005
   - _Type: 3
@@ -9881,12 +9087,6 @@ MonoBehaviour:
     _Length: 0.12000002
     _LengthACB: 0.12000002
   - _Type: 3
-    _PointA: {fileID: 114771973082362634}
-    _PointB: {fileID: 1137088289}
-    _PointC: {fileID: 114372673874225662}
-    _Length: 0.120000005
-    _LengthACB: 0.120000005
-  - _Type: 3
     _PointA: {fileID: 114149730132643542}
     _PointB: {fileID: 114580127466902024}
     _PointC: {fileID: 114186316140663724}
@@ -9911,12 +9111,6 @@ MonoBehaviour:
     _Length: 0.119999975
     _LengthACB: 0.119999975
   - _Type: 3
-    _PointA: {fileID: 114520626428414470}
-    _PointB: {fileID: 862917790}
-    _PointC: {fileID: 114145000699141488}
-    _Length: 0.119999945
-    _LengthACB: 0.11999995
-  - _Type: 3
     _PointA: {fileID: 114687251291009736}
     _PointB: {fileID: 114357916277480542}
     _PointC: {fileID: 114716694142250124}
@@ -9940,12 +9134,6 @@ MonoBehaviour:
     _PointC: {fileID: 114773611384029248}
     _Length: 0.124999925
     _LengthACB: 0.124999925
-  - _Type: 3
-    _PointA: {fileID: 114773611384029248}
-    _PointB: {fileID: 204817694}
-    _PointC: {fileID: 114305812170196904}
-    _Length: 0.12000005
-    _LengthACB: 0.12000005
   _ConstraintsBendingHorizontal:
   - _Type: 4
     _PointA: {fileID: 114818259583863178}
@@ -9978,12 +9166,6 @@ MonoBehaviour:
     _Length: 0.22983722
     _LengthACB: 0.23951524
   - _Type: 4
-    _PointA: {fileID: 548087925}
-    _PointB: {fileID: 388464751}
-    _PointC: {fileID: 1974518455}
-    _Length: 0.2544479
-    _LengthACB: 0.26505703
-  - _Type: 4
     _PointA: {fileID: 114289996551026366}
     _PointB: {fileID: 114006314904043290}
     _PointC: {fileID: 114423645987516078}
@@ -10013,12 +9195,6 @@ MonoBehaviour:
     _PointC: {fileID: 114073753776856832}
     _Length: 0.15757482
     _LengthACB: 0.17328489
-  - _Type: 4
-    _PointA: {fileID: 1974518455}
-    _PointB: {fileID: 1144672399}
-    _PointC: {fileID: 388464751}
-    _Length: 0.16803338
-    _LengthACB: 0.18497026
   - _Type: 4
     _PointA: {fileID: 114423645987516078}
     _PointB: {fileID: 114751838583187220}
@@ -10050,12 +9226,6 @@ MonoBehaviour:
     _Length: 0.23688324
     _LengthACB: 0.24337375
   - _Type: 4
-    _PointA: {fileID: 388464751}
-    _PointB: {fileID: 240627467}
-    _PointC: {fileID: 1144672399}
-    _Length: 0.26387706
-    _LengthACB: 0.2703479
-  - _Type: 4
     _PointA: {fileID: 114006314904043290}
     _PointB: {fileID: 114168326601062744}
     _PointC: {fileID: 114751838583187220}
@@ -10085,12 +9255,6 @@ MonoBehaviour:
     _PointC: {fileID: 114795908778839468}
     _Length: 0.24033765
     _LengthACB: 0.25138682
-  - _Type: 4
-    _PointA: {fileID: 1144672399}
-    _PointB: {fileID: 280250708}
-    _PointC: {fileID: 240627467}
-    _Length: 0.2677711
-    _LengthACB: 0.28042495
   - _Type: 4
     _PointA: {fileID: 114751838583187220}
     _PointB: {fileID: 114574496442146750}
@@ -10122,12 +9286,6 @@ MonoBehaviour:
     _Length: 0.24033763
     _LengthACB: 0.25138706
   - _Type: 4
-    _PointA: {fileID: 240627467}
-    _PointB: {fileID: 437835666}
-    _PointC: {fileID: 280250708}
-    _Length: 0.2677711
-    _LengthACB: 0.2804252
-  - _Type: 4
     _PointA: {fileID: 114168326601062744}
     _PointB: {fileID: 114689770284702812}
     _PointC: {fileID: 114574496442146750}
@@ -10157,12 +9315,6 @@ MonoBehaviour:
     _PointC: {fileID: 114641997065207364}
     _Length: 0.23688357
     _LengthACB: 0.243374
-  - _Type: 4
-    _PointA: {fileID: 280250708}
-    _PointB: {fileID: 1137088289}
-    _PointC: {fileID: 437835666}
-    _Length: 0.2638774
-    _LengthACB: 0.27034816
   - _Type: 4
     _PointA: {fileID: 114574496442146750}
     _PointB: {fileID: 114186316140663724}
@@ -10194,12 +9346,6 @@ MonoBehaviour:
     _Length: 0.15757462
     _LengthACB: 0.17328471
   - _Type: 4
-    _PointA: {fileID: 437835666}
-    _PointB: {fileID: 862917790}
-    _PointC: {fileID: 1137088289}
-    _Length: 0.16803317
-    _LengthACB: 0.18497011
-  - _Type: 4
     _PointA: {fileID: 114689770284702812}
     _PointB: {fileID: 114716694142250124}
     _PointC: {fileID: 114186316140663724}
@@ -10229,12 +9375,6 @@ MonoBehaviour:
     _PointC: {fileID: 114145000699141488}
     _Length: 0.22983749
     _LengthACB: 0.2395154
-  - _Type: 4
-    _PointA: {fileID: 1137088289}
-    _PointB: {fileID: 204817694}
-    _PointC: {fileID: 862917790}
-    _Length: 0.2544482
-    _LengthACB: 0.26505715
   - _Type: 4
     _PointA: {fileID: 114186316140663724}
     _PointB: {fileID: 114818259583863178}
@@ -10266,12 +9406,6 @@ MonoBehaviour:
     _Length: 0.25895852
     _LengthACB: 0.27124053
   - _Type: 4
-    _PointA: {fileID: 862917790}
-    _PointB: {fileID: 548087925}
-    _PointC: {fileID: 204817694}
-    _Length: 0.28740242
-    _LengthACB: 0.3010106
-  - _Type: 4
     _PointA: {fileID: 114716694142250124}
     _PointB: {fileID: 114289996551026366}
     _PointC: {fileID: 114818259583863178}
@@ -10301,12 +9435,6 @@ MonoBehaviour:
     _PointC: {fileID: 114125444936628706}
     _Length: 0.25895867
     _LengthACB: 0.27124017
-  - _Type: 4
-    _PointA: {fileID: 204817694}
-    _PointB: {fileID: 1974518455}
-    _PointC: {fileID: 548087925}
-    _Length: 0.2874026
-    _LengthACB: 0.3010103
   _IsLoopRootPoints: 1
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 1
@@ -10319,7 +9447,7 @@ MonoBehaviour:
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
   _IsDebugDraw_RuntimeColliderBounds: 0
-  _MaxPointDepth: 6
+  _MaxPointDepth: 5
   _IsPaused: 0
   _SubDivInsertedPoints: []
   _SubDivOriginalPoints: []
@@ -15930,7 +15058,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000025399703, z: 0.00000012699851}
   _Depth: 1
-  _Index: 64
+  _Index: 55
 --- !u!1 &1434530527548718
 GameObject:
   m_ObjectHideFlags: 0
@@ -16143,7 +15271,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000016366776, z: -0.00000029256418}
   _Depth: 4
-  _Index: 18
+  _Index: 16
 --- !u!1 &1454991505056526
 GameObject:
   m_ObjectHideFlags: 0
@@ -16618,7 +15746,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0, z: -0.000000064975985}
   _Depth: 0
-  _Index: 28
+  _Index: 24
 --- !u!1 &1487854594950854
 GameObject:
   m_ObjectHideFlags: 0
@@ -16646,8 +15774,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 388464750}
+  m_Children: []
   m_Father: {fileID: 4488061175051846}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16665,11 +15792,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 388464751}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.0000001169055, z: -0.00000031541117}
   _Depth: 5
-  _Index: 19
+  _Index: 17
 --- !u!1 &1489778416283942
 GameObject:
   m_ObjectHideFlags: 0
@@ -16695,7 +15822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489778416283942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1608, z: 0.0103}
+  m_LocalPosition: {x: 0, y: -0.075, z: 0.0032000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4167151649534350}
@@ -16715,9 +15842,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Radius: 0.075
-  _HeadRadiusScale: 1
+  _HeadRadiusScale: 1.2
   _TailRadiusScale: 1
-  _Height: 0.33
+  _Height: 0.12
   _Friction: 0.5
   _PushOutRate: 1
 --- !u!1 &1498586924093454
@@ -16952,7 +16079,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000040825063, z: 0.00000051031327}
   _Depth: 2
-  _Index: 51
+  _Index: 44
 --- !u!1 &1510001050384868
 GameObject:
   m_ObjectHideFlags: 0
@@ -17003,7 +16130,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0.00000007450576, z: -0.00000020489085}
   _Depth: 0
-  _Index: 7
+  _Index: 6
 --- !u!1 &1512345988211196
 GameObject:
   m_ObjectHideFlags: 0
@@ -17031,8 +16158,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 280250707}
+  m_Children: []
   m_Father: {fileID: 4309620144989516}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17050,11 +16176,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 280250708}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.720845e-15, z: -0.00000010643682}
   _Depth: 5
-  _Index: 40
+  _Index: 35
 --- !u!1 &1512414487546868
 GameObject:
   m_ObjectHideFlags: 0
@@ -17240,7 +16366,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000021287364, z: -0.00000005321841}
   _Depth: 2
-  _Index: 58
+  _Index: 50
 --- !u!1 &1539068795495838
 GameObject:
   m_ObjectHideFlags: 0
@@ -18770,7 +17896,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.000000093132215, z: -0.00000018940219}
   _Depth: 1
-  _Index: 22
+  _Index: 19
 --- !u!1 &1633181760797426
 GameObject:
   m_ObjectHideFlags: 0
@@ -19196,8 +18322,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1137088288}
+  m_Children: []
   m_Father: {fileID: 4783468685586816}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19215,11 +18340,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 1137088289}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000073458773, z: 0.0000010682655}
   _Depth: 5
-  _Index: 54
+  _Index: 47
 --- !u!1 &1666346668752214
 GameObject:
   m_ObjectHideFlags: 0
@@ -19320,7 +18445,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000042574737, z: -0.00000021287369}
   _Depth: 2
-  _Index: 9
+  _Index: 8
 --- !u!1 &1669572374490334
 GameObject:
   m_ObjectHideFlags: 0
@@ -20302,7 +19427,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: -0.0000001732692, z: -0.0000000866346}
   _Depth: 0
-  _Index: 21
+  _Index: 18
 --- !u!1 &1722626344099482
 GameObject:
   m_ObjectHideFlags: 0
@@ -21064,7 +20189,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0.00000016556845, z: 0.00000010348028}
   _Depth: 0
-  _Index: 63
+  _Index: 54
 --- !u!1 &1744853176058626
 GameObject:
   m_ObjectHideFlags: 0
@@ -21478,7 +20603,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000004257473, z: 0.000000016734694}
   _Depth: 3
-  _Index: 45
+  _Index: 39
 --- !u!1 &1750013431432546
 GameObject:
   m_ObjectHideFlags: 0
@@ -21699,8 +20824,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 437835665}
+  m_Children: []
   m_Father: {fileID: 4654323902960826}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21718,11 +20842,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 437835666}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 7.930197e-18, z: 0.00000006943336}
   _Depth: 5
-  _Index: 47
+  _Index: 41
 --- !u!1 &1766359495059162
 GameObject:
   m_ObjectHideFlags: 0
@@ -21773,7 +20897,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0.00000016556834, z: 0}
   _Depth: 0
-  _Index: 49
+  _Index: 42
 --- !u!1 &1769795531136366
 GameObject:
   m_ObjectHideFlags: 0
@@ -22329,7 +21453,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.1916395e-15, z: -0.00000007450581}
   _Depth: 2
-  _Index: 30
+  _Index: 26
 --- !u!1 &1803129761946724
 GameObject:
   m_ObjectHideFlags: 0
@@ -22462,7 +21586,7 @@ MonoBehaviour:
   _IsFixed: 1
   _BoneAxis: {x: -1, y: 0.00000007450576, z: -0.00000020489085}
   _Depth: 0
-  _Index: 56
+  _Index: 48
 --- !u!1 &1813178097017168
 GameObject:
   m_ObjectHideFlags: 0
@@ -22769,7 +21893,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 2.4091843e-15, z: -0.00000007450581}
   _Depth: 4
-  _Index: 39
+  _Index: 34
 --- !u!1 &1826713522260922
 GameObject:
   m_ObjectHideFlags: 0
@@ -22820,7 +21944,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000029802317, z: -0.000000075960976}
   _Depth: 4
-  _Index: 25
+  _Index: 22
 --- !u!1 &1827781954855350
 GameObject:
   m_ObjectHideFlags: 0
@@ -23587,7 +22711,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.1916395e-15, z: -0.00000007450581}
   _Depth: 2
-  _Index: 37
+  _Index: 32
 --- !u!1 &1835476835678742
 GameObject:
   m_ObjectHideFlags: 0
@@ -23638,7 +22762,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000021287362, z: -0.000000066626946}
   _Depth: 2
-  _Index: 44
+  _Index: 38
 --- !u!1 &1839696779535376
 GameObject:
   m_ObjectHideFlags: 0
@@ -23771,7 +22895,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000017530779, z: -0.00000006574042}
   _Depth: 1
-  _Index: 8
+  _Index: 7
 --- !u!1 &1848248072556048
 GameObject:
   m_ObjectHideFlags: 0
@@ -23852,7 +22976,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 1.7842868e-15, z: 0.0000009579317}
   _Depth: 3
-  _Index: 17
+  _Index: 15
 --- !u!1 &1852985579237508
 GameObject:
   m_ObjectHideFlags: 0
@@ -23985,7 +23109,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000020500308, z: -0.000000054651004}
   _Depth: 4
-  _Index: 11
+  _Index: 10
 --- !u!1 &1854660669318704
 GameObject:
   m_ObjectHideFlags: 0
@@ -24067,7 +23191,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000018626444, z: -0.00000005038599}
   _Depth: 1
-  _Index: 43
+  _Index: 37
 --- !u!1 &1857468684955894
 GameObject:
   m_ObjectHideFlags: 0
@@ -24301,7 +23425,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000059604633, z: -0.000000075960976}
   _Depth: 4
-  _Index: 46
+  _Index: 40
 --- !u!1 &1885669773998436
 GameObject:
   m_ObjectHideFlags: 0
@@ -24329,8 +23453,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0.00000006070495, z: -0.00000030629963}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 240627466}
+  m_Children: []
   m_Father: {fileID: 4099667924518952}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24348,11 +23471,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 240627467}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: -0.00000001571862, z: -0.00000009463938}
   _Depth: 5
-  _Index: 33
+  _Index: 29
 --- !u!1 &1887220866994350
 GameObject:
   m_ObjectHideFlags: 0
@@ -24411,8 +23534,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 204817693}
+  m_Children: []
   m_Father: {fileID: 4086728402820454}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24430,11 +23552,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 204817694}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000057217727, z: 0.00000006740036}
   _Depth: 5
-  _Index: 68
+  _Index: 59
 --- !u!1 &1904033983848356
 GameObject:
   m_ObjectHideFlags: 0
@@ -24536,7 +23658,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000021855024, z: 0.0000032782534}
   _Depth: 3
-  _Index: 66
+  _Index: 57
 --- !u!1 &1906767902457978
 GameObject:
   m_ObjectHideFlags: 0
@@ -24820,7 +23942,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000025544841, z: 0.0000029802316}
   _Depth: 3
-  _Index: 10
+  _Index: 9
 --- !u!1 &1914711214219842
 GameObject:
   m_ObjectHideFlags: 0
@@ -25254,8 +24376,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.049999997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 862917789}
+  m_Children: []
   m_Father: {fileID: 4666267756419610}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25273,11 +24394,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueGUIID: 
   _Mass: 1
-  _RefChildPoint: {fileID: 862917790}
+  _RefChildPoint: {fileID: 0}
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.0000005721784, z: 0.0000003867112}
   _Depth: 5
-  _Index: 61
+  _Index: 53
 --- !u!1 &1952718611064878
 GameObject:
   m_ObjectHideFlags: 0
@@ -25379,7 +24500,7 @@ MonoBehaviour:
   _IsFixed: 0
   _BoneAxis: {x: -1, y: 0.00000017953202, z: 0.00000040394704}
   _Depth: 1
-  _Index: 50
+  _Index: 43
 --- !u!1 &1957840077743820
 GameObject:
   m_ObjectHideFlags: 0
@@ -26119,6 +25240,7 @@ Transform:
   m_Children:
   - {fileID: 4769550125614404}
   - {fileID: 4241789241412964}
+  - {fileID: 5534812562433134206}
   m_Father: {fileID: 4927924021798734}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26172,6 +25294,106 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 19
+--- !u!1 &4124497377385453135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4921045917885865541}
+  - component: {fileID: 5931319503818163906}
+  m_Layer: 0
+  m_Name: jointCollider (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4921045917885865541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124497377385453135}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: -0.24510002, z: 0.0032}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4378768646289908}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+--- !u!114 &5931319503818163906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124497377385453135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386afa894c2644e4aad6c19b79ef08d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 
+  _Radius: 0.075
+  _HeadRadiusScale: 1.2
+  _TailRadiusScale: 1
+  _Height: 0.22
+  _Friction: 0.5
+  _PushOutRate: 1
+--- !u!1 &6211532809491905435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5534812562433134206}
+  - component: {fileID: 2497436939730105415}
+  m_Layer: 0
+  m_Name: jointCollider (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5534812562433134206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6211532809491905435}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: -0.2451, z: 0.0032000002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4167151649534350}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+--- !u!114 &2497436939730105415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6211532809491905435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386afa894c2644e4aad6c19b79ef08d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueGUIID: 
+  _Radius: 0.075
+  _HeadRadiusScale: 1.2
+  _TailRadiusScale: 1
+  _Height: 0.22
+  _Friction: 0.5
+  _PushOutRate: 1
 --- !u!1 &7868215005010336209
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 [DefaultExecutionOrder(10000)]
 public class SPCRJointDynamicsController : MonoBehaviour
@@ -152,12 +151,11 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsCollideBendingVertical = false;
     public bool _IsCollideBendingHorizontal = false;
 
-    public bool _UseLockAngles = false;
-    public int _LockAngle = -1;// Negative value is disable
-    public bool _UseSeperateLockAxis = false;
-    public int _LockAngleX = -1;// Negative value is disable
-    public int _LockAngleY = -1;// Negative value is disable
-    public int _LockAngleZ = -1;// Negative value is disable
+    public bool _UseLimitAngles = false;
+    public int _LimitAngle = -1;// Negative value is disable
+    public bool _LimitFromRoot = false;
+    public AnimationCurve _LimitPowerCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 0.0f) });
+
     [SerializeField]
     SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
     public SPCRJointDynamicsPoint[] PointTbl { get => _PointTbl; set => _PointTbl = value; }
@@ -217,8 +215,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
-    Vector3 LockAngles;
-
     void Awake()
     {
         var PointTransforms = new Transform[_PointTbl.Length];
@@ -238,6 +234,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].Hardness = _HardnessCurve.Evaluate(rate);
             Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
             Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
+            Points[i].LimitPower = _LimitPowerCurve.Evaluate(rate);
             Points[i].SliderJointLength = _SliderJointLengthCurve.Evaluate(rate);
             Points[i].SliderJointSpring = _SliderJointSpringCurve.Evaluate(rate);
             Points[i].BoneAxis = src._BoneAxis;
@@ -284,15 +281,13 @@ public class SPCRJointDynamicsController : MonoBehaviour
         _Job.Initialize(_RootTransform, Points, PointTransforms, _ConstraintTable, _ColliderTbl, _PointGrabberTbl);
 
         _Delay = 15.0f / 60.0f;
-
-        LockAngles = GetLockAngles();
     }
 
-    Vector3 GetLockAngles()
+    SPCRJointDynamicsJob.AngleLimitConfig GetAnglesConfig()
     {
-        if (!_UseLockAngles)
-            return Vector3.one * -1;
-        return _UseSeperateLockAxis ? new Vector3(_LockAngleX, _LockAngleY, _LockAngleZ) : Vector3.one * _LockAngle;
+        if (!_UseLimitAngles)
+            return new SPCRJointDynamicsJob.AngleLimitConfig { angleLimit = -1, limitFromRoot = _LimitFromRoot };
+        return new SPCRJointDynamicsJob.AngleLimitConfig { angleLimit = _LimitAngle, limitFromRoot = _LimitFromRoot }; ;
     }
 
     void OnDestroy()
@@ -337,7 +332,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _IsEnableFloorCollision, _FloorHeight,
             _DetailHitDivideMax,
             _IsEnableColliderCollision,
-            LockAngles);
+            GetAnglesConfig());
     }
 
     void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)
@@ -349,7 +344,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             if (child_point != null)
             {
                 Point._RefChildPoint = child_point;
-                var LocalPosition = Point.transform.InverseTransformPoint(Point._RefChildPoint.transform.position);
+                var LocalPosition = Point.transform.InverseTransformPoint(child_point.transform.position);
                 Point._BoneAxis = LocalPosition.normalized;
 
                 ConstraintList.Add(new SPCRJointDynamicsConstraint(

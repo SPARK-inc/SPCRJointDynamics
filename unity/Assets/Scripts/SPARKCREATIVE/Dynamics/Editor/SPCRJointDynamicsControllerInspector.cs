@@ -249,24 +249,15 @@ public class SPCRJointDynamicsControllerInspector : Editor
             }
         }
 
-        _Opened_AngleLockSettings = Foldout(_Opened_AngleLockSettings, "ロック軸角度", new Color(0.7f, 0.7f, 1.0f));
+        _Opened_AngleLockSettings = Foldout(_Opened_AngleLockSettings, "角度制限", new Color(0.7f, 0.7f, 1.0f));
         if (_Opened_AngleLockSettings)
         {
-            UpdateToggle("ロック角度", controller, ref controller._UseLockAngles);
-            if (controller._UseLockAngles)
+            controller._UseLimitAngles = EditorGUILayout.Toggle("角度制限", controller._UseLimitAngles);
+            if (controller._UseLimitAngles)
             {
-                if (controller._UseSeperateLockAxis)
-                {
-                    UpdateToggle("個々の軸をロック", controller, ref controller._UseSeperateLockAxis);
-                    UpdateIntSlider("ロック角度-X", controller, ref controller._LockAngleX, -1, 180);
-                    UpdateIntSlider("ロック角度-Y", controller, ref controller._LockAngleY, -1, 180);
-                    UpdateIntSlider("ロック角度-Z", controller, ref controller._LockAngleZ, -1, 180);
-                }
-                else
-                {
-                    UpdateIntSlider("ロック角度", controller, ref controller._LockAngle, 0, 180);
-                    UpdateToggle("個々の軸をロック", controller, ref controller._UseSeperateLockAxis);
-                }
+                controller._LimitAngle = EditorGUILayout.IntSlider("角度制限", controller._LimitAngle, 0, 180);
+                controller._LimitPowerCurve = EditorGUILayout.CurveField("制限力", controller._LimitPowerCurve);
+                controller._LimitFromRoot = EditorGUILayout.Toggle("ルートから角度制限", controller._LimitFromRoot);
             }
         }
 
