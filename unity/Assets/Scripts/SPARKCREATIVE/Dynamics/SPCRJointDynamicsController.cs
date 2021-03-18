@@ -66,11 +66,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    [HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID { get => uniqueGUIID; }
-
     public string Name;
 
     public Transform _RootTransform;
@@ -934,11 +929,5 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Gizmos.color = new Color(0.4f, 0.8f, 0.8f);
             OnDrawGizms_Constraint(_ConstraintsBendingHorizontal);
         }
-    }
-
-    public void Reset()
-    {
-        if (string.IsNullOrEmpty(uniqueGUIID))
-            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }

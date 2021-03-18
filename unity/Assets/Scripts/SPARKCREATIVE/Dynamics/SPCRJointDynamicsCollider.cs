@@ -13,11 +13,6 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
-    [SerializeField]
-    [HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID { get => uniqueGUIID; }
-
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
     public float Radius { get { return _Radius; } set { _Radius = value; } }
@@ -107,11 +102,5 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             Gizmos.DrawLine(from, to);
             from = to;
         }
-    }
-
-    public void Reset()
-    {
-        if (string.IsNullOrEmpty(uniqueGUIID))
-            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }

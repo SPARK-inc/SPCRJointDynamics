@@ -14,11 +14,6 @@ using UnityEngine;
 public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 {
     [SerializeField]
-    [HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID { get => uniqueGUIID; }
-
-    [SerializeField]
     bool _IsEnabled = true;
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
@@ -39,11 +34,5 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, _Radius);
-    }
-
-    public void Reset()
-    {
-        if (string.IsNullOrEmpty(uniqueGUIID))
-            uniqueGUIID = System.Guid.NewGuid().ToString();
     }
 }
