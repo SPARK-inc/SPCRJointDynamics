@@ -621,6 +621,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobCalculateDisplacement : IJobParallelFor
     {
         [NativeDisableUnsafePtrRestriction]
@@ -632,6 +635,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobPointUpdate : IJobParallelFor
     {
         [ReadOnly]
@@ -754,6 +760,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobConstraintUpdate : IJobParallelFor
     {
         [ReadOnly, NativeDisableUnsafePtrRestriction]
@@ -963,6 +972,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobMovingCollisionPoint : IJobParallelFor
     {
         [ReadOnly, NativeDisableUnsafePtrRestriction]
@@ -1157,6 +1169,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobCollisionPoint : IJobParallelFor
     {
         [NativeDisableUnsafePtrRestriction]
@@ -1268,6 +1283,9 @@ public unsafe class SPCRJointDynamicsJob
         }
     }
 
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
     struct JobPointToTransform : IJobParallelForTransform
     {
         [ReadOnly, NativeDisableUnsafePtrRestriction]

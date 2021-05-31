@@ -13,6 +13,18 @@ using UnityEngine;
 
 public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 {
+    [SerializeField, HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(uniqueGUIID))
+                GenerateNewID();
+            return uniqueGUIID;
+        }
+    }
+
     [SerializeField]
     bool _IsEnabled = true;
     [SerializeField, Range(0.0f, 5.0f)]
@@ -22,7 +34,18 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 
     public Transform RefTransform { get; private set; }
     public bool IsEnabled { get { return enabled && _IsEnabled; } set { _IsEnabled = value; } }
-    public float Radius { get { return _Radius; } set { _Radius = value; } }
+    public float RadiusRaw { get => _Radius; set => _Radius = value; }
+    public float Radius {
+        get{
+            return _Radius *
+                Mathf.Max(
+                new float[] {
+                    Mathf.Abs(transform.localScale.x),
+                    Mathf.Abs(transform.localScale.y),
+                    Mathf.Abs(transform.localScale.z)});
+        }
+        set { _Radius = value; }
+    }
     public float Force { get { return _Force; } set { _Force = value; } }
 
     void Awake()
@@ -32,7 +55,41 @@ public class SPCRJointDynamicsPointGrabber : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, _Radius);
+#if UNITY_EDITOR
+        if (UnityEditor.Selection.Contains(gameObject))
+            Gizmos.color = Color.green;
+        else
+            Gizmos.color = new Color(0.8f, 1, 0.8f);
+#else
+        Gizmos.color = Color.black;
+#endif
+        ResetTransform();
+        Gizmos.DrawWireSphere(transform.position, Radius);
+    }
+
+    void ResetTransform()
+    {
+        if (transform.localScale.x == 0)
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+        if (transform.localScale.y == 0)
+            transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
+        if (transform.localScale.z == 0)
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, 1);
+    }
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            GenerateNewID();
+    }
+
+    void GenerateNewID()
+    {
+        uniqueGUIID = System.Guid.NewGuid().ToString();
+    }
+
+    public void SetGUIIIde(string guiiid)
+    {
+        uniqueGUIID = guiiid;
     }
 }

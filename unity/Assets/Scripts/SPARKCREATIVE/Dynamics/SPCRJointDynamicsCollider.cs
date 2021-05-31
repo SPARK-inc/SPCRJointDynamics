@@ -13,9 +13,22 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
+    [SerializeField, HideInInspector]
+    private string uniqueGUIID;
+    public string UniqueGUIID
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(uniqueGUIID))
+                GenerateNewID();
+            return uniqueGUIID;
+        }
+    }
+
     [SerializeField, Range(0.0f, 5.0f)]
     float _Radius = 0.05f;
-    public float Radius { get { return _Radius; } set { _Radius = value; } }
+    public float RadiusRaw { get => _Radius; set =>_Radius = value; }
+    public float Radius { get { return _Radius * Mathf.Abs(transform.localScale.x) * Mathf.Abs(transform.localScale.z); } }
     [SerializeField, Range(0.0f, 5.0f)]
     float _HeadRadiusScale = 1.0f;
     public float HeadRadiusScale { get { return _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
@@ -24,19 +37,20 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
     public float TailRadiusScale { get { return _TailRadiusScale; } set { _TailRadiusScale = value; } }
     [SerializeField, Range(0.0f, 5.0f)]
     float _Height = 0.0f;
+    public float HeightRaw { get => _Height; set => _Height = value; }
     [SerializeField, Range(0.0f, 1.0f)]
     float _Friction = 0.5f;
     [SerializeField, Range(0.0f, 1.0f)]
     float _PushOutRate = 1.0f;
 
     public Transform RefTransform { get; private set; }
-    public float RadiusHead { get { return _Radius * _HeadRadiusScale; } }
-    public float RadiusTail { get { return _Radius * _TailRadiusScale; } }
-    public float Height { get { return _Height; } set { _Height = value; } }
+    public float RadiusHead { get { return Radius * _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
+    public float RadiusTail { get { return Radius * _TailRadiusScale; } }
+    public float Height { get { return _Height + (Mathf.Abs(transform.localScale.y) - 1); } set { _Height = value; } }
     public float Friction { get { return _Friction; } set { _Friction = value; } }
     public float PushOutRate { get { return _PushOutRate; } set { _PushOutRate = value; } }
 
-    public bool IsCapsule { get { return _Height > 0.0f; } }
+    public bool IsCapsule { get { return Height > 0.0f; } }
 
     void Awake()
     {
@@ -45,19 +59,27 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.gray;
+#if UNITY_EDITOR
+        if (UnityEditor.Selection.Contains(gameObject))
+            Gizmos.color = Color.green;
+        else
+            Gizmos.color = Color.gray;
+#else
+Gizmos.color = Color.gray;
+#endif
+        ResetTransform();
         var pos = transform.position;
         var rot = transform.rotation;
 
         if (IsCapsule)
         {
-            var halfLength = _Height / 2.0f;
+            var halfLength = Height / 2.0f;
             var up = Vector3.up * halfLength;
             var down = Vector3.down * halfLength;
-            var right_head = Vector3.right * _Radius * _HeadRadiusScale;
-            var right_tail = Vector3.right * _Radius * _TailRadiusScale;
-            var forward_head = Vector3.forward * _Radius * _HeadRadiusScale;
-            var forward_tail = Vector3.forward * _Radius * _TailRadiusScale;
+            var right_head = Vector3.right * Radius * HeadRadiusScale;
+            var right_tail = Vector3.right * Radius * TailRadiusScale;
+            var forward_head = Vector3.forward * Radius * HeadRadiusScale;
+            var forward_tail = Vector3.forward * Radius * TailRadiusScale;
             var top = pos + rot * up;
             var bottom = pos + rot * down;
 
@@ -70,25 +92,35 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             Gizmos.DrawLine(-forward_head - up, -forward_tail + up);
 
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot);
-            DrawWireArc(_Radius * _TailRadiusScale, 360);
+            DrawWireArc(Radius * TailRadiusScale, 360);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot);
-            DrawWireArc(_Radius * _HeadRadiusScale, 360);
+            DrawWireArc(Radius * HeadRadiusScale, 360);
 
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.forward));
-            DrawWireArc(_Radius * _TailRadiusScale, 180);
+            DrawWireArc(Radius * TailRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(top) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(90, Vector3.forward));
-            DrawWireArc(_Radius * _TailRadiusScale, 180);
+            DrawWireArc(Radius * TailRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(90, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.forward));
-            DrawWireArc(_Radius * _HeadRadiusScale, 180);
+            DrawWireArc(Radius * HeadRadiusScale, 180);
             Gizmos.matrix = Matrix4x4.Translate(bottom) * Matrix4x4.Rotate(rot * Quaternion.AngleAxis(-90, Vector3.forward));
-            DrawWireArc(_Radius * _HeadRadiusScale, 180);
+            DrawWireArc(Radius * HeadRadiusScale, 180);
 
             Gizmos.matrix = mOld;
         }
         else
         {
-            Gizmos.DrawWireSphere(pos, _Radius);
+            Gizmos.DrawWireSphere(pos, Radius);
         }
+    }
+
+    void ResetTransform()
+    {
+        if (transform.localScale.x == 0)
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+        if (transform.localScale.y == 0)
+            transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
+        if (transform.localScale.z == 0)
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, 1);
     }
 
     void DrawWireArc(float radius, float angle)
@@ -102,5 +134,21 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
             Gizmos.DrawLine(from, to);
             from = to;
         }
+    }
+
+    public void Reset()
+    {
+        if (string.IsNullOrEmpty(uniqueGUIID))
+            GenerateNewID();
+    }
+
+    void GenerateNewID()
+    {
+        uniqueGUIID = System.Guid.NewGuid().ToString();
+    }
+
+    public void SetGUIIIde(string guiiId)
+    {
+        uniqueGUIID = guiiId;
     }
 }

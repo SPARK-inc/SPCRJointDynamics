@@ -1,11 +1,38 @@
 ﻿using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
+
 
 public static class SPCRJointSettingLocalSave
 {
     public static readonly string INVALID_ID = "INV";
+
+    [System.Serializable]
+    public class TransformData
+    {
+        public string GOName { get; set; }
+        public SPCRvec3 GOPosition { get; set; }
+        public SPCRvec3 GOEular { get; set; }
+        public SPCRvec3 GOScaler { get; set; }
+
+        public void SaveTransformData(Transform transform)
+        {
+            GOName = transform.name;
+            GOPosition = new SPCRvec3(transform.position);
+            GOEular = new SPCRvec3(transform.eulerAngles);
+            GOScaler = new SPCRvec3(transform.localScale);
+        }
+
+        public void AssignTransformData(Transform transform)
+        {
+            transform.name = GOName;
+            transform.position = GOPosition.ToUnityVector3();
+            transform.eulerAngles = GOEular.ToUnityVector3();
+            transform.localScale = GOScaler.ToUnityVector3();
+        }
+    }
 
     [System.Serializable]
     public class SPCRvec3
@@ -20,6 +47,101 @@ public static class SPCRJointSettingLocalSave
         public Vector3 ToUnityVector3()
         {
             return new Vector3(x, y, z);
+        }
+    }
+
+    [System.Serializable]
+    public class SPCRJointDynamicsPointSave
+    {
+        public string RefUniqueID { get; set; }
+        public float mass { get; set; }
+        public string refChildID { get; set; }
+        public bool IsFixed { get; set; }
+        public SPCRvec3 BoneAxis { get; set; }
+        public float Depth { get; set; }
+        public int Index { get; set; }
+
+        public SPCRJointDynamicsPointSave(SPCRJointDynamicsPoint spcrJointDynamicsPoint)
+        {
+            if (spcrJointDynamicsPoint != null)
+            {
+                if (string.IsNullOrEmpty(spcrJointDynamicsPoint.UniqueGUIID))
+                    spcrJointDynamicsPoint.Reset();
+                RefUniqueID = spcrJointDynamicsPoint.UniqueGUIID;
+
+                mass = spcrJointDynamicsPoint._Mass;
+                if (spcrJointDynamicsPoint._RefChildPoint != null)
+                    refChildID = spcrJointDynamicsPoint._RefChildPoint.UniqueGUIID;
+                IsFixed = spcrJointDynamicsPoint._IsFixed;
+                BoneAxis = new SPCRvec3(spcrJointDynamicsPoint._BoneAxis);
+                Depth = spcrJointDynamicsPoint._Depth;
+                Index = spcrJointDynamicsPoint._Index;
+            }
+            else
+            {
+                RefUniqueID = INVALID_ID;
+            }
+        }
+    }
+    [System.Serializable]
+    public class SPCRJointDynamicsColliderSave : TransformData
+    {
+        public string RefUniqueId { get; set; }
+        public float Radius { get; set; }
+        public float HeadRadiusScale { get; set; }
+        public float TailRadiusScale { get; set; }
+        public float Height { get; set; }
+        public float Friction { get; set; }
+        public float PushOutRate { get; set; }
+
+        public SPCRJointDynamicsColliderSave(SPCRJointDynamicsCollider spcrJoinDynamicsCollider)
+        {
+            if (spcrJoinDynamicsCollider != null)
+            {
+                if (string.IsNullOrEmpty(spcrJoinDynamicsCollider.UniqueGUIID))
+                    spcrJoinDynamicsCollider.Reset();
+                RefUniqueId = spcrJoinDynamicsCollider.UniqueGUIID;
+                Radius = spcrJoinDynamicsCollider.RadiusRaw;
+                HeadRadiusScale = spcrJoinDynamicsCollider.HeadRadiusScale;
+                TailRadiusScale = spcrJoinDynamicsCollider.TailRadiusScale;
+                Height = spcrJoinDynamicsCollider.HeightRaw;
+                Friction = spcrJoinDynamicsCollider.Friction;
+                PushOutRate = spcrJoinDynamicsCollider.PushOutRate;
+
+                SaveTransformData(spcrJoinDynamicsCollider.transform);
+
+            }
+            else
+            {
+                RefUniqueId = INVALID_ID;
+            }
+        }
+    }
+    [System.Serializable]
+    public class SPCRJointDynamicsPointGrabberSave : TransformData
+    {
+        public string RefUniqueGUIID { get; set; }
+        public bool IsEnabled { get; set; }
+        public float Radius { get; set; }
+        public float Force { get; set; }
+
+        public SPCRJointDynamicsPointGrabberSave(SPCRJointDynamicsPointGrabber spcrJointDynamicsPointGrabber)
+        {
+            if (spcrJointDynamicsPointGrabber != null)
+            {
+                if (string.IsNullOrEmpty(spcrJointDynamicsPointGrabber.UniqueGUIID))
+                    spcrJointDynamicsPointGrabber.Reset();
+                RefUniqueGUIID = spcrJointDynamicsPointGrabber.UniqueGUIID;
+                IsEnabled = spcrJointDynamicsPointGrabber.IsEnabled;
+                Radius = spcrJointDynamicsPointGrabber.RadiusRaw;
+                Force = spcrJointDynamicsPointGrabber.Force;
+
+                SaveTransformData(spcrJointDynamicsPointGrabber.transform);
+            }
+            else
+            {
+                RefUniqueGUIID = INVALID_ID;
+            }
         }
     }
 
@@ -87,6 +209,14 @@ public static class SPCRJointSettingLocalSave
     [System.Serializable]
     public class SPCRJointDynamicsControllerSave
     {
+        public SPCRJointDynamicsPointSave[] spcrChildJointDynamicsPointList { get; set; }
+        public SPCRJointDynamicsPointGrabberSave[] spcrChildJointDynamicsPointGtabberList { get; set; }
+        public SPCRJointDynamicsColliderSave[] spcrChildJointDynamicsColliderList { get; set; }
+
+        public string name { get; set; }
+        public string rootTransformName { get; set; }
+        public string[] RootPointTbl { get; set; }
+
         public SPCRJointDynamicsController.UpdateTiming UpdateTiming { get; set; }
         public int Relaxation { get; set; }
         public int SubSteps { get; set; }
@@ -186,6 +316,36 @@ public static class SPCRJointSettingLocalSave
     public static void Save(SPCRJointDynamicsController SPCRJointDynamicsContoller)
     {
         SPCRJointDynamicsControllerSave spcrJointDynamicsSave = new SPCRJointDynamicsControllerSave();
+
+        spcrJointDynamicsSave.name = SPCRJointDynamicsContoller.Name;
+        spcrJointDynamicsSave.rootTransformName = SPCRJointDynamicsContoller._RootTransform.name;
+
+        spcrJointDynamicsSave.spcrChildJointDynamicsPointList = new SPCRJointDynamicsPointSave[SPCRJointDynamicsContoller.PointTbl.Length];
+        for (int i = 0; i < SPCRJointDynamicsContoller.PointTbl.Length; i++)
+        {
+            spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i] = new SPCRJointDynamicsPointSave(SPCRJointDynamicsContoller.PointTbl[i]);
+        }
+
+        spcrJointDynamicsSave.spcrChildJointDynamicsColliderList = new SPCRJointDynamicsColliderSave[SPCRJointDynamicsContoller._ColliderTbl.Length];
+        for (int i = 0; i < SPCRJointDynamicsContoller._ColliderTbl.Length; i++)
+        {
+            spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i] = new SPCRJointDynamicsColliderSave(SPCRJointDynamicsContoller._ColliderTbl[i]);
+        }
+
+        spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList = new SPCRJointDynamicsPointGrabberSave[SPCRJointDynamicsContoller._PointGrabberTbl.Length];
+        for (int i = 0; i < SPCRJointDynamicsContoller._PointGrabberTbl.Length; i++)
+        {
+            spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i] = new SPCRJointDynamicsPointGrabberSave(SPCRJointDynamicsContoller._PointGrabberTbl[i]);
+        }
+
+        if (SPCRJointDynamicsContoller._RootPointTbl != null && SPCRJointDynamicsContoller._RootPointTbl.Length > 0)
+        {
+            spcrJointDynamicsSave.RootPointTbl = new string[SPCRJointDynamicsContoller._RootPointTbl.Length];
+            for (int i = 0; i < SPCRJointDynamicsContoller._RootPointTbl.Length; i++)
+            {
+                spcrJointDynamicsSave.RootPointTbl[i] = SPCRJointDynamicsContoller._RootPointTbl[i].UniqueGUIID;
+            }
+        }
 
         spcrJointDynamicsSave.UpdateTiming = SPCRJointDynamicsContoller._UpdateTiming;
 
@@ -364,12 +524,99 @@ public static class SPCRJointSettingLocalSave
         }
         return spcrJointDynamicsSave;
     }
-
+    static System.Collections.Generic.List<Object> globalUniqueIdList;
     public static void Load(SPCRJointDynamicsController SPCRJointDynamicsContoller)
     {
         SPCRJointDynamicsControllerSave spcrJointDynamicsSave = LoadBinary();
         if (spcrJointDynamicsSave == null)
             return;
+
+        if (string.IsNullOrEmpty(SPCRJointDynamicsContoller.Name))
+            SPCRJointDynamicsContoller.Name = spcrJointDynamicsSave.name;
+
+        GameObject RootGameObject = GameObject.Find(spcrJointDynamicsSave.rootTransformName);
+        if (RootGameObject != null)
+            SPCRJointDynamicsContoller._RootTransform = RootGameObject.transform;
+
+        globalUniqueIdList = GetGlobalUniqueIdComponentList();
+
+        if (spcrJointDynamicsSave.spcrChildJointDynamicsPointList != null)
+        {
+            for (int i = 0; i < spcrJointDynamicsSave.spcrChildJointDynamicsPointList.Length; i++)
+            {
+                SPCRJointDynamicsPoint point = (SPCRJointDynamicsPoint)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPoint) && ((SPCRJointDynamicsPoint)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].RefUniqueID));
+                SPCRJointDynamicsPoint ChildPoint = (SPCRJointDynamicsPoint)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPoint) && ((SPCRJointDynamicsPoint)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].refChildID));
+                if (point != null)
+                {
+                    point._Mass = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].mass;
+                    point._RefChildPoint = ChildPoint;
+                    point._IsFixed = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].IsFixed;
+                    point._BoneAxis = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].BoneAxis.ToUnityVector3();
+                    point._Depth = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].Depth;
+                    point._Index = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].Index;
+                }
+            }
+        }
+
+        if (spcrJointDynamicsSave.spcrChildJointDynamicsColliderList != null)
+        {
+            List<SPCRJointDynamicsCollider> colliderTable = new List<SPCRJointDynamicsCollider>();
+            for (int i = 0; i < spcrJointDynamicsSave.spcrChildJointDynamicsColliderList.Length; i++)
+            {
+                SPCRJointDynamicsCollider point = (SPCRJointDynamicsCollider)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsCollider) && ((SPCRJointDynamicsCollider)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].RefUniqueId));
+                if (point == null)
+                    point = CreateNewCollider(spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i]);
+                point.RadiusRaw = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].Radius;
+                point.HeadRadiusScale = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].HeadRadiusScale;
+                point.TailRadiusScale = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].TailRadiusScale;
+                point.HeightRaw = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].Height;
+                point.Friction = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].Friction;
+                point.PushOutRate = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].PushOutRate;
+
+                if(!colliderTable.Contains(point))
+                {
+                    colliderTable.Add(point);
+                }
+            }
+            if(colliderTable.Count > 0)
+            SPCRJointDynamicsContoller._ColliderTbl = colliderTable.ToArray();
+        }
+
+        if (spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList != null)
+        {
+            List<SPCRJointDynamicsPointGrabber> grabberList = new List<SPCRJointDynamicsPointGrabber>();
+            for (int i = 0; i < spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList.Length; i++)
+            {
+                SPCRJointDynamicsPointGrabber point = (SPCRJointDynamicsPointGrabber)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPointGrabber) && ((SPCRJointDynamicsPointGrabber)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i].RefUniqueGUIID));
+                if (point == null)
+                    point = CreateNewGrabber(spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i]);
+                point.IsEnabled = spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i].IsEnabled;
+                point.RadiusRaw = spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i].Radius;
+                point.Force = spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i].Force;
+
+                grabberList.Add(point);
+            }
+            if (grabberList.Count > 0)
+                SPCRJointDynamicsContoller._PointGrabberTbl = grabberList.ToArray();
+        }
+
+        if (spcrJointDynamicsSave.RootPointTbl != null)
+        {
+            List<SPCRJointDynamicsPoint> pointList = new List<SPCRJointDynamicsPoint>();
+            for (int i = 0; i < spcrJointDynamicsSave.RootPointTbl.Length; i++)
+            {
+                SPCRJointDynamicsPoint point = (SPCRJointDynamicsPoint)globalUniqueIdList.Find(obj => obj.GetType() == typeof(SPCRJointDynamicsPoint) && ((SPCRJointDynamicsPoint)obj).UniqueGUIID.Equals(spcrJointDynamicsSave.RootPointTbl[i]));
+                if (point == null)
+                    continue;
+                pointList.Add(point);
+            }
+            if(pointList.Count > 0)
+                SPCRJointDynamicsContoller._RootPointTbl = pointList.ToArray();
+        }
+        else
+        {
+            SPCRJointDynamicsContoller._RootPointTbl = new SPCRJointDynamicsPoint[0];
+        }
 
         SPCRJointDynamicsContoller._UpdateTiming = spcrJointDynamicsSave.UpdateTiming;
 
@@ -477,5 +724,34 @@ public static class SPCRJointSettingLocalSave
 
         SPCRJointDynamicsContoller.Accel = spcrJointDynamicsSave.Accel;
         SPCRJointDynamicsContoller.Delay = spcrJointDynamicsSave.Delay;
+
+        globalUniqueIdList.Clear();
+    }
+
+    static SPCRJointDynamicsCollider CreateNewCollider(SPCRJointDynamicsColliderSave colliderData)
+    {
+        GameObject colliderObject = new GameObject();
+        SPCRJointDynamicsCollider collider = colliderObject.AddComponent<SPCRJointDynamicsCollider>();
+        colliderData.AssignTransformData(collider.transform);
+        collider.SetGUIIIde(colliderData.RefUniqueId);
+        return collider;
+    }
+
+    static SPCRJointDynamicsPointGrabber CreateNewGrabber(SPCRJointDynamicsPointGrabberSave grabberData)
+    {
+        GameObject colliderObject = new GameObject();
+        SPCRJointDynamicsPointGrabber grabber = colliderObject.AddComponent<SPCRJointDynamicsPointGrabber>();
+        grabberData.AssignTransformData(grabber.transform);
+        grabber.SetGUIIIde(grabberData.RefUniqueGUIID);
+        return grabber;
+    }
+
+    private static List<Object> GetGlobalUniqueIdComponentList()
+    {
+        List<Object> globalUniqueIdList = new List<Object>();
+        globalUniqueIdList.AddRange(GameObject.FindObjectsOfType(typeof(SPCRJointDynamicsPoint)));
+        globalUniqueIdList.AddRange(GameObject.FindObjectsOfType(typeof(SPCRJointDynamicsCollider)));
+        globalUniqueIdList.AddRange(GameObject.FindObjectsOfType(typeof(SPCRJointDynamicsPointGrabber)));
+        return globalUniqueIdList;
     }
 }

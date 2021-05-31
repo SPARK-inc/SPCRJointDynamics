@@ -8,43 +8,21 @@
  *  
  *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
 */
-
 using UnityEngine;
+using UnityEditor;
 
-[DisallowMultipleComponent]
-public class SPCRJointDynamicsPoint : MonoBehaviour
+[CustomEditor(typeof(SPCRJointDynamicsCollider))]
+public class SPCRJointDynamicsColliderEditor : Editor
 {
-    [SerializeField, HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID { get
-        {
-            if (string.IsNullOrEmpty(uniqueGUIID))
-                GenerateNewID();
-            return uniqueGUIID;
-        }
+    public bool HasFrameBounds()
+    {
+        return true;
     }
 
-    [Header("=== 物理設定項目 ===")]
-    public float _Mass = 1.0f;
-
-    [Header("=== 物理自動設定項目 ===")]
-    public SPCRJointDynamicsPoint _RefChildPoint;
-    public bool _IsFixed;
-    [HideInInspector]
-    public Vector3 _BoneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
-    [HideInInspector]
-    public float _Depth;
-    [HideInInspector]
-    public int _Index;
-
-    public void Reset()
+    public Bounds OnGetFrameBounds()
     {
-        if (string.IsNullOrEmpty(UniqueGUIID))
-            GenerateNewID();
-    }
-
-    void GenerateNewID()
-    {
-        uniqueGUIID = System.Guid.NewGuid().ToString();
+        SPCRJointDynamicsCollider jointCollider = (SPCRJointDynamicsCollider)target;
+        Bounds bounds = new Bounds(jointCollider.transform.position, new Vector3(jointCollider.Radius, jointCollider.Height, jointCollider.Radius));
+        return bounds;
     }
 }
