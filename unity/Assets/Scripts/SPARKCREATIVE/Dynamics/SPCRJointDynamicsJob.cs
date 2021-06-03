@@ -508,11 +508,12 @@ public unsafe class SPCRJointDynamicsJob
                     _hJob = MovingCollisionPoint.Schedule(_PointCount, 8, _hJob);
                 }
 
-                for (int i = 0; i < Relaxation; ++i)
+                for (int i = Relaxation - 1; i >= 0; --i)
                 {
                     foreach (var constraint in _Constraints)
                     {
                         var ConstraintUpdate = new JobConstraintUpdate();
+                        ConstraintUpdate.IsCollision = i == 0;
                         ConstraintUpdate.pConstraints = (Constraint*)constraint.GetUnsafePtr();
                         ConstraintUpdate.pRPoints = pRPoints;
                         ConstraintUpdate.pRWPoints = pRWPoints;
@@ -765,6 +766,8 @@ public unsafe class SPCRJointDynamicsJob
 #endif
     struct JobConstraintUpdate : IJobParallelFor
     {
+        public bool IsCollision;
+
         [ReadOnly, NativeDisableUnsafePtrRestriction]
         public Constraint* pConstraints;
 
@@ -876,6 +879,7 @@ public unsafe class SPCRJointDynamicsJob
             }
 
             if (constraint->IsCollision == 0) return;
+            if (!IsCollision) return;
 
             float Friction = 0.0f;
             for (int i = 0; i < ColliderCount; ++i)

@@ -115,7 +115,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
                 controller._UpdateTiming = _UpdateTiming;
                 EditorUtility.SetDirty(controller);
             }
-            UpdateIntSlider("演算繰り返し回数", controller, ref controller._Relaxation, 1, 16);
+            UpdateIntSlider("演算安定化回数", controller, ref controller._Relaxation, 1, 16);
             UpdateIntSlider("演算分割数", controller, ref controller._SubSteps, 1, 16);
 
             GUILayout.Space(8);
