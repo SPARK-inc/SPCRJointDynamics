@@ -482,6 +482,7 @@ public static class SPCRJointSettingLocalSave
 
     private static void SaveIntoBinary(SPCRJointDynamicsControllerSave spcrJointDynamicsSave)
     {
+#if UNITY_EDITOR
         var filePath = EditorUtility.SaveFilePanel("Save Joint Dynamics Configuration",Application.dataPath,
                                 "SPCRJointConfigutation",
                                 "SPCR");
@@ -501,16 +502,18 @@ public static class SPCRJointSettingLocalSave
         {
             Debug.LogError("ファイル保存失敗：" + e.Message);
         }
+#endif//UNITY_EDITOR
     }
 
     private static SPCRJointDynamicsControllerSave LoadBinary()
     {
+        SPCRJointDynamicsControllerSave spcrJointDynamicsSave = null;
+#if UNITY_EDITOR
         string filePath = EditorUtility.OpenFilePanel("Open Joint Dynamics Configuration", Application.dataPath, "SPCR");
         if (!File.Exists(filePath))
         {
             return null;
         }
-        SPCRJointDynamicsControllerSave spcrJointDynamicsSave = null;
         try
         {
             Stream stream = File.Open(filePath, FileMode.Open);
@@ -522,6 +525,7 @@ public static class SPCRJointSettingLocalSave
         {
             Debug.LogError("ファイルの読み込み失敗：" + e.Message);
         }
+#endif//UNITY_EDITOR
         return spcrJointDynamicsSave;
     }
     static System.Collections.Generic.List<Object> globalUniqueIdList;
