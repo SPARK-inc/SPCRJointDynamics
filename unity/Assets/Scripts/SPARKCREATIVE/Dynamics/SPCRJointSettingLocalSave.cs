@@ -60,6 +60,7 @@ public static class SPCRJointSettingLocalSave
         public SPCRvec3 BoneAxis { get; set; }
         public float Depth { get; set; }
         public int Index { get; set; }
+        public bool UseForSurfaceCollision { get; set; }
 
         public SPCRJointDynamicsPointSave(SPCRJointDynamicsPoint spcrJointDynamicsPoint)
         {
@@ -76,6 +77,7 @@ public static class SPCRJointSettingLocalSave
                 BoneAxis = new SPCRvec3(spcrJointDynamicsPoint._BoneAxis);
                 Depth = spcrJointDynamicsPoint._Depth;
                 Index = spcrJointDynamicsPoint._Index;
+                UseForSurfaceCollision = spcrJointDynamicsPoint._UseForSurfaceCollision;
             }
             else
             {
@@ -226,6 +228,10 @@ public static class SPCRJointSettingLocalSave
         public bool IsEnableColliderCollision { get; set; }
         public bool IsCancelResetPhysics { get; set; }
 
+        public bool IsEnableSurfaceCollision { get; set; }
+        public int SurfaceCollisionDivision { get; set; }
+        public SPCRJointDynamicsController.ColliderForce SurfaceColliderForce { get; set; }
+
         public SPCRAnimCurveKeyFrameSave[] MassScaleCurve { get; set; }
         public SPCRAnimCurveKeyFrameSave[] GravityScaleCurve { get; set; }
         public SPCRAnimCurveKeyFrameSave[] ResistanceCurve { get; set; }
@@ -302,6 +308,8 @@ public static class SPCRJointSettingLocalSave
         public bool IsDebugDraw_Shear { get; set; }
         public bool IsDebugDraw_BendingVertical { get; set; }
         public bool IsDebugDraw_BendingHorizontal { get; set; }
+        public bool IsDebugDraw_SurfaceFace { get; set; }
+        public float Debug_SurfaceNoramlLength { get; set; }
         public bool IsDebugDraw_RuntimeColliderBounds { get; set; }
 
         public SPCRConstraintSave[][] ConstraintTable { get; set; }
@@ -358,6 +366,10 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.IsEnableColliderCollision = SPCRJointDynamicsContoller._IsEnableColliderCollision;
 
         spcrJointDynamicsSave.IsCancelResetPhysics = SPCRJointDynamicsContoller._IsCancelResetPhysics;
+
+        spcrJointDynamicsSave.IsEnableSurfaceCollision = SPCRJointDynamicsContoller._IsEnableSurfaceCollision;
+        spcrJointDynamicsSave.SurfaceCollisionDivision = SPCRJointDynamicsContoller._SurfaceCollisionDivision;
+        spcrJointDynamicsSave.SurfaceColliderForce = SPCRJointDynamicsContoller._SurfaceColliderForce;
 
         spcrJointDynamicsSave.MassScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._MassScaleCurve);
         spcrJointDynamicsSave.GravityScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._GravityScaleCurve);
@@ -435,6 +447,8 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.IsDebugDraw_Shear = SPCRJointDynamicsContoller._IsDebugDraw_Shear;
         spcrJointDynamicsSave.IsDebugDraw_BendingVertical = SPCRJointDynamicsContoller._IsDebugDraw_BendingVertical;
         spcrJointDynamicsSave.IsDebugDraw_BendingHorizontal = SPCRJointDynamicsContoller._IsDebugDraw_BendingHorizontal;
+        spcrJointDynamicsSave.IsDebugDraw_SurfaceFace = SPCRJointDynamicsContoller._IsDebugDraw_SurfaceFace;
+        spcrJointDynamicsSave.Debug_SurfaceNoramlLength = SPCRJointDynamicsContoller._Debug_SurfaceNormalLength;
         spcrJointDynamicsSave.IsDebugDraw_RuntimeColliderBounds = SPCRJointDynamicsContoller._IsDebugDraw_RuntimeColliderBounds;
 
         if (SPCRJointDynamicsContoller.ConstraintTable != null)
@@ -558,6 +572,7 @@ public static class SPCRJointSettingLocalSave
                     point._BoneAxis = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].BoneAxis.ToUnityVector3();
                     point._Depth = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].Depth;
                     point._Index = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].Index;
+                    point._UseForSurfaceCollision = spcrJointDynamicsSave.spcrChildJointDynamicsPointList[i].UseForSurfaceCollision;
                 }
             }
         }
@@ -633,6 +648,9 @@ public static class SPCRJointSettingLocalSave
         SPCRJointDynamicsContoller._IsEnableColliderCollision = spcrJointDynamicsSave.IsEnableColliderCollision;
 
         SPCRJointDynamicsContoller._IsCancelResetPhysics = spcrJointDynamicsSave.IsCancelResetPhysics;
+        SPCRJointDynamicsContoller._IsEnableSurfaceCollision = spcrJointDynamicsSave.IsEnableSurfaceCollision;
+        SPCRJointDynamicsContoller._SurfaceCollisionDivision = spcrJointDynamicsSave.SurfaceCollisionDivision;
+        SPCRJointDynamicsContoller._SurfaceColliderForce = spcrJointDynamicsSave.SurfaceColliderForce;
 
         SPCRJointDynamicsContoller._MassScaleCurve = GetAnimCurve(spcrJointDynamicsSave.MassScaleCurve);
         SPCRJointDynamicsContoller._GravityScaleCurve = GetAnimCurve(spcrJointDynamicsSave.GravityScaleCurve);
@@ -708,6 +726,8 @@ public static class SPCRJointSettingLocalSave
         SPCRJointDynamicsContoller._IsDebugDraw_Shear = spcrJointDynamicsSave.IsDebugDraw_Shear;
         SPCRJointDynamicsContoller._IsDebugDraw_BendingVertical = spcrJointDynamicsSave.IsDebugDraw_BendingVertical;
         SPCRJointDynamicsContoller._IsDebugDraw_BendingHorizontal = spcrJointDynamicsSave.IsDebugDraw_BendingHorizontal;
+        SPCRJointDynamicsContoller._IsDebugDraw_SurfaceFace = spcrJointDynamicsSave.IsDebugDraw_SurfaceFace;
+        SPCRJointDynamicsContoller._Debug_SurfaceNormalLength = spcrJointDynamicsSave.Debug_SurfaceNoramlLength;
         SPCRJointDynamicsContoller._IsDebugDraw_RuntimeColliderBounds = spcrJointDynamicsSave.IsDebugDraw_RuntimeColliderBounds;
 
         if (spcrJointDynamicsSave.ConstraintTable != null)

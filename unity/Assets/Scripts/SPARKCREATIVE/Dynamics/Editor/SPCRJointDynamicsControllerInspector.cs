@@ -132,6 +132,14 @@ public class SPCRJointDynamicsControllerInspector : Editor
             UpdateIntSlider("詳細な衝突判定の最大分割数", controller, ref controller._DetailHitDivideMax, 0, 16);
 
             GUILayout.Space(8);
+            UpdateToggle("表面衝突", controller, ref controller._IsEnableSurfaceCollision);
+            if (controller._IsEnableSurfaceCollision)
+            {
+                UpdateIntSlider("表面衝突分割数", controller, ref controller._SurfaceCollisionDivision, 1, 16);
+                controller._SurfaceColliderForce = (SPCRJointDynamicsController.ColliderForce)EditorGUILayout.EnumPopup(new GUIContent("フォースタイプ", "表面がコライダーに刺さった時のフォース"), controller._SurfaceColliderForce);
+            }
+
+            GUILayout.Space(8);
             UpdateFloat("ルートの最大移動距離", controller, ref controller._RootSlideLimit);
             UpdateFloat("ルートの最大回転角", controller, ref controller._RootRotateLimit);
 
@@ -278,6 +286,11 @@ public class SPCRJointDynamicsControllerInspector : Editor
             UpdateToggle("せん断", controller, ref controller._IsDebugDraw_Shear);
             UpdateToggle("垂直曲げ", controller, ref controller._IsDebugDraw_BendingVertical);
             UpdateToggle("水平曲げ", controller, ref controller._IsDebugDraw_BendingHorizontal);
+            UpdateToggle("表面三角フェース", controller, ref controller._IsDebugDraw_SurfaceFace);
+            if(controller._IsDebugDraw_SurfaceFace)
+            {
+                UpdateSlider("表面の法線長", controller, ref controller._Debug_SurfaceNormalLength, 0, 1);
+            }
             UpdateToggle("実行中のコリジョン情報", controller, ref controller._IsDebugDraw_RuntimeColliderBounds);
         }
 

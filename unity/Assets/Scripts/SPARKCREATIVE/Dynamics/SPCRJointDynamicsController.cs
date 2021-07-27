@@ -31,6 +31,13 @@ public class SPCRJointDynamicsController : MonoBehaviour
         FixedUpdate,
     }
 
+    public enum ColliderForce
+    {
+        Auto,
+        Push,
+        Pull
+    }
+
     [Serializable]
     public class SPCRJointDynamicsConstraint
     {
@@ -66,6 +73,12 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class SPCRJointDynamicsSurfaceFace
+    {
+        public SPCRJointDynamicsPoint PointA, PointB, PointC, PointD;
+    }
+
     public string Name;
 
     public Transform _RootTransform;
@@ -86,6 +99,10 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsEnableColliderCollision = true;
 
     public bool _IsCancelResetPhysics = false;
+
+    public bool _IsEnableSurfaceCollision = false;
+    public int _SurfaceCollisionDivision = 1;
+    public ColliderForce _SurfaceColliderForce = ColliderForce.Auto;
 
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -170,6 +187,10 @@ public class SPCRJointDynamicsController : MonoBehaviour
     SPCRJointDynamicsConstraint[] _ConstraintsBendingHorizontal = new SPCRJointDynamicsConstraint[0];
     public SPCRJointDynamicsConstraint[] ConstraintsBendingHorizontal { get => _ConstraintsBendingHorizontal; set => _ConstraintsBendingHorizontal = value; }
 
+    [SerializeField]
+    SPCRJointDynamicsSurfaceFace[] _surfaceFacePoints = new SPCRJointDynamicsSurfaceFace[0];
+    public SPCRJointDynamicsSurfaceFace[] SurfaceFacePoints { get => _surfaceFacePoints; set => _surfaceFacePoints = value; }
+
     public bool _IsLoopRootPoints = false;
     public bool _IsComputeStructuralVertical = true;
     public bool _IsComputeStructuralHorizontal = true;
@@ -182,6 +203,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
     public bool _IsDebugDraw_Shear = false;
     public bool _IsDebugDraw_BendingVertical = false;
     public bool _IsDebugDraw_BendingHorizontal = false;
+    public bool _IsDebugDraw_SurfaceFace = false;
+    public float _Debug_SurfaceNormalLength = 0.5f;
     public bool _IsDebugDraw_RuntimeColliderBounds = false;
 
     [SerializeField]
@@ -273,7 +296,10 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
 
         CreationConstraintTable();
-        _Job.Initialize(_RootTransform, Points, PointTransforms, _ConstraintTable, _ColliderTbl, _PointGrabberTbl);
+
+        List<SPCRJointDynamicsJob.SurfaceFaceConstraints> surfaceConstraints = GetSurfaceFaceConstraints();
+
+        _Job.Initialize(_RootTransform, Points, PointTransforms, _ConstraintTable, _ColliderTbl, _PointGrabberTbl, surfaceConstraints.ToArray());
 
         _Delay = 15.0f / 60.0f;
     }
@@ -327,6 +353,8 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _IsEnableFloorCollision, _FloorHeight,
             _DetailHitDivideMax,
             _IsEnableColliderCollision,
+            _IsEnableSurfaceCollision,
+            new SPCRJointDynamicsJob.SurfaceColliderConfig { collisionDivision = _SurfaceCollisionDivision, forceType = _SurfaceColliderForce },
             GetAnglesConfig());
     }
 
@@ -499,6 +527,16 @@ public class SPCRJointDynamicsController : MonoBehaviour
                 CreateConstraintStructuralVertical(_RootPointTbl[i], ref ConstraintList);
             }
             _ConstraintsStructuralVertical = ConstraintList.ToArray();
+        }
+
+        _surfaceFacePoints = new SPCRJointDynamicsSurfaceFace[0];
+        {
+            var faceList = new List<SPCRJointDynamicsSurfaceFace>();
+            for(int i = 0; i < HorizontalRootCount - 1; ++i)
+            {
+                CreateSurfaceFace(_RootPointTbl[i], _RootPointTbl[i + 1], ref faceList);
+            }
+            _surfaceFacePoints = faceList.ToArray();
         }
 
         CreationConstraintTable();
@@ -878,6 +916,41 @@ public class SPCRJointDynamicsController : MonoBehaviour
         }
     }
 
+    List<SPCRJointDynamicsJob.SurfaceFaceConstraints> GetSurfaceFaceConstraints()
+    {
+        List<SPCRJointDynamicsJob.SurfaceFaceConstraints> faceConstraints = new List<SPCRJointDynamicsJob.SurfaceFaceConstraints>();
+        for(int i = 0; i < SurfaceFacePoints.Length; i++)
+        {
+            faceConstraints.Add(new SPCRJointDynamicsJob.SurfaceFaceConstraints
+            {
+                IndexA = SurfaceFacePoints[i].PointA._Index,
+                IndexB = SurfaceFacePoints[i].PointB._Index,
+                IndexC = SurfaceFacePoints[i].PointC._Index,
+                IndexD = SurfaceFacePoints[i].PointD._Index
+            });
+        }
+
+        return faceConstraints;
+    }
+
+    void CreateSurfaceFace(SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB, ref List<SPCRJointDynamicsSurfaceFace> faceList)
+    {
+        if (PointA == null || PointB == null) return;
+        if (PointA == PointB) return;
+
+        var childPointA = GetChildJointDynamicsPoint(PointA);
+        var childPointB = GetChildJointDynamicsPoint(PointB);
+
+        if(childPointA != null && childPointB != null)
+        {
+            if (PointA._UseForSurfaceCollision && PointB._UseForSurfaceCollision && childPointA._UseForSurfaceCollision && childPointB._UseForSurfaceCollision)
+            {
+                faceList.Add(new SPCRJointDynamicsSurfaceFace { PointA = PointA, PointB = PointB, PointC = childPointB, PointD = childPointA });
+            }
+            CreateSurfaceFace(childPointA, childPointB, ref faceList);
+        }
+    }
+
     void OnDrawGizms_Constraint(SPCRJointDynamicsConstraint[] constraints)
     {
         for (int i = 0; i < constraints.Length; i++)
@@ -887,6 +960,33 @@ public class SPCRJointDynamicsController : MonoBehaviour
             var pointB = constraint._PointB.transform.position;
             Gizmos.DrawLine(pointA, pointB);
         }
+    }
+
+    void OnDrawGizmo_SurfaceFaces()
+    {
+        for(int i = 0; i < SurfaceFacePoints.Length; i++)
+        {
+            var clothPattern = SurfaceFacePoints[i];
+            DebugDrawTriangle(clothPattern.PointA.transform.position, clothPattern.PointB.transform.position, clothPattern.PointC.transform.position);
+            DebugDrawTriangle(clothPattern.PointC.transform.position, clothPattern.PointD.transform.position, clothPattern.PointA.transform.position);
+        }
+    }
+
+    void DebugDrawTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
+    {
+        Gizmos.DrawLine(v1, v2);
+        Gizmos.DrawLine(v2, v3);
+        Gizmos.DrawLine(v3, v1);
+        Vector3 center = FindCenterOfTheTriangle(v1, v2, v3);
+        Vector3 normal = Vector3.Cross(v2 - v1, v3 - v1).normalized;
+        Gizmos.DrawLine(center, center + normal * _Debug_SurfaceNormalLength);
+    }
+
+    Vector3 FindCenterOfTheTriangle(Vector3 a, Vector3 b, Vector3 c)
+    {
+        Vector3 ab = Vector3.Lerp(a, b, 0.5f);
+        Vector3 ac = Vector3.Lerp(a, c, 0.5f);
+        return Vector3.Lerp(ab, ac, 0.5f);
     }
 
     public void OnDrawGizmos()
@@ -928,6 +1028,12 @@ public class SPCRJointDynamicsController : MonoBehaviour
         {
             Gizmos.color = new Color(0.4f, 0.8f, 0.8f);
             OnDrawGizms_Constraint(_ConstraintsBendingHorizontal);
+        }
+
+        if(_IsDebugDraw_SurfaceFace)
+        {
+            Gizmos.color = Color.red;
+            OnDrawGizmo_SurfaceFaces();
         }
     }
 }

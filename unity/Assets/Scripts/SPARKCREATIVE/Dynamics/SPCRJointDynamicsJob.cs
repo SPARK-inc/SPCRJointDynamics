@@ -146,6 +146,20 @@ public unsafe class SPCRJointDynamicsJob
         public bool limitFromRoot;
     }
 
+    public struct SurfaceColliderConfig
+    {
+        public int collisionDivision;
+        public SPCRJointDynamicsController.ColliderForce forceType;
+    }
+
+    public struct SurfaceFaceConstraints
+    {
+        public int IndexA;
+        public int IndexB;
+        public int IndexC;
+        public int IndexD;
+    }
+
     Transform _RootBone;
     Vector3 _OldRootPosition;
     Vector3 _OldRootScale;
@@ -154,6 +168,7 @@ public unsafe class SPCRJointDynamicsJob
     NativeArray<PointRead> _PointsR;
     NativeArray<PointReadWrite> _PointsRW;
     NativeArray<Constraint>[] _Constraints;
+    NativeArray<SurfaceFaceConstraints> _SurfaceConstraints;
     Transform[] _PointTransforms;
     TransformAccessArray _TransformArray;
     SPCRJointDynamicsCollider[] _RefColliders;
@@ -164,7 +179,7 @@ public unsafe class SPCRJointDynamicsJob
     NativeArray<GrabberEx> _GrabberExs;
     JobHandle _hJob = default(JobHandle);
 
-    public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers)
+    public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers, SurfaceFaceConstraints[] SurfaceConstraints)
     {
         _RootBone = RootBone;
         _PointCount = Points.Length;
@@ -234,6 +249,9 @@ public unsafe class SPCRJointDynamicsJob
             _Constraints[i].CopyFrom(src);
         }
 
+        _SurfaceConstraints = new NativeArray<SurfaceFaceConstraints>(SurfaceConstraints.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        _SurfaceConstraints.CopyFrom(SurfaceConstraints);
+
         _RefColliders = Colliders;
         var ColliderR = new Collider[Colliders.Length];
         var ColliderExR = new ColliderEx[Colliders.Length];
@@ -292,6 +310,7 @@ public unsafe class SPCRJointDynamicsJob
         _TransformArray.Dispose();
         _PointsR.Dispose();
         _PointsRW.Dispose();
+        _SurfaceConstraints.Dispose();
     }
 
     public void Reset()
@@ -347,6 +366,8 @@ public unsafe class SPCRJointDynamicsJob
         bool IsEnableFloorCollision, float FloorHeight,
         int DetailHitDivideMax,
         bool IsEnableColliderCollision,
+        bool EnableSurfaceCollision,
+        SurfaceColliderConfig surfaceColliderConfig,
         AngleLimitConfig angleLockConfig)
     {
         bool IsPaused = StepTime <= 0.0f;
@@ -394,6 +415,7 @@ public unsafe class SPCRJointDynamicsJob
         var pColliderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
         var pGrabbers = (Grabber*)_Grabbers.GetUnsafePtr();
         var pGrabberExs = (GrabberEx*)_GrabberExs.GetUnsafePtr();
+        var pSurfaceFaces = (SurfaceFaceConstraints*)_SurfaceConstraints.GetUnsafePtr();
 
         int ColliderCount = _RefColliders.Length;
         Bounds TempBounds = new Bounds();
@@ -433,9 +455,10 @@ public unsafe class SPCRJointDynamicsJob
                     }
                     else
                     {
-                        pDst->SourceDirection = SrcT.rotation * Vector3.up * Src.Height;
                         pDst->SourcePosition = SrcT.position - (pDst->Direction * 0.5f);
                     }
+
+                    pDst->SourceDirection = SrcT.rotation * Vector3.up * Mathf.Clamp(Src.Height, 0.01f, Src.Height);
 
                     pDst->WorldToLocal = SrcT.worldToLocalMatrix;
                 }
@@ -524,6 +547,20 @@ public unsafe class SPCRJointDynamicsJob
                         ConstraintUpdate.SpringK = SpringK;
                         _hJob = ConstraintUpdate.Schedule(constraint.Length, 8, _hJob);
                     }
+                }
+
+                if (EnableSurfaceCollision)
+                {
+                    var surfaceCollision = new JobSurfaceCollision();
+                    surfaceCollision.pRPoints = pRPoints;
+                    surfaceCollision.pRWPoints = pRWPoints;
+                    surfaceCollision.pSurfaceConstraint = pSurfaceFaces;
+                    surfaceCollision.pColliders = pColliders;
+                    surfaceCollision.pColliderExs = pColliderExs;
+                    surfaceCollision.ColliderCount = ColliderCount;
+                    surfaceCollision.CollisionDivision = Mathf.Clamp(surfaceColliderConfig.collisionDivision, 1, surfaceColliderConfig.collisionDivision);
+                    surfaceCollision.colliderForceType = surfaceColliderConfig.forceType;
+                    _hJob = surfaceCollision.Schedule(_SurfaceConstraints.Length, 8, _hJob);
                 }
 
                 if (IsEnableFloorCollision || IsEnableColliderCollision)
@@ -758,6 +795,251 @@ public unsafe class SPCRJointDynamicsJob
                     pRW->GrabberDistance = Mathf.Sqrt(sqrNearRange) / 2.0f;
                 }
             }
+        }
+    }
+
+#if ENABLE_BURST
+    [Unity.Burst.BurstCompile]
+#endif
+    struct JobSurfaceCollision : IJobParallelFor
+    {
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public PointRead* pRPoints;
+        [NativeDisableUnsafePtrRestriction]
+        public PointReadWrite* pRWPoints;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public SurfaceFaceConstraints* pSurfaceConstraint;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public Collider* pColliders;
+        [ReadOnly, NativeDisableUnsafePtrRestriction]
+        public ColliderEx* pColliderExs;
+        [ReadOnly]
+        public int ColliderCount;
+        [ReadOnly]
+        public int CollisionDivision;
+        [ReadOnly]
+        public SPCRJointDynamicsController.ColliderForce colliderForceType;
+
+        public void Execute(int index)
+        {
+            var pSurfaceFace = pSurfaceConstraint + index;
+
+            NativeArray<int> triangleArray = new NativeArray<int>(6, Allocator.Temp);
+            triangleArray[0] = pSurfaceFace->IndexA;
+            triangleArray[1] = pSurfaceFace->IndexB;
+            triangleArray[2] = pSurfaceFace->IndexC;
+
+            triangleArray[3] = pSurfaceFace->IndexC;
+            triangleArray[4] = pSurfaceFace->IndexD;
+            triangleArray[5] = pSurfaceFace->IndexA;
+
+            for (int i = 0; i < ColliderCount; i++)
+            {
+                Collider* pCollider = pColliders + i;
+
+                if (pCollider->PushOutRate <= 0)
+                    continue;
+
+                ColliderEx* pColliderEx = pColliderExs + i;
+                Vector3 intersectionPoint, pointOnCollider, pushOut;
+                float radius;
+
+                for (int division = 1; division <= CollisionDivision; division++)
+                {
+                    Vector3 colliderPosition = Vector3.Lerp(pColliderEx->OldPosition, pColliderEx->Position, division / CollisionDivision);
+
+                    for (int j = 0; j < triangleArray.Length; j += 3)
+                    {
+                        var RWPtA = pRWPoints + triangleArray[j + 0];
+                        var RWPtB = pRWPoints + triangleArray[j + 1];
+                        var RWPtC = pRWPoints + triangleArray[j + 2];
+
+                        if (CheckCollision(RWPtA, RWPtB, RWPtC, colliderPosition, pCollider, pColliderEx, out intersectionPoint, out pointOnCollider, out radius, out pushOut))
+                        {
+                            Vector3 triangleCenter = CenterOfTheTriangle(RWPtA->Position, RWPtB->Position, RWPtC->Position);
+                            float pushOutmagnitude = pushOut.magnitude;
+                            pushOut /= pushOutmagnitude;
+
+                            for (int k = 0; k < 3; k++)
+                            {
+                                var rwPt = pRWPoints + triangleArray[j + k];
+                                Vector3 centerToPoint = rwPt->Position - triangleCenter;
+                                Vector3 intersectionToPoint = rwPt->Position - intersectionPoint;
+
+                                float rate = centerToPoint.magnitude / intersectionToPoint.magnitude;
+                                rate = Mathf.Clamp01(Mathf.Abs(rate));
+                                Vector3 pushVec = pushOut * ((radius - pushOutmagnitude) * pCollider->PushOutRate);
+                                rwPt->Position += pushVec * rate;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        bool CheckCollision(PointReadWrite* RWPtA, PointReadWrite* RWPtB, PointReadWrite* RWPtC, Vector3 colliderPosition, Collider* pCollider, ColliderEx* pColliderEx, out Vector3 intersectionPoint, out Vector3 pointOnCollider, out float radius, out Vector3 pushOut)
+        {
+            Ray ray;
+            float enter;
+
+            pointOnCollider = colliderPosition;
+            radius = pCollider->RadiusHead;
+
+            bool isCapsuleCollider = pCollider->Height > EPSILON;
+
+            Vector3 triangleCenter = CenterOfTheTriangle(RWPtA->Position, RWPtB->Position, RWPtC->Position);
+            Vector3 colliderDirection = (colliderPosition - triangleCenter).normalized;
+
+            Vector3 planeNormal = Vector3.Cross(RWPtB->Position - RWPtA->Position, RWPtC->Position - RWPtA->Position).normalized;
+            float planeDistanceFromOrigin = -Vector3.Dot(planeNormal, RWPtA->Position);
+            planeNormal *= -1;
+
+            float dot = Vector3.Dot(colliderDirection, planeNormal);
+
+            if (isCapsuleCollider)
+            {
+                float side = Vector3.Dot(pColliderEx->Direction, planeNormal) * dot;
+                colliderDirection = planeNormal * dot * -1;
+                Vector3 tempPointOnCollider = pointOnCollider;
+
+                if (side < 0)
+                {
+                    radius = pCollider->RadiusTail;
+                    pointOnCollider = colliderPosition + ((pColliderEx->Direction * 0.5f) * 2);
+                }
+                else
+                {
+                    radius = pCollider->RadiusHead;
+                }
+                ray = new Ray(pointOnCollider, colliderDirection.normalized);
+                if (Raycast(planeNormal * -1, planeDistanceFromOrigin, ray, out enter))
+                {
+                    intersectionPoint = ray.GetPoint(enter);
+                    if (TriangleContainsPoint(RWPtA->Position, RWPtB->Position, RWPtC->Position, intersectionPoint))
+                    {
+                        pushOut = intersectionPoint - pointOnCollider;
+                        Vector3 towardsCollider = pointOnCollider - intersectionPoint;
+                        return towardsCollider.sqrMagnitude <= radius * radius;
+                    }
+                }
+                else
+                {
+                    //Forcefully extrude the surface out of the collider
+                    pointOnCollider = tempPointOnCollider;
+                    Vector3 endVec = colliderPosition + ((pColliderEx->Direction * 0.5f) * 2);
+                    Vector3 colDirVec = pColliderEx->Direction;
+
+                    if (colliderForceType == SPCRJointDynamicsController.ColliderForce.Pull)
+                    {
+                        Vector3 temp = pointOnCollider;
+                        pointOnCollider = endVec;
+                        endVec = temp;
+                        colDirVec *= -1;
+                    }
+
+                    ray = new Ray(pointOnCollider, colDirVec);
+                    if (Raycast(planeNormal * -1, planeDistanceFromOrigin, ray, out enter))
+                    {
+                        intersectionPoint = ray.GetPoint(enter);
+                        if (TriangleContainsPoint(RWPtA->Position, RWPtB->Position, RWPtC->Position, intersectionPoint))
+                        {
+                            Vector3 intersecToEnd = endVec - intersectionPoint;
+                            Vector3 colliderToEndVec = endVec - pointOnCollider;
+                            Vector3 colldierToIntersectVec = intersectionPoint - pointOnCollider;
+
+                            float pointDot = Vector3.Dot(intersecToEnd, colldierToIntersectVec);
+                            float lineDot = Vector3.Dot(colliderToEndVec, colliderToEndVec);
+
+                            if (!(pointDot >= 0 && pointDot <= lineDot))
+                            {
+                                pushOut = Vector3.zero;
+                                return false;
+                            }
+
+                            float dotvalue = Vector3.Dot(colliderToEndVec, colldierToIntersectVec);
+                            float startToEndMag = Vector3.Dot(colliderToEndVec, colliderToEndVec);
+
+                            if (colliderForceType == SPCRJointDynamicsController.ColliderForce.Auto)
+                            {
+                                endVec = intersecToEnd.sqrMagnitude < colldierToIntersectVec.sqrMagnitude
+                                            ? endVec
+                                            : pointOnCollider;
+
+                                endVec = (endVec + (intersectionPoint - endVec).normalized * -radius);
+                                pushOut = intersectionPoint - endVec;
+                            }
+                            else
+                            {
+                                endVec = (pointOnCollider + colliderToEndVec.normalized * -radius);
+                                pushOut = intersectionPoint - endVec;
+                            }
+
+                            pointOnCollider += colliderToEndVec * (dotvalue / startToEndMag);
+                            Vector3 towardsCollider = pointOnCollider - intersectionPoint;
+                            return towardsCollider.sqrMagnitude <= radius * radius;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //This is for Sphere collider
+                colliderDirection = planeNormal * dot * -1;
+                ray = new Ray(pointOnCollider, colliderDirection.normalized);
+
+                if (Raycast(planeNormal * -1, planeDistanceFromOrigin, ray, out enter))
+                {
+                    intersectionPoint = ray.GetPoint(enter);
+                    if (TriangleContainsPoint(RWPtA->Position, RWPtB->Position, RWPtC->Position, intersectionPoint))
+                    {
+                        pushOut = intersectionPoint - pointOnCollider;
+                        Vector3 towardsCollider = pointOnCollider - intersectionPoint;
+                        return towardsCollider.sqrMagnitude <= radius * radius;
+                    }
+                }
+            }
+            intersectionPoint = Vector3.zero;
+            pushOut = Vector3.zero;
+            return false;
+        }
+
+        bool Raycast(Vector3 normal, float planeDistance, Ray ray, out float enter)
+        {
+            float vdot = Vector3.Dot(ray.direction, normal);
+            float ndot = -Vector3.Dot(ray.origin, normal) - planeDistance;
+
+            if (Mathf.Abs(vdot) <= EPSILON)
+            {
+                enter = 0.0f;
+                return false;
+            }
+
+            enter = ndot / vdot;
+            return enter > 0.0f;
+        }
+
+        Vector3 CenterOfTheTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
+        {
+            Vector3 v12 = Vector3.Lerp(v1, v2, 0.5f);
+            Vector3 v13 = Vector3.Lerp(v1, v3, 0.5f);
+            return Vector3.Lerp(v12, v13, 0.5f);
+        }
+
+        bool TriangleContainsPoint(Vector3 a, Vector3 b, Vector3 c, Vector3 p)
+        {
+            a -= p;
+            b -= p;
+            c -= p;
+
+            Vector3 u = Vector3.Cross(a, b);
+            Vector3 v = Vector3.Cross(b, c);
+            Vector3 w = Vector3.Cross(c, a);
+
+            if (Vector3.Dot(u, v) < 0)
+                return false;
+            if (Vector3.Dot(v, w) < 0)
+                return false;
+            return true;
         }
     }
 

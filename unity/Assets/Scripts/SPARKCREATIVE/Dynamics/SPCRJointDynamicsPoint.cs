@@ -37,6 +37,8 @@ public class SPCRJointDynamicsPoint : MonoBehaviour
     [HideInInspector]
     public int _Index;
 
+    public bool _UseForSurfaceCollision = true;
+
     public void Reset()
     {
         if (string.IsNullOrEmpty(UniqueGUIID))
