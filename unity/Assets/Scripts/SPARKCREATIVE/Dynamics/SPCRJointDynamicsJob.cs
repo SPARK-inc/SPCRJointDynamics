@@ -114,6 +114,7 @@ public unsafe class SPCRJointDynamicsJob
         public float Height;
         public float Friction;
         public float PushOutRate;
+        public SPCRJointDynamicsCollider.ColliderForce ForceType;
     }
 
     struct ColliderEx
@@ -144,12 +145,6 @@ public unsafe class SPCRJointDynamicsJob
     {
         public float angleLimit;
         public bool limitFromRoot;
-    }
-
-    public struct SurfaceColliderConfig
-    {
-        public int collisionDivision;
-        public SPCRJointDynamicsController.ColliderForce forceType;
     }
 
     public struct SurfaceFaceConstraints
@@ -271,6 +266,7 @@ public unsafe class SPCRJointDynamicsJob
             }
             ColliderR[i].Friction = src.Friction;
             ColliderR[i].PushOutRate = src.PushOutRate;
+            ColliderR[i].ForceType = src._SurfaceColliderForce;
             ColliderExR[i].Position = ColliderExR[i].OldPosition = src.transform.position;
             ColliderExR[i].Direction = ColliderExR[i].OldDirection = src.transform.rotation * Vector3.up * src.Height;
             ColliderExR[i].LocalBounds = new Bounds();
@@ -367,7 +363,7 @@ public unsafe class SPCRJointDynamicsJob
         int DetailHitDivideMax,
         bool IsEnableColliderCollision,
         bool EnableSurfaceCollision,
-        SurfaceColliderConfig surfaceColliderConfig,
+        int SurfaceCollisionDivision,
         AngleLimitConfig angleLockConfig)
     {
         bool IsPaused = StepTime <= 0.0f;
@@ -558,8 +554,7 @@ public unsafe class SPCRJointDynamicsJob
                     surfaceCollision.pColliders = pColliders;
                     surfaceCollision.pColliderExs = pColliderExs;
                     surfaceCollision.ColliderCount = ColliderCount;
-                    surfaceCollision.CollisionDivision = Mathf.Clamp(surfaceColliderConfig.collisionDivision, 1, surfaceColliderConfig.collisionDivision);
-                    surfaceCollision.colliderForceType = surfaceColliderConfig.forceType;
+                    surfaceCollision.CollisionDivision = Mathf.Clamp(SurfaceCollisionDivision, 1, SurfaceCollisionDivision);
                     _hJob = surfaceCollision.Schedule(_SurfaceConstraints.Length, 8, _hJob);
                 }
 
@@ -817,8 +812,6 @@ public unsafe class SPCRJointDynamicsJob
         public int ColliderCount;
         [ReadOnly]
         public int CollisionDivision;
-        [ReadOnly]
-        public SPCRJointDynamicsController.ColliderForce colliderForceType;
 
         public void Execute(int index)
         {
@@ -924,59 +917,50 @@ public unsafe class SPCRJointDynamicsJob
                 }
                 else
                 {
-                    //Forcefully extrude the surface out of the collider
-                    pointOnCollider = tempPointOnCollider;
-                    Vector3 endVec = colliderPosition + ((pColliderEx->Direction * 0.5f) * 2);
-                    Vector3 colDirVec = pColliderEx->Direction;
-
-                    if (colliderForceType == SPCRJointDynamicsController.ColliderForce.Pull)
+                    if (pCollider->ForceType != SPCRJointDynamicsCollider.ColliderForce.Off)
                     {
-                        Vector3 temp = pointOnCollider;
-                        pointOnCollider = endVec;
-                        endVec = temp;
-                        colDirVec *= -1;
-                    }
+                        //Forcefully extrude the surface out of the collider
+                        pointOnCollider = tempPointOnCollider;
+                        Vector3 endVec = colliderPosition + ((pColliderEx->Direction * 0.5f) * 2);
+                        Vector3 colDirVec = pColliderEx->Direction;
 
-                    ray = new Ray(pointOnCollider, colDirVec);
-                    if (Raycast(planeNormal * -1, planeDistanceFromOrigin, ray, out enter))
-                    {
-                        intersectionPoint = ray.GetPoint(enter);
-                        if (TriangleContainsPoint(RWPtA->Position, RWPtB->Position, RWPtC->Position, intersectionPoint))
+                        if (pCollider->ForceType == SPCRJointDynamicsCollider.ColliderForce.Pull)
                         {
-                            Vector3 intersecToEnd = endVec - intersectionPoint;
-                            Vector3 colliderToEndVec = endVec - pointOnCollider;
-                            Vector3 colldierToIntersectVec = intersectionPoint - pointOnCollider;
+                            Vector3 temp = pointOnCollider;
+                            pointOnCollider = endVec;
+                            endVec = temp;
+                            colDirVec *= -1;
+                        }
 
-                            float pointDot = Vector3.Dot(intersecToEnd, colldierToIntersectVec);
-                            float lineDot = Vector3.Dot(colliderToEndVec, colliderToEndVec);
-
-                            if (!(pointDot >= 0 && pointDot <= lineDot))
+                        ray = new Ray(pointOnCollider, colDirVec);
+                        if (Raycast(planeNormal * -1, planeDistanceFromOrigin, ray, out enter))
+                        {
+                            intersectionPoint = ray.GetPoint(enter);
+                            if (TriangleContainsPoint(RWPtA->Position, RWPtB->Position, RWPtC->Position, intersectionPoint))
                             {
-                                pushOut = Vector3.zero;
-                                return false;
-                            }
+                                Vector3 intersecToEnd = endVec - intersectionPoint;
+                                Vector3 colliderToEndVec = endVec - pointOnCollider;
+                                Vector3 colldierToIntersectVec = intersectionPoint - pointOnCollider;
 
-                            float dotvalue = Vector3.Dot(colliderToEndVec, colldierToIntersectVec);
-                            float startToEndMag = Vector3.Dot(colliderToEndVec, colliderToEndVec);
+                                float pointDot = Vector3.Dot(intersecToEnd, colldierToIntersectVec);
+                                float lineDot = Vector3.Dot(colliderToEndVec, colliderToEndVec);
 
-                            if (colliderForceType == SPCRJointDynamicsController.ColliderForce.Auto)
-                            {
-                                endVec = intersecToEnd.sqrMagnitude < colldierToIntersectVec.sqrMagnitude
-                                            ? endVec
-                                            : pointOnCollider;
+                                if (!(pointDot >= 0 && pointDot <= lineDot))
+                                {
+                                    pushOut = Vector3.zero;
+                                    return false;
+                                }
 
-                                endVec = (endVec + (intersectionPoint - endVec).normalized * -radius);
-                                pushOut = intersectionPoint - endVec;
-                            }
-                            else
-                            {
+                                float dotvalue = Vector3.Dot(colliderToEndVec, colldierToIntersectVec);
+                                float startToEndMag = Vector3.Dot(colliderToEndVec, colliderToEndVec);
+
                                 endVec = (pointOnCollider + colliderToEndVec.normalized * -radius);
                                 pushOut = intersectionPoint - endVec;
-                            }
 
-                            pointOnCollider += colliderToEndVec * (dotvalue / startToEndMag);
-                            Vector3 towardsCollider = pointOnCollider - intersectionPoint;
-                            return towardsCollider.sqrMagnitude <= radius * radius;
+                                pointOnCollider += colliderToEndVec * (dotvalue / startToEndMag);
+                                Vector3 towardsCollider = pointOnCollider - intersectionPoint;
+                                return towardsCollider.sqrMagnitude <= radius * radius;
+                            }
                         }
                     }
                 }

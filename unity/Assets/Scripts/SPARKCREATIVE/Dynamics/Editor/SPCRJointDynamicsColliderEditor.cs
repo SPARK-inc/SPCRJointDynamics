@@ -25,4 +25,60 @@ public class SPCRJointDynamicsColliderEditor : Editor
         Bounds bounds = new Bounds(jointCollider.transform.position, new Vector3(jointCollider.Radius, jointCollider.Height, jointCollider.Radius));
         return bounds;
     }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        var collider = target as SPCRJointDynamicsCollider;
+
+        Titlebar("一般設定", new Color(0.7f, 1.0f, 1.0f));
+        UpdateSlider("Radius", collider, ref collider._Radius, 0.0f, 5.0f);
+        UpdateSlider("Head Radius Scale", collider, ref collider._HeadRadiusScale, 0.0f, 5.0f);
+        UpdateSlider("Tail Radius Scale", collider, ref collider._TailRadiusScale, 0.0f, 5.0f);
+        UpdateSlider("Height", collider, ref collider._Height, 0.0f, 5.0f);
+        UpdateSlider("Friction", collider, ref collider._Friction, 0.0f, 1.0f);
+        UpdateSlider("Push Out Rate", collider, ref collider._PushOutRate, 0.0f, 1.0f);
+
+        if(collider.IsCapsule)
+        {
+            Titlebar("表面衝突", new Color(1.0f, 0.7f, 0.7f));
+            collider._SurfaceColliderForce = (SPCRJointDynamicsCollider.ColliderForce)EditorGUILayout.EnumPopup(new GUIContent("Force Type", "表面がコライダーに刺さった時のフォース"), collider._SurfaceColliderForce);
+        }
+
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(collider);
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    void Titlebar(string text, Color color)
+    {
+        GUILayout.Space(12);
+
+        var backgroundColor = GUI.backgroundColor;
+        GUI.backgroundColor = color;
+
+        EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+        GUILayout.Label(text);
+        EditorGUILayout.EndHorizontal();
+
+        GUI.backgroundColor = backgroundColor;
+
+        GUILayout.Space(3);
+    }
+
+    void UpdateSlider(string Label, SPCRJointDynamicsCollider Source, ref float Value, float Min, float Max)
+    {
+        EditorGUI.BeginChangeCheck();
+        float Newvalue = EditorGUILayout.Slider(Label, Value, Min, Max);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(target, "SPCRColliderUndo");
+            Value = Newvalue;
+        }
+    }
 }

@@ -31,13 +31,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
         FixedUpdate,
     }
 
-    public enum ColliderForce
-    {
-        Auto,
-        Push,
-        Pull
-    }
-
     [Serializable]
     public class SPCRJointDynamicsConstraint
     {
@@ -102,7 +95,6 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public bool _IsEnableSurfaceCollision = false;
     public int _SurfaceCollisionDivision = 1;
-    public ColliderForce _SurfaceColliderForce = ColliderForce.Auto;
 
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -354,7 +346,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             _DetailHitDivideMax,
             _IsEnableColliderCollision,
             _IsEnableSurfaceCollision,
-            new SPCRJointDynamicsJob.SurfaceColliderConfig { collisionDivision = _SurfaceCollisionDivision, forceType = _SurfaceColliderForce },
+            _SurfaceCollisionDivision,
             GetAnglesConfig());
     }
 
@@ -535,6 +527,10 @@ public class SPCRJointDynamicsController : MonoBehaviour
             for(int i = 0; i < HorizontalRootCount - 1; ++i)
             {
                 CreateSurfaceFace(_RootPointTbl[i], _RootPointTbl[i + 1], ref faceList);
+            }
+            if (_IsLoopRootPoints)
+            {
+                CreateSurfaceFace(_RootPointTbl[HorizontalRootCount - 1], _RootPointTbl[0], ref faceList);
             }
             _surfaceFacePoints = faceList.ToArray();
         }

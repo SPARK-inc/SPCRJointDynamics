@@ -95,6 +95,7 @@ public static class SPCRJointSettingLocalSave
         public float Height { get; set; }
         public float Friction { get; set; }
         public float PushOutRate { get; set; }
+        public SPCRJointDynamicsCollider.ColliderForce ForceType { get; set; }
 
         public SPCRJointDynamicsColliderSave(SPCRJointDynamicsCollider spcrJoinDynamicsCollider)
         {
@@ -109,6 +110,7 @@ public static class SPCRJointSettingLocalSave
                 Height = spcrJoinDynamicsCollider.HeightRaw;
                 Friction = spcrJoinDynamicsCollider.Friction;
                 PushOutRate = spcrJoinDynamicsCollider.PushOutRate;
+                ForceType = spcrJoinDynamicsCollider._SurfaceColliderForce;
 
                 SaveTransformData(spcrJoinDynamicsCollider.transform);
 
@@ -212,8 +214,8 @@ public static class SPCRJointSettingLocalSave
     public class SPCRJointDynamicsControllerSave
     {
         public SPCRJointDynamicsPointSave[] spcrChildJointDynamicsPointList { get; set; }
-        public SPCRJointDynamicsPointGrabberSave[] spcrChildJointDynamicsPointGtabberList { get; set; }
-        public SPCRJointDynamicsColliderSave[] spcrChildJointDynamicsColliderList { get; set; }
+        public SPCRJointDynamicsPointGrabberSave[] spcrChildJointDynamicsPointGtabberList;
+        public SPCRJointDynamicsColliderSave[] spcrChildJointDynamicsColliderList;
 
         public string name { get; set; }
         public string rootTransformName { get; set; }
@@ -230,7 +232,6 @@ public static class SPCRJointSettingLocalSave
 
         public bool IsEnableSurfaceCollision { get; set; }
         public int SurfaceCollisionDivision { get; set; }
-        public SPCRJointDynamicsController.ColliderForce SurfaceColliderForce { get; set; }
 
         public SPCRAnimCurveKeyFrameSave[] MassScaleCurve { get; set; }
         public SPCRAnimCurveKeyFrameSave[] GravityScaleCurve { get; set; }
@@ -339,12 +340,14 @@ public static class SPCRJointSettingLocalSave
         {
             spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i] = new SPCRJointDynamicsColliderSave(SPCRJointDynamicsContoller._ColliderTbl[i]);
         }
+        UpdateIDIfSameUniqueId(ref spcrJointDynamicsSave.spcrChildJointDynamicsColliderList);
 
         spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList = new SPCRJointDynamicsPointGrabberSave[SPCRJointDynamicsContoller._PointGrabberTbl.Length];
         for (int i = 0; i < SPCRJointDynamicsContoller._PointGrabberTbl.Length; i++)
         {
             spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList[i] = new SPCRJointDynamicsPointGrabberSave(SPCRJointDynamicsContoller._PointGrabberTbl[i]);
         }
+        UpdateIDIfSameUniqueId(ref spcrJointDynamicsSave.spcrChildJointDynamicsPointGtabberList);
 
         if (SPCRJointDynamicsContoller._RootPointTbl != null && SPCRJointDynamicsContoller._RootPointTbl.Length > 0)
         {
@@ -369,7 +372,6 @@ public static class SPCRJointSettingLocalSave
 
         spcrJointDynamicsSave.IsEnableSurfaceCollision = SPCRJointDynamicsContoller._IsEnableSurfaceCollision;
         spcrJointDynamicsSave.SurfaceCollisionDivision = SPCRJointDynamicsContoller._SurfaceCollisionDivision;
-        spcrJointDynamicsSave.SurfaceColliderForce = SPCRJointDynamicsContoller._SurfaceColliderForce;
 
         spcrJointDynamicsSave.MassScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._MassScaleCurve);
         spcrJointDynamicsSave.GravityScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._GravityScaleCurve);
@@ -471,6 +473,34 @@ public static class SPCRJointSettingLocalSave
         spcrJointDynamicsSave.Delay = SPCRJointDynamicsContoller.Delay;
 
         SaveIntoBinary(spcrJointDynamicsSave);
+    }
+
+    static void UpdateIDIfSameUniqueId(ref SPCRJointDynamicsColliderSave[] spcrColliderlist)
+    {
+        for(int i = 0; i < spcrColliderlist.Length - 1; i++)
+        {
+            for(int j = i + 1; j < spcrColliderlist.Length; j++)
+            {
+                if(spcrColliderlist[i].RefUniqueId.Equals(spcrColliderlist[j].RefUniqueId))
+                {
+                    spcrColliderlist[i].RefUniqueId = System.Guid.NewGuid().ToString();
+                }
+            }
+        }
+    }
+
+    static void UpdateIDIfSameUniqueId(ref SPCRJointDynamicsPointGrabberSave[] spcrGrabberList)
+    {
+        for (int i = 0; i < spcrGrabberList.Length - 1; i++)
+        {
+            for (int j = i + 1; j < spcrGrabberList.Length; j++)
+            {
+                if (spcrGrabberList[i].RefUniqueGUIID.Equals(spcrGrabberList[j].RefUniqueGUIID))
+                {
+                    spcrGrabberList[i].RefUniqueGUIID = System.Guid.NewGuid().ToString();
+                }
+            }
+        }
     }
 
     static SPCRAnimCurveKeyFrameSave[] GetSPCRAnimaCurveKeyFrames(AnimationCurve animCurve)
@@ -591,8 +621,9 @@ public static class SPCRJointSettingLocalSave
                 point.HeightRaw = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].Height;
                 point.Friction = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].Friction;
                 point.PushOutRate = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].PushOutRate;
+                point._SurfaceColliderForce = spcrJointDynamicsSave.spcrChildJointDynamicsColliderList[i].ForceType;
 
-                if(!colliderTable.Contains(point))
+                if (!colliderTable.Contains(point))
                 {
                     colliderTable.Add(point);
                 }
@@ -650,7 +681,6 @@ public static class SPCRJointSettingLocalSave
         SPCRJointDynamicsContoller._IsCancelResetPhysics = spcrJointDynamicsSave.IsCancelResetPhysics;
         SPCRJointDynamicsContoller._IsEnableSurfaceCollision = spcrJointDynamicsSave.IsEnableSurfaceCollision;
         SPCRJointDynamicsContoller._SurfaceCollisionDivision = spcrJointDynamicsSave.SurfaceCollisionDivision;
-        SPCRJointDynamicsContoller._SurfaceColliderForce = spcrJointDynamicsSave.SurfaceColliderForce;
 
         SPCRJointDynamicsContoller._MassScaleCurve = GetAnimCurve(spcrJointDynamicsSave.MassScaleCurve);
         SPCRJointDynamicsContoller._GravityScaleCurve = GetAnimCurve(spcrJointDynamicsSave.GravityScaleCurve);

@@ -13,6 +13,14 @@ using UnityEngine;
 
 public class SPCRJointDynamicsCollider : MonoBehaviour
 {
+    public enum ColliderForce
+    {
+        Off,
+        Push,
+        Pull
+        //,Auto
+    }
+
     [SerializeField, HideInInspector]
     private string uniqueGUIID;
     public string UniqueGUIID
@@ -25,23 +33,24 @@ public class SPCRJointDynamicsCollider : MonoBehaviour
         }
     }
 
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _Radius = 0.05f;
+    public float _Radius = 0.05f;
     public float RadiusRaw { get => _Radius; set =>_Radius = value; }
     public float Radius { get { return _Radius * Mathf.Abs(transform.localScale.x) * Mathf.Abs(transform.localScale.z); } }
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _HeadRadiusScale = 1.0f;
+
+    public float _HeadRadiusScale = 1.0f;
     public float HeadRadiusScale { get { return _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _TailRadiusScale = 1.0f;
+
+    public float _TailRadiusScale = 1.0f;
     public float TailRadiusScale { get { return _TailRadiusScale; } set { _TailRadiusScale = value; } }
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _Height = 0.0f;
+
+    public float _Height = 0.0f;
     public float HeightRaw { get => _Height; set => _Height = value; }
-    [SerializeField, Range(0.0f, 1.0f)]
-    float _Friction = 0.5f;
-    [SerializeField, Range(0.0f, 1.0f)]
-    float _PushOutRate = 1.0f;
+
+    public float _Friction = 0.5f;
+
+    public float _PushOutRate = 1.0f;
+
+    public ColliderForce _SurfaceColliderForce = ColliderForce.Off;
 
     public Transform RefTransform { get; private set; }
     public float RadiusHead { get { return Radius * _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
@@ -111,6 +120,30 @@ Gizmos.color = Color.gray;
         {
             Gizmos.DrawWireSphere(pos, Radius);
         }
+
+        if (IsCapsule)
+        {
+            if (UnityEditor.Selection.Contains(gameObject))
+                Gizmos.color = Color.blue;
+            else
+                Gizmos.color = Color.gray;
+
+            switch (_SurfaceColliderForce)
+            {
+                case ColliderForce.Off:
+                    break;
+                case ColliderForce.Push:
+                    DrawArrow(transform.position + transform.up * Height * 0.5f, -transform.up);
+                    break;
+                case ColliderForce.Pull:
+                    DrawArrow(transform.position - transform.up * Height * 0.5f, transform.up);
+                    break;
+                    //case ColliderForce.Auto:
+                    //    DrawArrow(transform.position, -transform.up);
+                    //    DrawArrow(transform.position, transform.up);
+                    //    break;
+            }
+        }
     }
 
     void ResetTransform()
@@ -151,4 +184,40 @@ Gizmos.color = Color.gray;
     {
         uniqueGUIID = guiiId;
     }
+
+    void DrawArrow(Vector3 pos, Vector3 direction)
+    {
+        Gizmos.DrawLine(pos, pos + direction * Height);
+        float arrowHeight = 0.15f;
+        float coneAngle = 20.0f;
+
+        Vector3 up = Quaternion.LookRotation(direction) * Quaternion.Euler(180 + coneAngle, 0, 0) * new Vector3(0, 0, 1);
+        Vector3 down = Quaternion.LookRotation(direction) * Quaternion.Euler(180 - coneAngle, 0, 0) * new Vector3(0, 0, 1);
+        Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + coneAngle, 0) * new Vector3(0, 0, 1);
+        Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - coneAngle, 0) * new Vector3(0, 0, 1);
+
+        Vector3 arrowPos = pos + direction * Height;
+        up = arrowPos + up * arrowHeight;
+        down = arrowPos + down * arrowHeight;
+        right = arrowPos + right * arrowHeight;
+        left = arrowPos + left * arrowHeight;
+
+
+        Gizmos.DrawLine(arrowPos, up);
+        Gizmos.DrawLine(arrowPos, down);
+        Gizmos.DrawLine(arrowPos, right);
+        Gizmos.DrawLine(arrowPos, left);
+
+        Gizmos.DrawLine(up, right);
+        Gizmos.DrawLine(right, down);
+        Gizmos.DrawLine(down, left);
+        Gizmos.DrawLine(left, up);
+
+        arrowPos = arrowPos - direction * (arrowHeight - 0.01f);
+        Gizmos.DrawLine(arrowPos, up);
+        Gizmos.DrawLine(arrowPos, down);
+        Gizmos.DrawLine(arrowPos, right);
+        Gizmos.DrawLine(arrowPos, left);
+    }
+
 }

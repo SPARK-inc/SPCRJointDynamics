@@ -136,7 +136,6 @@ public class SPCRJointDynamicsControllerInspector : Editor
             if (controller._IsEnableSurfaceCollision)
             {
                 UpdateIntSlider("表面衝突分割数", controller, ref controller._SurfaceCollisionDivision, 1, 16);
-                controller._SurfaceColliderForce = (SPCRJointDynamicsController.ColliderForce)EditorGUILayout.EnumPopup(new GUIContent("フォースタイプ", "表面がコライダーに刺さった時のフォース"), controller._SurfaceColliderForce);
             }
 
             GUILayout.Space(8);
