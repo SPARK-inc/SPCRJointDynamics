@@ -121,6 +121,7 @@ Gizmos.color = Color.gray;
             Gizmos.DrawWireSphere(pos, Radius);
         }
 
+#if UNITY_EDITOR
         if (IsCapsule)
         {
             if (UnityEditor.Selection.Contains(gameObject))
@@ -138,12 +139,13 @@ Gizmos.color = Color.gray;
                 case ColliderForce.Pull:
                     DrawArrow(transform.position - transform.up * Height * 0.5f, transform.up);
                     break;
-                    //case ColliderForce.Auto:
-                    //    DrawArrow(transform.position, -transform.up);
-                    //    DrawArrow(transform.position, transform.up);
-                    //    break;
+                //case ColliderForce.Auto:
+                //    DrawArrow(transform.position, -transform.up);
+                //    DrawArrow(transform.position, transform.up);
+                //    break;
             }
         }
+#endif//UNITY_EDITOR
     }
 
     void ResetTransform()
