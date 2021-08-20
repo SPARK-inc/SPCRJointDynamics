@@ -239,9 +239,9 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].Parent = -1;
             Points[i].Child = -1;
             Points[i].Weight = src._IsFixed ? 0.0f : 1.0f;
-            Points[i].Mass = src._Mass * _MassScaleCurve.Evaluate(rate);
-            Points[i].Resistance = 1.0f - _ResistanceCurve.Evaluate(rate);
-            Points[i].Hardness = _HardnessCurve.Evaluate(rate);
+            Points[i].Mass = Math.Max(0.01f, src._Mass * _MassScaleCurve.Evaluate(rate));
+            Points[i].Resistance = 1.0f - Mathf.Clamp01(_ResistanceCurve.Evaluate(rate));
+            Points[i].Hardness = Mathf.Clamp01(_HardnessCurve.Evaluate(rate));
             Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
             Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
             Points[i].LimitPower = _LimitPowerCurve.Evaluate(rate);

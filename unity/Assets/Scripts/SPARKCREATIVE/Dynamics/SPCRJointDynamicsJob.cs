@@ -727,15 +727,15 @@ public unsafe class SPCRJointDynamicsJob
             Vector3 Displacement = Vector3.zero;
             if (!IsPaused)
             {
-                Vector3 Force = Vector3.zero;
-                Force += pR->Gravity;
-                Force += WindForce;
-                Force *= StepTime_x2_Half;
+                Vector3 ExternalForce = Vector3.zero;
+                ExternalForce += pR->Gravity;
+                ExternalForce += WindForce / pR->Mass;
+                ExternalForce *= StepTime_x2_Half;
 
                 Displacement = pRW->TargetDisplacement;
-                Displacement += Force / pR->Mass;
+                Displacement += ExternalForce;
                 Displacement *= pR->Resistance;
-                Displacement *= 1.0f - (pRW->Friction * pR->FrictionScale);
+                Displacement *= 1.0f - Mathf.Clamp01(pRW->Friction * pR->FrictionScale);
             }
 
             pRW->OldPosition = pRW->Position;
