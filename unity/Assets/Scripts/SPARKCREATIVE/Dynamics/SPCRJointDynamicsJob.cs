@@ -42,6 +42,7 @@ public unsafe class SPCRJointDynamicsJob
         public float BendingShrinkHorizontal;
         public float BendingStretchHorizontal;
         public float LimitPower;
+        public float WindForceScale;
         public Vector3 Gravity;
         public Vector3 BoneAxis;
         public Vector3 InitialPosition;
@@ -75,6 +76,7 @@ public unsafe class SPCRJointDynamicsJob
         public float BendingShrinkHorizontal;
         public float BendingStretchHorizontal;
         public float LimitPower;
+        public float WindForceScale;
         public Vector3 Gravity;
         public Vector3 BoneAxis;
         public Vector3 InitialPosition;
@@ -215,6 +217,7 @@ public unsafe class SPCRJointDynamicsJob
             PointsR[i].BendingStretchVertical = src.BendingStretchVertical * 0.5f;
             PointsR[i].LimitPower = src.LimitPower;
             PointsR[i].Gravity = src.Gravity;
+            PointsR[i].WindForceScale = src.WindForceScale;
             PointsR[i].BoneAxis = src.BoneAxis;
             PointsR[i].LocalPosition = src.LocalPosition;
             PointsR[i].LocalRotation = src.LocalRotation;
@@ -729,7 +732,7 @@ public unsafe class SPCRJointDynamicsJob
             {
                 Vector3 ExternalForce = Vector3.zero;
                 ExternalForce += pR->Gravity;
-                ExternalForce += WindForce / pR->Mass;
+                ExternalForce += WindForce * pR->WindForceScale / pR->Mass;
                 ExternalForce *= StepTime_x2_Half;
 
                 Displacement = pRW->TargetDisplacement;

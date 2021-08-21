@@ -98,6 +98,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
 
     public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
+    public AnimationCurve _WindForceScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
     public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.05f) });
     public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
     public AnimationCurve _FrictionCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.7f), new Keyframe(1.0f, 0.7f) });
@@ -243,6 +244,7 @@ public class SPCRJointDynamicsController : MonoBehaviour
             Points[i].Resistance = 1.0f - Mathf.Clamp01(_ResistanceCurve.Evaluate(rate));
             Points[i].Hardness = Mathf.Clamp01(_HardnessCurve.Evaluate(rate));
             Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
+            Points[i].WindForceScale = _WindForceScaleCurve.Evaluate(rate) * rate;
             Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
             Points[i].LimitPower = _LimitPowerCurve.Evaluate(rate);
             Points[i].SliderJointLength = _SliderJointLengthCurve.Evaluate(rate);

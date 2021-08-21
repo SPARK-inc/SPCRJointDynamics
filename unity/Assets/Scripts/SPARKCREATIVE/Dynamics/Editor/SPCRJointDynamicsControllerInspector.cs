@@ -152,6 +152,7 @@ public class SPCRJointDynamicsControllerInspector : Editor
             GUILayout.Space(8);
             UpdateCurve("質量", controller, ref controller._MassScaleCurve);
             UpdateCurve("重力", controller, ref controller._GravityScaleCurve);
+            UpdateCurve("風力", controller, ref controller._WindForceScaleCurve);
             UpdateCurve("空気抵抗", controller, ref controller._ResistanceCurve);
             UpdateCurve("硬さ", controller, ref controller._HardnessCurve);
             UpdateCurve("摩擦", controller, ref controller._FrictionCurve);
