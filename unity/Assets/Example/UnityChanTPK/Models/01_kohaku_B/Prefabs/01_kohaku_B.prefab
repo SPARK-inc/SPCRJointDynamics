@@ -50,6 +50,7 @@ MonoBehaviour:
   _Height: 0.13
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1000801649037170
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +134,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00007518884, z: -0.000056655503}
   _Depth: 3
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1010006093569788
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,6 +217,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.7606156e-17, z: -0.00000006621667}
   _Depth: 1
   _Index: 21
+  _UseForSurfaceCollision: 1
 --- !u!1 &1016301704786456
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +666,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000085149304, z: 0.0000015965494}
   _Depth: 3
   _Index: 45
+  _UseForSurfaceCollision: 1
 --- !u!1 &1020927202352564
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,6 +748,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000009934103, z: -0.000000049670515}
   _Depth: 1
   _Index: 31
+  _UseForSurfaceCollision: 1
 --- !u!1 &1029554880087428
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +800,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000020500308, z: 0.00000024337243}
   _Depth: 4
   _Index: 52
+  _UseForSurfaceCollision: 1
 --- !u!1 &1029980657620200
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,6 +852,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000005960467, z: 0.00000008381906}
   _Depth: 0
   _Index: 16
+  _UseForSurfaceCollision: 1
 --- !u!1 &1032753810271560
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +903,7 @@ MonoBehaviour:
   _Height: 0.09
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1034682869113382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,6 +1014,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.00000015239814}
   _Depth: 0
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1035463667664124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,6 +1066,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.5728171e-17, z: -0.00000020861398}
   _Depth: 2
   _Index: 22
+  _UseForSurfaceCollision: 1
 --- !u!1 &1037938326255360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1150,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000039736432, z: -0.000000010246974}
   _Depth: 2
   _Index: 17
+  _UseForSurfaceCollision: 1
 --- !u!1 &1046484686967716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,6 +1233,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000088475514, z: -0.00000030267938}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1058931657155026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1273,6 +1285,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000003386627, z: 0.00000012699851}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1060266016878514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,6 +1337,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000015433351, z: -0.000000069849214}
   _Depth: 0
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1061046559971616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1405,6 +1419,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000002716359, z: 0.000000077076685}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1071337804173032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,6 +1470,7 @@ MonoBehaviour:
   _Height: 0
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1073423783894298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1506,6 +1522,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000080104957, z: 0.00000039238395}
   _Depth: 4
   _Index: 58
+  _UseForSurfaceCollision: 1
 --- !u!1 &1075633128944666
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,6 +1574,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000068393994, z: -0.000000042467715}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1084512166360946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,6 +1625,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 3
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1096026675240650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1689,6 +1708,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000039104336, z: -0.000010485461}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1117102655039064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,6 +1759,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1118781420398664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,6 +1872,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 7.930197e-18, z: -0.00000019561915}
   _Depth: 5
   _Index: 23
+  _UseForSurfaceCollision: 1
 --- !u!1 &1125541715915034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1902,6 +1924,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000002128737, z: 0.0000029802316}
   _Depth: 3
   _Index: 51
+  _UseForSurfaceCollision: 1
 --- !u!1 &1129001476528998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,6 +1976,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000015102526, z: 0.00000035239233}
   _Depth: 2
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1132145287736946
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,6 +2027,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000005721784, z: 0.0000003867112}
   _Depth: 5
   _Index: 11
+  _UseForSurfaceCollision: 1
 --- !u!1 &1134232417248534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,6 +2079,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000027978474, z: 0.0000038739613}
   _Depth: 3
   _Index: 26
+  _UseForSurfaceCollision: 1
 --- !u!1 &1141643964326216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2242,6 +2268,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000010853411, z: -0.00000016954587}
   _Depth: 5
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1164030595725912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2293,6 +2320,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000082784204, z: -0.00000022765656}
   _Depth: 0
   _Index: 12
+  _UseForSurfaceCollision: 1
 --- !u!1 &1165708306090048
 GameObject:
   m_ObjectHideFlags: 0
@@ -2712,6 +2740,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000075375225, z: 0.000031292515}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1172981345178156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,6 +2792,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000030867714, z: -0.00000019843527}
   _Depth: 3
   _Index: 20
+  _UseForSurfaceCollision: 1
 --- !u!1 &1174908315701870
 GameObject:
   m_ObjectHideFlags: 0
@@ -2845,6 +2875,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000061237597, z: -0.000000102062664}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1178078739576254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2896,6 +2927,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000011920914, z: -0.000006183974}
   _Depth: 4
   _Index: 28
+  _UseForSurfaceCollision: 1
 --- !u!1 &1179233134342006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,6 +2979,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000043237728, z: 0.0000011975479}
   _Depth: 4
   _Index: 46
+  _UseForSurfaceCollision: 1
 --- !u!1 &1184945959852144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3090,6 +3123,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000070780544, z: 0.00000008381907}
   _Depth: 0
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1196556368002562
 GameObject:
   m_ObjectHideFlags: 0
@@ -3141,6 +3175,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000018109054, z: -0.00000010348031}
   _Depth: 0
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1196578582838596
 GameObject:
   m_ObjectHideFlags: 0
@@ -3224,6 +3259,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000015852287, z: -0.000000009907679}
   _Depth: 0
   _Index: 20
+  _UseForSurfaceCollision: 1
 --- !u!1 &1204629864820552
 GameObject:
   m_ObjectHideFlags: 0
@@ -3336,6 +3372,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 2.3592255e-17, z: -0.00000019099402}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1220517350625010
 GameObject:
   m_ObjectHideFlags: 0
@@ -3751,6 +3788,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000021287364, z: -0.00000030101663}
   _Depth: 3
   _Index: 21
+  _UseForSurfaceCollision: 1
 --- !u!1 &1240573654091688
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,6 +3840,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.000000064975985}
   _Depth: 0
   _Index: 30
+  _UseForSurfaceCollision: 1
 --- !u!1 &1241681506718676
 GameObject:
   m_ObjectHideFlags: 0
@@ -3853,6 +3892,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000029802325, z: -0.000000043055483}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1242883263159620
 GameObject:
   m_ObjectHideFlags: 0
@@ -3904,6 +3944,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 7.179441e-16, z: -0.00000004967053}
   _Depth: 3
   _Index: 27
+  _UseForSurfaceCollision: 1
 --- !u!1 &1245661750457620
 GameObject:
   m_ObjectHideFlags: 0
@@ -4288,6 +4329,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000007926154, z: 0.00000028236923}
   _Depth: 0
   _Index: 15
+  _UseForSurfaceCollision: 1
 --- !u!1 &1256979339550840
 GameObject:
   m_ObjectHideFlags: 0
@@ -4339,6 +4381,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000040825066, z: -0.000000102062664}
   _Depth: 2
   _Index: 56
+  _UseForSurfaceCollision: 1
 --- !u!1 &1258373997704046
 GameObject:
   m_ObjectHideFlags: 0
@@ -4390,6 +4433,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000002716359, z: 0.000000077076685}
   _Depth: 2
   _Index: 25
+  _UseForSurfaceCollision: 1
 --- !u!1 &1261389347628934
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,6 +4485,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000004206828, z: 0.00000005434922}
   _Depth: 3
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1261662954500232
 GameObject:
   m_ObjectHideFlags: 0
@@ -4584,6 +4629,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000001732692, z: -0.0000000866346}
   _Depth: 0
   _Index: 36
+  _UseForSurfaceCollision: 1
 --- !u!1 &1293248407373508
 GameObject:
   m_ObjectHideFlags: 0
@@ -4697,6 +4743,7 @@ MonoBehaviour:
   _BoneAxis: {x: -0.99989367, y: 0.011886416, z: -0.008445167}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1297922117315522
 GameObject:
   m_ObjectHideFlags: 0
@@ -4748,6 +4795,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 7.179441e-16, z: -0.00000004967053}
   _Depth: 3
   _Index: 33
+  _UseForSurfaceCollision: 1
 --- !u!1 &1298883125315910
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,6 +5210,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1304039332090680
 GameObject:
   m_ObjectHideFlags: 0
@@ -5244,6 +5293,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.7606156e-17, z: -0.00000006621667}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1312478939365918
 GameObject:
   m_ObjectHideFlags: 0
@@ -5688,6 +5738,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000009934103, z: -0.000000049670515}
   _Depth: 1
   _Index: 25
+  _UseForSurfaceCollision: 1
 --- !u!1 &1317120670161584
 GameObject:
   m_ObjectHideFlags: 0
@@ -5739,6 +5790,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000044703415, z: 0.000010859896}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1317849726288726
 GameObject:
   m_ObjectHideFlags: 0
@@ -5867,6 +5919,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000053799406, z: 0.000021451466}
   _Depth: 1
   _Index: 15
+  _UseForSurfaceCollision: 1
 --- !u!1 &1327334596085236
 GameObject:
   m_ObjectHideFlags: 0
@@ -5918,6 +5971,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -1.0700948e-16, z: -0.00000013464908}
   _Depth: 1
   _Index: 13
+  _UseForSurfaceCollision: 1
 --- !u!1 &1337553389220704
 GameObject:
   m_ObjectHideFlags: 0
@@ -5969,6 +6023,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00013175116, z: 0.00001362836}
   _Depth: 1
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1338560747372700
 GameObject:
   m_ObjectHideFlags: 0
@@ -6019,6 +6074,7 @@ MonoBehaviour:
   _Height: 0
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1354435400075288
 GameObject:
   m_ObjectHideFlags: 0
@@ -6070,6 +6126,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000024835306, z: 0.000005459189}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1355860919213630
 GameObject:
   m_ObjectHideFlags: 0
@@ -6121,6 +6178,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000004967051, z: -0.0000064578335}
   _Depth: 3
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1356312162714464
 GameObject:
   m_ObjectHideFlags: 0
@@ -6171,6 +6229,7 @@ MonoBehaviour:
   _Height: 0.12
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1365563229865902
 GameObject:
   m_ObjectHideFlags: 0
@@ -6221,6 +6280,7 @@ MonoBehaviour:
   _Height: 0.04
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1372334023439650
 GameObject:
   m_ObjectHideFlags: 0
@@ -6272,6 +6332,7 @@ MonoBehaviour:
   _BoneAxis: {x: -0.99989367, y: 0.0145767415, z: -0.00035466664}
   _Depth: 0
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1373047752243772
 GameObject:
   m_ObjectHideFlags: 0
@@ -6322,6 +6383,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 27
+  _UseForSurfaceCollision: 1
 --- !u!1 &1375028900467232
 GameObject:
   m_ObjectHideFlags: 0
@@ -6373,6 +6435,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000027163594, z: 0.000000046178105}
   _Depth: 2
   _Index: 19
+  _UseForSurfaceCollision: 1
 --- !u!1 &1377410639288528
 GameObject:
   m_ObjectHideFlags: 0
@@ -6454,6 +6517,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000000087653895, z: 0.00000006574042}
   _Depth: 1
   _Index: 49
+  _UseForSurfaceCollision: 1
 --- !u!1 &1381025211798152
 GameObject:
   m_ObjectHideFlags: 0
@@ -6505,6 +6569,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.9542969e-15, z: -0.00000020412551}
   _Depth: 2
   _Index: 14
+  _UseForSurfaceCollision: 1
 --- !u!1 &1384071299921252
 GameObject:
   m_ObjectHideFlags: 0
@@ -6556,6 +6621,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.2767561e-15, z: -0.00000009323617}
   _Depth: 2
   _Index: 20
+  _UseForSurfaceCollision: 1
 --- !u!1 &1384587401201864
 GameObject:
   m_ObjectHideFlags: 0
@@ -6637,6 +6703,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.5728154e-17, z: 0.00000008894855}
   _Depth: 2
   _Index: 12
+  _UseForSurfaceCollision: 1
 --- !u!1 &1397660968642474
 GameObject:
   m_ObjectHideFlags: 0
@@ -6687,6 +6754,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1398887046113012
 GameObject:
   m_ObjectHideFlags: 0
@@ -6737,6 +6805,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 24
+  _UseForSurfaceCollision: 1
 --- !u!1 &1399725586051844
 GameObject:
   m_ObjectHideFlags: 0
@@ -6819,6 +6888,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000000158523, z: -0.00000023778449}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1409664839465490
 GameObject:
   m_ObjectHideFlags: 0
@@ -6869,6 +6939,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 12
+  _UseForSurfaceCollision: 1
 --- !u!1 &1414185899854748
 GameObject:
   m_ObjectHideFlags: 0
@@ -6951,6 +7022,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000004027341, z: 0.00000035239233}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1422821836286746
 GameObject:
   m_ObjectHideFlags: 0
@@ -7033,6 +7105,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000024835306, z: 0.0000049631653}
   _Depth: 3
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1425925625858106
 GameObject:
   m_ObjectHideFlags: 0
@@ -7104,7 +7177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 
   Name: "\u30B9\u30AB\u30FC\u30C8"
   _RootTransform: {fileID: 4927924021798734}
   _RootPointTbl:
@@ -7130,12 +7202,14 @@ MonoBehaviour:
   - {fileID: 2497436939730105415}
   _PointGrabberTbl: []
   _UpdateTiming: 0
-  _Relaxation: 2
-  _SubSteps: 2
+  _Relaxation: 1
+  _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -7178,6 +7252,30 @@ MonoBehaviour:
       inSlope: 0
       outSlope: 0
       tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -7598,37 +7696,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 1
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 1
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 0
-  _IsAllBendingingStretchVertical: 0
-  _IsAllBendingingShrinkHorizontal: 0
-  _IsAllBendingingStretchHorizontal: 0
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: 45
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114791030858528614}
   - {fileID: 114818259583863178}
@@ -9435,6 +9558,207 @@ MonoBehaviour:
     _PointC: {fileID: 114125444936628706}
     _Length: 0.25895867
     _LengthACB: 0.27124017
+  _surfaceFacePoints:
+  - PointA: {fileID: 114791030858528614}
+    PointB: {fileID: 114037169873914594}
+    PointC: {fileID: 114289996551026366}
+    PointD: {fileID: 114818259583863178}
+  - PointA: {fileID: 114818259583863178}
+    PointB: {fileID: 114289996551026366}
+    PointC: {fileID: 114274176942523122}
+    PointD: {fileID: 114584111800662724}
+  - PointA: {fileID: 114584111800662724}
+    PointB: {fileID: 114274176942523122}
+    PointC: {fileID: 114987183659859276}
+    PointD: {fileID: 114670340736751058}
+  - PointA: {fileID: 114670340736751058}
+    PointB: {fileID: 114987183659859276}
+    PointC: {fileID: 114418573493124854}
+    PointD: {fileID: 114497933673226702}
+  - PointA: {fileID: 114497933673226702}
+    PointB: {fileID: 114418573493124854}
+    PointC: {fileID: 114276029505196596}
+    PointD: {fileID: 114125444936628706}
+  - PointA: {fileID: 114037169873914594}
+    PointB: {fileID: 114101467275166342}
+    PointC: {fileID: 114423645987516078}
+    PointD: {fileID: 114289996551026366}
+  - PointA: {fileID: 114289996551026366}
+    PointB: {fileID: 114423645987516078}
+    PointC: {fileID: 114533239009961778}
+    PointD: {fileID: 114274176942523122}
+  - PointA: {fileID: 114274176942523122}
+    PointB: {fileID: 114533239009961778}
+    PointC: {fileID: 114526365507079660}
+    PointD: {fileID: 114987183659859276}
+  - PointA: {fileID: 114987183659859276}
+    PointB: {fileID: 114526365507079660}
+    PointC: {fileID: 114023082546126286}
+    PointD: {fileID: 114418573493124854}
+  - PointA: {fileID: 114418573493124854}
+    PointB: {fileID: 114023082546126286}
+    PointC: {fileID: 114073753776856832}
+    PointD: {fileID: 114276029505196596}
+  - PointA: {fileID: 114101467275166342}
+    PointB: {fileID: 114043206255366274}
+    PointC: {fileID: 114006314904043290}
+    PointD: {fileID: 114423645987516078}
+  - PointA: {fileID: 114423645987516078}
+    PointB: {fileID: 114006314904043290}
+    PointC: {fileID: 114525888646778502}
+    PointD: {fileID: 114533239009961778}
+  - PointA: {fileID: 114533239009961778}
+    PointB: {fileID: 114525888646778502}
+    PointC: {fileID: 114338910826715890}
+    PointD: {fileID: 114526365507079660}
+  - PointA: {fileID: 114526365507079660}
+    PointB: {fileID: 114338910826715890}
+    PointC: {fileID: 114949897385755158}
+    PointD: {fileID: 114023082546126286}
+  - PointA: {fileID: 114023082546126286}
+    PointB: {fileID: 114949897385755158}
+    PointC: {fileID: 114163207740994782}
+    PointD: {fileID: 114073753776856832}
+  - PointA: {fileID: 114043206255366274}
+    PointB: {fileID: 114349886424933334}
+    PointC: {fileID: 114751838583187220}
+    PointD: {fileID: 114006314904043290}
+  - PointA: {fileID: 114006314904043290}
+    PointB: {fileID: 114751838583187220}
+    PointC: {fileID: 114714384967531478}
+    PointD: {fileID: 114525888646778502}
+  - PointA: {fileID: 114525888646778502}
+    PointB: {fileID: 114714384967531478}
+    PointC: {fileID: 114775903993878888}
+    PointD: {fileID: 114338910826715890}
+  - PointA: {fileID: 114338910826715890}
+    PointB: {fileID: 114775903993878888}
+    PointC: {fileID: 114869733218258472}
+    PointD: {fileID: 114949897385755158}
+  - PointA: {fileID: 114949897385755158}
+    PointB: {fileID: 114869733218258472}
+    PointC: {fileID: 114795908778839468}
+    PointD: {fileID: 114163207740994782}
+  - PointA: {fileID: 114349886424933334}
+    PointB: {fileID: 114649704536829566}
+    PointC: {fileID: 114168326601062744}
+    PointD: {fileID: 114751838583187220}
+  - PointA: {fileID: 114751838583187220}
+    PointB: {fileID: 114168326601062744}
+    PointC: {fileID: 114686585982691042}
+    PointD: {fileID: 114714384967531478}
+  - PointA: {fileID: 114714384967531478}
+    PointB: {fileID: 114686585982691042}
+    PointC: {fileID: 114165279748110772}
+    PointD: {fileID: 114775903993878888}
+  - PointA: {fileID: 114775903993878888}
+    PointB: {fileID: 114165279748110772}
+    PointC: {fileID: 114488213358956964}
+    PointD: {fileID: 114869733218258472}
+  - PointA: {fileID: 114869733218258472}
+    PointB: {fileID: 114488213358956964}
+    PointC: {fileID: 114431888588568542}
+    PointD: {fileID: 114795908778839468}
+  - PointA: {fileID: 114649704536829566}
+    PointB: {fileID: 114771173440662302}
+    PointC: {fileID: 114574496442146750}
+    PointD: {fileID: 114168326601062744}
+  - PointA: {fileID: 114168326601062744}
+    PointB: {fileID: 114574496442146750}
+    PointC: {fileID: 114875278228453948}
+    PointD: {fileID: 114686585982691042}
+  - PointA: {fileID: 114686585982691042}
+    PointB: {fileID: 114875278228453948}
+    PointC: {fileID: 114403199016981706}
+    PointD: {fileID: 114165279748110772}
+  - PointA: {fileID: 114165279748110772}
+    PointB: {fileID: 114403199016981706}
+    PointC: {fileID: 114751263474387756}
+    PointD: {fileID: 114488213358956964}
+  - PointA: {fileID: 114488213358956964}
+    PointB: {fileID: 114751263474387756}
+    PointC: {fileID: 114641997065207364}
+    PointD: {fileID: 114431888588568542}
+  - PointA: {fileID: 114771173440662302}
+    PointB: {fileID: 114357406141485620}
+    PointC: {fileID: 114689770284702812}
+    PointD: {fileID: 114574496442146750}
+  - PointA: {fileID: 114574496442146750}
+    PointB: {fileID: 114689770284702812}
+    PointC: {fileID: 114146752944617558}
+    PointD: {fileID: 114875278228453948}
+  - PointA: {fileID: 114875278228453948}
+    PointB: {fileID: 114146752944617558}
+    PointC: {fileID: 114159860878184814}
+    PointD: {fileID: 114403199016981706}
+  - PointA: {fileID: 114403199016981706}
+    PointB: {fileID: 114159860878184814}
+    PointC: {fileID: 114771973082362634}
+    PointD: {fileID: 114751263474387756}
+  - PointA: {fileID: 114751263474387756}
+    PointB: {fileID: 114771973082362634}
+    PointC: {fileID: 114372673874225662}
+    PointD: {fileID: 114641997065207364}
+  - PointA: {fileID: 114357406141485620}
+    PointB: {fileID: 114149730132643542}
+    PointC: {fileID: 114186316140663724}
+    PointD: {fileID: 114689770284702812}
+  - PointA: {fileID: 114689770284702812}
+    PointB: {fileID: 114186316140663724}
+    PointC: {fileID: 114580127466902024}
+    PointD: {fileID: 114146752944617558}
+  - PointA: {fileID: 114146752944617558}
+    PointB: {fileID: 114580127466902024}
+    PointC: {fileID: 114331791277164226}
+    PointD: {fileID: 114159860878184814}
+  - PointA: {fileID: 114159860878184814}
+    PointB: {fileID: 114331791277164226}
+    PointC: {fileID: 114520626428414470}
+    PointD: {fileID: 114771973082362634}
+  - PointA: {fileID: 114771973082362634}
+    PointB: {fileID: 114520626428414470}
+    PointC: {fileID: 114145000699141488}
+    PointD: {fileID: 114372673874225662}
+  - PointA: {fileID: 114149730132643542}
+    PointB: {fileID: 114687251291009736}
+    PointC: {fileID: 114716694142250124}
+    PointD: {fileID: 114186316140663724}
+  - PointA: {fileID: 114186316140663724}
+    PointB: {fileID: 114716694142250124}
+    PointC: {fileID: 114357916277480542}
+    PointD: {fileID: 114580127466902024}
+  - PointA: {fileID: 114580127466902024}
+    PointB: {fileID: 114357916277480542}
+    PointC: {fileID: 114467676964829180}
+    PointD: {fileID: 114331791277164226}
+  - PointA: {fileID: 114331791277164226}
+    PointB: {fileID: 114467676964829180}
+    PointC: {fileID: 114773611384029248}
+    PointD: {fileID: 114520626428414470}
+  - PointA: {fileID: 114520626428414470}
+    PointB: {fileID: 114773611384029248}
+    PointC: {fileID: 114305812170196904}
+    PointD: {fileID: 114145000699141488}
+  - PointA: {fileID: 114687251291009736}
+    PointB: {fileID: 114791030858528614}
+    PointC: {fileID: 114818259583863178}
+    PointD: {fileID: 114716694142250124}
+  - PointA: {fileID: 114716694142250124}
+    PointB: {fileID: 114818259583863178}
+    PointC: {fileID: 114584111800662724}
+    PointD: {fileID: 114357916277480542}
+  - PointA: {fileID: 114357916277480542}
+    PointB: {fileID: 114584111800662724}
+    PointC: {fileID: 114670340736751058}
+    PointD: {fileID: 114467676964829180}
+  - PointA: {fileID: 114467676964829180}
+    PointB: {fileID: 114670340736751058}
+    PointC: {fileID: 114497933673226702}
+    PointD: {fileID: 114773611384029248}
+  - PointA: {fileID: 114773611384029248}
+    PointB: {fileID: 114497933673226702}
+    PointC: {fileID: 114125444936628706}
+    PointD: {fileID: 114305812170196904}
   _IsLoopRootPoints: 1
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 1
@@ -9446,6 +9770,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 5
   _IsPaused: 0
@@ -9463,7 +9789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 
   Name: "\u9AEA\u306E\u6BDB"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -9488,6 +9813,8 @@ MonoBehaviour:
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -9513,6 +9840,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -9950,37 +10301,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: -1
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114709563767558228}
   - {fileID: 114649034701611030}
@@ -10699,6 +11075,79 @@ MonoBehaviour:
     _PointC: {fileID: 114119177922763810}
     _Length: 0.12811689
     _LengthACB: 0.14895973
+  _surfaceFacePoints:
+  - PointA: {fileID: 114709563767558228}
+    PointB: {fileID: 114985651457896456}
+    PointC: {fileID: 114229516038695542}
+    PointD: {fileID: 114649034701611030}
+  - PointA: {fileID: 114649034701611030}
+    PointB: {fileID: 114229516038695542}
+    PointC: {fileID: 114502055045634166}
+    PointD: {fileID: 114382539745649476}
+  - PointA: {fileID: 114382539745649476}
+    PointB: {fileID: 114502055045634166}
+    PointC: {fileID: 114874849672115178}
+    PointD: {fileID: 114586075733127032}
+  - PointA: {fileID: 114586075733127032}
+    PointB: {fileID: 114874849672115178}
+    PointC: {fileID: 114800931725344808}
+    PointD: {fileID: 114179808875994426}
+  - PointA: {fileID: 114985651457896456}
+    PointB: {fileID: 114696034111314014}
+    PointC: {fileID: 114396172759986072}
+    PointD: {fileID: 114229516038695542}
+  - PointA: {fileID: 114229516038695542}
+    PointB: {fileID: 114396172759986072}
+    PointC: {fileID: 114071454651942580}
+    PointD: {fileID: 114502055045634166}
+  - PointA: {fileID: 114502055045634166}
+    PointB: {fileID: 114071454651942580}
+    PointC: {fileID: 114344784837340956}
+    PointD: {fileID: 114874849672115178}
+  - PointA: {fileID: 114874849672115178}
+    PointB: {fileID: 114344784837340956}
+    PointC: {fileID: 114316880292280922}
+    PointD: {fileID: 114800931725344808}
+  - PointA: {fileID: 114800931725344808}
+    PointB: {fileID: 114316880292280922}
+    PointC: {fileID: 114669150948256920}
+    PointD: {fileID: 114433312475773320}
+  - PointA: {fileID: 114696034111314014}
+    PointB: {fileID: 114055810151218578}
+    PointC: {fileID: 114829786309334472}
+    PointD: {fileID: 114396172759986072}
+  - PointA: {fileID: 114396172759986072}
+    PointB: {fileID: 114829786309334472}
+    PointC: {fileID: 114443153646643266}
+    PointD: {fileID: 114071454651942580}
+  - PointA: {fileID: 114071454651942580}
+    PointB: {fileID: 114443153646643266}
+    PointC: {fileID: 114535301765036158}
+    PointD: {fileID: 114344784837340956}
+  - PointA: {fileID: 114344784837340956}
+    PointB: {fileID: 114535301765036158}
+    PointC: {fileID: 114326877275098024}
+    PointD: {fileID: 114316880292280922}
+  - PointA: {fileID: 114316880292280922}
+    PointB: {fileID: 114326877275098024}
+    PointC: {fileID: 114119177922763810}
+    PointD: {fileID: 114669150948256920}
+  - PointA: {fileID: 114055810151218578}
+    PointB: {fileID: 114037912383156542}
+    PointC: {fileID: 114314334746709172}
+    PointD: {fileID: 114829786309334472}
+  - PointA: {fileID: 114829786309334472}
+    PointB: {fileID: 114314334746709172}
+    PointC: {fileID: 114374960378202586}
+    PointD: {fileID: 114443153646643266}
+  - PointA: {fileID: 114443153646643266}
+    PointB: {fileID: 114374960378202586}
+    PointC: {fileID: 114006367974849758}
+    PointD: {fileID: 114535301765036158}
+  - PointA: {fileID: 114535301765036158}
+    PointB: {fileID: 114006367974849758}
+    PointC: {fileID: 114489414159250110}
+    PointD: {fileID: 114326877275098024}
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 1
@@ -10710,6 +11159,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 5
   _IsPaused: 0
@@ -10727,7 +11178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 
   Name: "\u9AEA\u306E\u6BDB\uFF1A\u5185\u5074\u5F8C"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -10749,6 +11199,8 @@ MonoBehaviour:
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -10774,6 +11226,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -11211,37 +11687,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: -1
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114700514368092546}
   - {fileID: 114866584082114080}
@@ -11843,6 +12344,71 @@ MonoBehaviour:
     _PointC: {fileID: 114372302474070130}
     _Length: 0.056927055
     _LengthACB: 0.057564437
+  _surfaceFacePoints:
+  - PointA: {fileID: 114700514368092546}
+    PointB: {fileID: 114007537925915288}
+    PointC: {fileID: 114026848634030122}
+    PointD: {fileID: 114866584082114080}
+  - PointA: {fileID: 114866584082114080}
+    PointB: {fileID: 114026848634030122}
+    PointC: {fileID: 114802030645116350}
+    PointD: {fileID: 114695115160601260}
+  - PointA: {fileID: 114695115160601260}
+    PointB: {fileID: 114802030645116350}
+    PointC: {fileID: 114339600298751410}
+    PointD: {fileID: 114359156170426870}
+  - PointA: {fileID: 114359156170426870}
+    PointB: {fileID: 114339600298751410}
+    PointC: {fileID: 114322489312768664}
+    PointD: {fileID: 114826968788940288}
+  - PointA: {fileID: 114007537925915288}
+    PointB: {fileID: 114375779289972558}
+    PointC: {fileID: 114809121567961954}
+    PointD: {fileID: 114026848634030122}
+  - PointA: {fileID: 114026848634030122}
+    PointB: {fileID: 114809121567961954}
+    PointC: {fileID: 114404809917104212}
+    PointD: {fileID: 114802030645116350}
+  - PointA: {fileID: 114802030645116350}
+    PointB: {fileID: 114404809917104212}
+    PointC: {fileID: 114458991588301484}
+    PointD: {fileID: 114339600298751410}
+  - PointA: {fileID: 114339600298751410}
+    PointB: {fileID: 114458991588301484}
+    PointC: {fileID: 114181129465900276}
+    PointD: {fileID: 114322489312768664}
+  - PointA: {fileID: 114375779289972558}
+    PointB: {fileID: 114077500839637894}
+    PointC: {fileID: 114374402595857258}
+    PointD: {fileID: 114809121567961954}
+  - PointA: {fileID: 114809121567961954}
+    PointB: {fileID: 114374402595857258}
+    PointC: {fileID: 114808018154720048}
+    PointD: {fileID: 114404809917104212}
+  - PointA: {fileID: 114404809917104212}
+    PointB: {fileID: 114808018154720048}
+    PointC: {fileID: 114242539401266924}
+    PointD: {fileID: 114458991588301484}
+  - PointA: {fileID: 114458991588301484}
+    PointB: {fileID: 114242539401266924}
+    PointC: {fileID: 114372302474070130}
+    PointD: {fileID: 114181129465900276}
+  - PointA: {fileID: 114077500839637894}
+    PointB: {fileID: 114551230046487614}
+    PointC: {fileID: 114144763107738944}
+    PointD: {fileID: 114374402595857258}
+  - PointA: {fileID: 114374402595857258}
+    PointB: {fileID: 114144763107738944}
+    PointC: {fileID: 114246146973266006}
+    PointD: {fileID: 114808018154720048}
+  - PointA: {fileID: 114808018154720048}
+    PointB: {fileID: 114246146973266006}
+    PointC: {fileID: 114289982073613998}
+    PointD: {fileID: 114242539401266924}
+  - PointA: {fileID: 114242539401266924}
+    PointB: {fileID: 114289982073613998}
+    PointC: {fileID: 114897195613391756}
+    PointD: {fileID: 114372302474070130}
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 1
@@ -11854,6 +12420,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 4
   _IsPaused: 0
@@ -11871,7 +12439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 
   Name: "\u9AEA\u306E\u6BDB\uFF1A\u6A2A"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -11892,6 +12459,8 @@ MonoBehaviour:
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -11917,6 +12486,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -12354,37 +12947,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 0
   _IsCollideShear: 0
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: -1
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114491280639140564}
   - {fileID: 114488442926231340}
@@ -12557,6 +13175,23 @@ MonoBehaviour:
     _Length: 0.07999997
     _LengthACB: 0.07999997
   _ConstraintsBendingHorizontal: []
+  _surfaceFacePoints:
+  - PointA: {fileID: 114491280639140564}
+    PointB: {fileID: 114578937158985574}
+    PointC: {fileID: 114270834968022634}
+    PointD: {fileID: 114488442926231340}
+  - PointA: {fileID: 114488442926231340}
+    PointB: {fileID: 114270834968022634}
+    PointC: {fileID: 114389183113015986}
+    PointD: {fileID: 114773096906780104}
+  - PointA: {fileID: 114773096906780104}
+    PointB: {fileID: 114389183113015986}
+    PointC: {fileID: 114381148325032484}
+    PointD: {fileID: 114670628794067194}
+  - PointA: {fileID: 114670628794067194}
+    PointB: {fileID: 114381148325032484}
+    PointC: {fileID: 114109787744178760}
+    PointD: {fileID: 114925828929829628}
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 0
@@ -12568,6 +13203,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 4
   _IsPaused: 0
@@ -12585,7 +13222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 
   Name: "\u9AEA\u306E\u6BDB\u524D"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -12606,6 +13242,8 @@ MonoBehaviour:
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -12631,6 +13269,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -13068,37 +13730,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 0
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: -1
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114841922343152656}
   - {fileID: 114207385132218904}
@@ -13643,6 +14330,55 @@ MonoBehaviour:
     _PointC: {fileID: 114062067801990282}
     _Length: 0.17117995
     _LengthACB: 0.19199243
+  _surfaceFacePoints:
+  - PointA: {fileID: 114841922343152656}
+    PointB: {fileID: 114986084021575982}
+    PointC: {fileID: 114719237497158632}
+    PointD: {fileID: 114207385132218904}
+  - PointA: {fileID: 114207385132218904}
+    PointB: {fileID: 114719237497158632}
+    PointC: {fileID: 114908875384794430}
+    PointD: {fileID: 114062067801990282}
+  - PointA: {fileID: 114986084021575982}
+    PointB: {fileID: 114744004950090738}
+    PointC: {fileID: 114406814833509404}
+    PointD: {fileID: 114719237497158632}
+  - PointA: {fileID: 114719237497158632}
+    PointB: {fileID: 114406814833509404}
+    PointC: {fileID: 114729693616049750}
+    PointD: {fileID: 114908875384794430}
+  - PointA: {fileID: 114744004950090738}
+    PointB: {fileID: 114409091171990118}
+    PointC: {fileID: 114897157839680106}
+    PointD: {fileID: 114406814833509404}
+  - PointA: {fileID: 114406814833509404}
+    PointB: {fileID: 114897157839680106}
+    PointC: {fileID: 114936795793964400}
+    PointD: {fileID: 114729693616049750}
+  - PointA: {fileID: 114409091171990118}
+    PointB: {fileID: 114548680649591554}
+    PointC: {fileID: 114886164238718912}
+    PointD: {fileID: 114897157839680106}
+  - PointA: {fileID: 114897157839680106}
+    PointB: {fileID: 114886164238718912}
+    PointC: {fileID: 114213489561347572}
+    PointD: {fileID: 114936795793964400}
+  - PointA: {fileID: 114548680649591554}
+    PointB: {fileID: 114288983282341752}
+    PointC: {fileID: 114823435713224790}
+    PointD: {fileID: 114886164238718912}
+  - PointA: {fileID: 114886164238718912}
+    PointB: {fileID: 114823435713224790}
+    PointC: {fileID: 114041157194279602}
+    PointD: {fileID: 114213489561347572}
+  - PointA: {fileID: 114288983282341752}
+    PointB: {fileID: 114160846473671144}
+    PointC: {fileID: 114269875601458408}
+    PointD: {fileID: 114823435713224790}
+  - PointA: {fileID: 114160846473671144}
+    PointB: {fileID: 114841922343152656}
+    PointC: {fileID: 114207385132218904}
+    PointD: {fileID: 114269875601458408}
   _IsLoopRootPoints: 1
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 1
@@ -13654,6 +14390,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 3
   _IsPaused: 0
@@ -13671,7 +14409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: d3244580-b048-456b-b148-4fc1969001d4
   Name: "\u30EA\u30DC\u30F3"
   _RootTransform: {fileID: 4840837466078988}
   _RootPointTbl:
@@ -13680,12 +14417,14 @@ MonoBehaviour:
   _ColliderTbl: []
   _PointGrabberTbl: []
   _UpdateTiming: 0
-  _Relaxation: 3
+  _Relaxation: 1
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -13711,6 +14450,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -14148,37 +14911,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 0
   _IsCollideShear: 0
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: 10
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 114172629759796326}
   - {fileID: 114036122444029814}
@@ -14351,6 +15139,23 @@ MonoBehaviour:
     _Length: 0.060795408
     _LengthACB: 0.06699996
   _ConstraintsBendingHorizontal: []
+  _surfaceFacePoints:
+  - PointA: {fileID: 114172629759796326}
+    PointB: {fileID: 114322537385054682}
+    PointC: {fileID: 114565133266402620}
+    PointD: {fileID: 114036122444029814}
+  - PointA: {fileID: 114036122444029814}
+    PointB: {fileID: 114565133266402620}
+    PointC: {fileID: 114813499861231550}
+    PointD: {fileID: 114260964056193262}
+  - PointA: {fileID: 114260964056193262}
+    PointB: {fileID: 114813499861231550}
+    PointC: {fileID: 114349606536085624}
+    PointD: {fileID: 114247948041437388}
+  - PointA: {fileID: 114247948041437388}
+    PointB: {fileID: 114349606536085624}
+    PointC: {fileID: 114421419669476258}
+    PointD: {fileID: 114943330109304322}
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 0
@@ -14362,6 +15167,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 4
   _IsPaused: 0
@@ -14379,7 +15186,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueGUIID: 58128c9f-e342-4df6-8e31-2679f1490177
   Name: "\u80F8\u30EA\u30DC\u30F3"
   _RootTransform: {fileID: 4415447140615780}
   _RootPointTbl:
@@ -14390,12 +15196,14 @@ MonoBehaviour:
   - {fileID: 114370441630096742}
   _PointGrabberTbl: []
   _UpdateTiming: 0
-  _Relaxation: 3
+  _Relaxation: 1
   _SubSteps: 1
   _IsEnableFloorCollision: 1
   _FloorHeight: 0.02
   _IsEnableColliderCollision: 1
   _IsCancelResetPhysics: 0
+  _IsEnableSurfaceCollision: 0
+  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -14421,6 +15229,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _GravityScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _WindForceScaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -14858,37 +15690,62 @@ MonoBehaviour:
   _RootSlideLimit: -1
   _RootRotateLimit: -1
   _DetailHitDivideMax: 0
+  _AllShrink: 1
+  _AllStretch: 1
   _StructuralShrinkVertical: 1
   _StructuralStretchVertical: 1
   _StructuralShrinkHorizontal: 1
   _StructuralStretchHorizontal: 1
   _ShearShrink: 1
   _ShearStretch: 1
-  _BendingingShrinkVertical: 1
-  _BendingingStretchVertical: 1
-  _BendingingShrinkHorizontal: 1
-  _BendingingStretchHorizontal: 1
+  _BendingShrinkVertical: 1
+  _BendingStretchVertical: 1
+  _BendingShrinkHorizontal: 1
+  _BendingStretchHorizontal: 1
   _IsAllStructuralShrinkVertical: 0
   _IsAllStructuralStretchVertical: 1
   _IsAllStructuralShrinkHorizontal: 1
   _IsAllStructuralStretchHorizontal: 1
   _IsAllShearShrink: 1
   _IsAllShearStretch: 1
-  _IsAllBendingingShrinkVertical: 1
-  _IsAllBendingingStretchVertical: 1
-  _IsAllBendingingShrinkHorizontal: 1
-  _IsAllBendingingStretchHorizontal: 1
+  _IsAllBendingShrinkVertical: 1
+  _IsAllBendingStretchVertical: 1
+  _IsAllBendingShrinkHorizontal: 1
+  _IsAllBendingStretchHorizontal: 1
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 0
   _IsCollideShear: 0
   _IsCollideBendingVertical: 0
   _IsCollideBendingHorizontal: 0
-  _UseLockAngles: 0
-  _LockAngle: -1
-  _UseSeperateLockAxis: 0
-  _LockAngleX: -1
-  _LockAngleY: -1
-  _LockAngleZ: -1
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsAnimated: 0
+  _IsFixedUpdateSimulation: 1
   _PointTbl:
   - {fileID: 534202194}
   - {fileID: 1647070468}
@@ -14942,6 +15799,7 @@ MonoBehaviour:
     _Length: 0.08500001
     _LengthACB: 0.08500001
   _ConstraintsBendingHorizontal: []
+  _surfaceFacePoints: []
   _IsLoopRootPoints: 0
   _IsComputeStructuralVertical: 1
   _IsComputeStructuralHorizontal: 0
@@ -14953,6 +15811,8 @@ MonoBehaviour:
   _IsDebugDraw_Shear: 0
   _IsDebugDraw_BendingVertical: 0
   _IsDebugDraw_BendingHorizontal: 0
+  _IsDebugDraw_SurfaceFace: 0
+  _Debug_SurfaceNormalLength: 0.5
   _IsDebugDraw_RuntimeColliderBounds: 0
   _MaxPointDepth: 4
   _IsPaused: 0
@@ -15008,6 +15868,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 5
   _Index: 10
+  _UseForSurfaceCollision: 1
 --- !u!1 &1432444015982904
 GameObject:
   m_ObjectHideFlags: 0
@@ -15059,6 +15920,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000025399703, z: 0.00000012699851}
   _Depth: 1
   _Index: 55
+  _UseForSurfaceCollision: 1
 --- !u!1 &1434530527548718
 GameObject:
   m_ObjectHideFlags: 0
@@ -15085,7 +15947,7 @@ Transform:
   m_GameObject: {fileID: 1434530527548718}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.0466, y: -0.012, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4411859694833450}
   m_RootOrder: 1
@@ -15109,6 +15971,7 @@ MonoBehaviour:
   _Height: 0.15
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1435654512272692
 GameObject:
   m_ObjectHideFlags: 0
@@ -15221,6 +16084,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000016079869, z: 0.00000016807465}
   _Depth: 1
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1451301764042210
 GameObject:
   m_ObjectHideFlags: 0
@@ -15272,6 +16136,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000016366776, z: -0.00000029256418}
   _Depth: 4
   _Index: 16
+  _UseForSurfaceCollision: 1
 --- !u!1 &1454991505056526
 GameObject:
   m_ObjectHideFlags: 0
@@ -15323,6 +16188,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000039630768, z: 0.00000016347691}
   _Depth: 0
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1460150239215192
 GameObject:
   m_ObjectHideFlags: 0
@@ -15404,6 +16270,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.000000118892345}
   _Depth: 0
   _Index: 10
+  _UseForSurfaceCollision: 1
 --- !u!1 &1466043424462336
 GameObject:
   m_ObjectHideFlags: 0
@@ -15454,6 +16321,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 1
   _Index: 21
+  _UseForSurfaceCollision: 1
 --- !u!1 &1471645352456422
 GameObject:
   m_ObjectHideFlags: 0
@@ -15504,6 +16372,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 15
+  _UseForSurfaceCollision: 1
 --- !u!1 &1475749869994014
 GameObject:
   m_ObjectHideFlags: 0
@@ -15616,6 +16485,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1480254074162392
 GameObject:
   m_ObjectHideFlags: 0
@@ -15666,6 +16536,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1482250102482560
 GameObject:
   m_ObjectHideFlags: 0
@@ -15747,6 +16618,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.000000064975985}
   _Depth: 0
   _Index: 24
+  _UseForSurfaceCollision: 1
 --- !u!1 &1487854594950854
 GameObject:
   m_ObjectHideFlags: 0
@@ -15797,6 +16669,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000001169055, z: -0.00000031541117}
   _Depth: 5
   _Index: 17
+  _UseForSurfaceCollision: 1
 --- !u!1 &1489778416283942
 GameObject:
   m_ObjectHideFlags: 0
@@ -15847,6 +16720,7 @@ MonoBehaviour:
   _Height: 0.12
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1498586924093454
 GameObject:
   m_ObjectHideFlags: 0
@@ -15929,6 +16803,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000018874794, z: 0.0000071420764}
   _Depth: 2
   _Index: 5
+  _UseForSurfaceCollision: 1
 --- !u!1 &1500026365046352
 GameObject:
   m_ObjectHideFlags: 0
@@ -15979,6 +16854,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1500202224293464
 GameObject:
   m_ObjectHideFlags: 0
@@ -16029,6 +16905,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1508206545523662
 GameObject:
   m_ObjectHideFlags: 0
@@ -16080,6 +16957,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000040825063, z: 0.00000051031327}
   _Depth: 2
   _Index: 44
+  _UseForSurfaceCollision: 1
 --- !u!1 &1510001050384868
 GameObject:
   m_ObjectHideFlags: 0
@@ -16131,6 +17009,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000007450576, z: -0.00000020489085}
   _Depth: 0
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1512345988211196
 GameObject:
   m_ObjectHideFlags: 0
@@ -16181,6 +17060,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.720845e-15, z: -0.00000010643682}
   _Depth: 5
   _Index: 35
+  _UseForSurfaceCollision: 1
 --- !u!1 &1512414487546868
 GameObject:
   m_ObjectHideFlags: 0
@@ -16367,6 +17247,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000021287364, z: -0.00000005321841}
   _Depth: 2
   _Index: 50
+  _UseForSurfaceCollision: 1
 --- !u!1 &1539068795495838
 GameObject:
   m_ObjectHideFlags: 0
@@ -16417,6 +17298,7 @@ MonoBehaviour:
   _Height: 0.09
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1542617937886790
 GameObject:
   m_ObjectHideFlags: 0
@@ -16468,6 +17350,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000027815495, z: 0.0000030795725}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1543570387233734
 GameObject:
   m_ObjectHideFlags: 0
@@ -16519,6 +17402,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 9.714447e-17, z: -0.0000001749526}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1547980835047002
 GameObject:
   m_ObjectHideFlags: 0
@@ -16600,6 +17484,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1562400663897534
 GameObject:
   m_ObjectHideFlags: 0
@@ -16984,6 +17869,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000012191861, z: 0.00000033919196}
   _Depth: 1
   _Index: 17
+  _UseForSurfaceCollision: 1
 --- !u!1 &1572912127476774
 GameObject:
   m_ObjectHideFlags: 0
@@ -17066,6 +17952,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -1.7925455e-16, z: 0.000001241762}
   _Depth: 1
   _Index: 11
+  _UseForSurfaceCollision: 1
 --- !u!1 &1574157477780922
 GameObject:
   m_ObjectHideFlags: 0
@@ -17117,6 +18004,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -1.1483805e-15, z: 0.00000014777899}
   _Depth: 3
   _Index: 14
+  _UseForSurfaceCollision: 1
 --- !u!1 &1577136193524434
 GameObject:
   m_ObjectHideFlags: 0
@@ -17500,6 +18388,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1583548388331474
 GameObject:
   m_ObjectHideFlags: 0
@@ -17551,6 +18440,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.00000010346977}
   _Depth: 0
   _Index: 11
+  _UseForSurfaceCollision: 1
 --- !u!1 &1595044663808202
 GameObject:
   m_ObjectHideFlags: 0
@@ -17602,6 +18492,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000059604645, z: -0.00000020850469}
   _Depth: 2
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1602046068465104
 GameObject:
   m_ObjectHideFlags: 0
@@ -17653,6 +18544,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00013168901, z: 0.000013845662}
   _Depth: 1
   _Index: 14
+  _UseForSurfaceCollision: 1
 --- !u!1 &1612317602109438
 GameObject:
   m_ObjectHideFlags: 0
@@ -17734,6 +18626,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 10
+  _UseForSurfaceCollision: 1
 --- !u!1 &1614704896515686
 GameObject:
   m_ObjectHideFlags: 0
@@ -17815,6 +18708,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 3
   _Index: 19
+  _UseForSurfaceCollision: 1
 --- !u!1 &1621250762808928
 GameObject:
   m_ObjectHideFlags: 0
@@ -17897,6 +18791,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000093132215, z: -0.00000018940219}
   _Depth: 1
   _Index: 19
+  _UseForSurfaceCollision: 1
 --- !u!1 &1633181760797426
 GameObject:
   m_ObjectHideFlags: 0
@@ -17948,6 +18843,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000032945527, z: 0.000002761589}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1648761362659604
 GameObject:
   m_ObjectHideFlags: 0
@@ -18030,6 +18926,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000000068393994, z: -0.000000042467715}
   _Depth: 1
   _Index: 24
+  _UseForSurfaceCollision: 1
 --- !u!1 &1653157814165966
 GameObject:
   m_ObjectHideFlags: 0
@@ -18081,6 +18978,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.7746223e-14, z: -0.000007795717}
   _Depth: 4
   _Index: 15
+  _UseForSurfaceCollision: 1
 --- !u!1 &1653670638723026
 GameObject:
   m_ObjectHideFlags: 0
@@ -18131,6 +19029,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 5
   _Index: 22
+  _UseForSurfaceCollision: 1
 --- !u!1 &1654086828964206
 GameObject:
   m_ObjectHideFlags: 0
@@ -18244,6 +19143,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000044481024, z: 0.00000003109925}
   _Depth: 1
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1663769243404880
 GameObject:
   m_ObjectHideFlags: 0
@@ -18295,6 +19195,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000016556845, z: 0.00000010348028}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1665758641319840
 GameObject:
   m_ObjectHideFlags: 0
@@ -18345,6 +19246,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000073458773, z: 0.0000010682655}
   _Depth: 5
   _Index: 47
+  _UseForSurfaceCollision: 1
 --- !u!1 &1666346668752214
 GameObject:
   m_ObjectHideFlags: 0
@@ -18395,6 +19297,7 @@ MonoBehaviour:
   _Height: 0
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1667966597327194
 GameObject:
   m_ObjectHideFlags: 0
@@ -18446,6 +19349,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000042574737, z: -0.00000021287369}
   _Depth: 2
   _Index: 8
+  _UseForSurfaceCollision: 1
 --- !u!1 &1669572374490334
 GameObject:
   m_ObjectHideFlags: 0
@@ -18892,6 +19796,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -2.7007447e-16, z: -0.000000104409985}
   _Depth: 1
   _Index: 12
+  _UseForSurfaceCollision: 1
 --- !u!1 &1704818073046764
 GameObject:
   m_ObjectHideFlags: 0
@@ -19276,6 +20181,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000016556876, z: 0.00000010348048}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1708255909480864
 GameObject:
   m_ObjectHideFlags: 0
@@ -19326,6 +20232,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1712021741655042
 GameObject:
   m_ObjectHideFlags: 0
@@ -19377,6 +20284,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 2.7293002e-15, z: -0.000013784642}
   _Depth: 3
   _Index: 13
+  _UseForSurfaceCollision: 1
 --- !u!1 &1712110684644336
 GameObject:
   m_ObjectHideFlags: 0
@@ -19428,6 +20336,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000001732692, z: -0.0000000866346}
   _Depth: 0
   _Index: 18
+  _UseForSurfaceCollision: 1
 --- !u!1 &1722626344099482
 GameObject:
   m_ObjectHideFlags: 0
@@ -19478,6 +20387,7 @@ MonoBehaviour:
   _Height: 0
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1723423556639660
 GameObject:
   m_ObjectHideFlags: 0
@@ -19560,6 +20470,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00005730736, z: -0.000008218918}
   _Depth: 1
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1726692177619036
 GameObject:
   m_ObjectHideFlags: 0
@@ -20089,6 +21000,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000010679201, z: -0.0000056810863}
   _Depth: 1
   _Index: 1
+  _UseForSurfaceCollision: 1
 --- !u!1 &1739834646790972
 GameObject:
   m_ObjectHideFlags: 0
@@ -20139,6 +21051,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 2
   _Index: 16
+  _UseForSurfaceCollision: 1
 --- !u!1 &1740571039293324
 GameObject:
   m_ObjectHideFlags: 0
@@ -20190,6 +21103,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000016556845, z: 0.00000010348028}
   _Depth: 0
   _Index: 54
+  _UseForSurfaceCollision: 1
 --- !u!1 &1744853176058626
 GameObject:
   m_ObjectHideFlags: 0
@@ -20604,6 +21518,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000004257473, z: 0.000000016734694}
   _Depth: 3
   _Index: 39
+  _UseForSurfaceCollision: 1
 --- !u!1 &1750013431432546
 GameObject:
   m_ObjectHideFlags: 0
@@ -20655,6 +21570,7 @@ MonoBehaviour:
   _BoneAxis: {x: -0.99989367, y: -0.011886416, z: -0.008445167}
   _Depth: 0
   _Index: 23
+  _UseForSurfaceCollision: 1
 --- !u!1 &1754726884347234
 GameObject:
   m_ObjectHideFlags: 0
@@ -20797,6 +21713,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 3.0924303e-15, z: 0.000014827416}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1765321373272804
 GameObject:
   m_ObjectHideFlags: 0
@@ -20847,6 +21764,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 7.930197e-18, z: 0.00000006943336}
   _Depth: 5
   _Index: 41
+  _UseForSurfaceCollision: 1
 --- !u!1 &1766359495059162
 GameObject:
   m_ObjectHideFlags: 0
@@ -20898,6 +21816,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000016556834, z: 0}
   _Depth: 0
   _Index: 42
+  _UseForSurfaceCollision: 1
 --- !u!1 &1769795531136366
 GameObject:
   m_ObjectHideFlags: 0
@@ -21011,6 +21930,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 9.134102e-16, z: -0.000000009524884}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1772098335154724
 GameObject:
   m_ObjectHideFlags: 0
@@ -21062,6 +21982,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000007926143, z: -0.00000015356903}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1774024078600604
 GameObject:
   m_ObjectHideFlags: 0
@@ -21159,6 +22080,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.0000005321845}
   _Depth: 0
   _Index: 10
+  _UseForSurfaceCollision: 1
 --- !u!1 &1781372156547436
 GameObject:
   m_ObjectHideFlags: 0
@@ -21209,6 +22131,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1782880631541564
 GameObject:
   m_ObjectHideFlags: 0
@@ -21260,6 +22183,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.7606144e-17, z: 0.00000016279273}
   _Depth: 1
   _Index: 11
+  _UseForSurfaceCollision: 1
 --- !u!1 &1787119862832008
 GameObject:
   m_ObjectHideFlags: 0
@@ -21403,6 +22327,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000017151861, z: 0.00000003400298}
   _Depth: 2
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1801871252502994
 GameObject:
   m_ObjectHideFlags: 0
@@ -21454,6 +22379,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.1916395e-15, z: -0.00000007450581}
   _Depth: 2
   _Index: 26
+  _UseForSurfaceCollision: 1
 --- !u!1 &1803129761946724
 GameObject:
   m_ObjectHideFlags: 0
@@ -21536,6 +22462,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000012191866, z: 0.00000005714937}
   _Depth: 1
   _Index: 4
+  _UseForSurfaceCollision: 1
 --- !u!1 &1811384702551816
 GameObject:
   m_ObjectHideFlags: 0
@@ -21587,6 +22514,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000007450576, z: -0.00000020489085}
   _Depth: 0
   _Index: 48
+  _UseForSurfaceCollision: 1
 --- !u!1 &1813178097017168
 GameObject:
   m_ObjectHideFlags: 0
@@ -21638,6 +22566,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000011051712, z: 0.000014839096}
   _Depth: 0
   _Index: 20
+  _UseForSurfaceCollision: 1
 --- !u!1 &1816157500995396
 GameObject:
   m_ObjectHideFlags: 0
@@ -21843,6 +22772,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.0000006286408}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1824986780559702
 GameObject:
   m_ObjectHideFlags: 0
@@ -21894,6 +22824,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 2.4091843e-15, z: -0.00000007450581}
   _Depth: 4
   _Index: 34
+  _UseForSurfaceCollision: 1
 --- !u!1 &1826713522260922
 GameObject:
   m_ObjectHideFlags: 0
@@ -21945,6 +22876,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000029802317, z: -0.000000075960976}
   _Depth: 4
   _Index: 22
+  _UseForSurfaceCollision: 1
 --- !u!1 &1827781954855350
 GameObject:
   m_ObjectHideFlags: 0
@@ -21995,6 +22927,7 @@ MonoBehaviour:
   _Height: 0.07
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1829434786447892
 GameObject:
   m_ObjectHideFlags: 0
@@ -22712,6 +23645,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.1916395e-15, z: -0.00000007450581}
   _Depth: 2
   _Index: 32
+  _UseForSurfaceCollision: 1
 --- !u!1 &1835476835678742
 GameObject:
   m_ObjectHideFlags: 0
@@ -22763,6 +23697,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000021287362, z: -0.000000066626946}
   _Depth: 2
   _Index: 38
+  _UseForSurfaceCollision: 1
 --- !u!1 &1839696779535376
 GameObject:
   m_ObjectHideFlags: 0
@@ -22814,6 +23749,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000004899163, z: 0.0000012034441}
   _Depth: 4
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1847916688805844
 GameObject:
   m_ObjectHideFlags: 0
@@ -22896,6 +23832,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000017530779, z: -0.00000006574042}
   _Depth: 1
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1848248072556048
 GameObject:
   m_ObjectHideFlags: 0
@@ -22977,6 +23914,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.7842868e-15, z: 0.0000009579317}
   _Depth: 3
   _Index: 15
+  _UseForSurfaceCollision: 1
 --- !u!1 &1852985579237508
 GameObject:
   m_ObjectHideFlags: 0
@@ -23028,6 +23966,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 1.5728171e-17, z: -0.00000020861398}
   _Depth: 2
   _Index: 2
+  _UseForSurfaceCollision: 1
 --- !u!1 &1853244924144936
 GameObject:
   m_ObjectHideFlags: 0
@@ -23110,6 +24049,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000020500308, z: -0.000000054651004}
   _Depth: 4
   _Index: 10
+  _UseForSurfaceCollision: 1
 --- !u!1 &1854660669318704
 GameObject:
   m_ObjectHideFlags: 0
@@ -23192,6 +24132,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000018626444, z: -0.00000005038599}
   _Depth: 1
   _Index: 37
+  _UseForSurfaceCollision: 1
 --- !u!1 &1857468684955894
 GameObject:
   m_ObjectHideFlags: 0
@@ -23243,6 +24184,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000019868205, z: -0.0000054664847}
   _Depth: 3
   _Index: 18
+  _UseForSurfaceCollision: 1
 --- !u!1 &1859471828334210
 GameObject:
   m_ObjectHideFlags: 0
@@ -23294,6 +24236,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000022240512, z: 0.00000014209819}
   _Depth: 1
   _Index: 16
+  _UseForSurfaceCollision: 1
 --- !u!1 &1867059631703766
 GameObject:
   m_ObjectHideFlags: 0
@@ -23345,6 +24288,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00007177389, z: -0.000054979046}
   _Depth: 3
   _Index: 3
+  _UseForSurfaceCollision: 1
 --- !u!1 &1867246755346108
 GameObject:
   m_ObjectHideFlags: 0
@@ -23426,6 +24370,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000059604633, z: -0.000000075960976}
   _Depth: 4
   _Index: 40
+  _UseForSurfaceCollision: 1
 --- !u!1 &1885669773998436
 GameObject:
   m_ObjectHideFlags: 0
@@ -23476,6 +24421,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000001571862, z: -0.00000009463938}
   _Depth: 5
   _Index: 29
+  _UseForSurfaceCollision: 1
 --- !u!1 &1887220866994350
 GameObject:
   m_ObjectHideFlags: 0
@@ -23557,6 +24503,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000057217727, z: 0.00000006740036}
   _Depth: 5
   _Index: 59
+  _UseForSurfaceCollision: 1
 --- !u!1 &1904033983848356
 GameObject:
   m_ObjectHideFlags: 0
@@ -23608,6 +24555,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: -0.00000015239814}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1904551628931426
 GameObject:
   m_ObjectHideFlags: 0
@@ -23659,6 +24607,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000021855024, z: 0.0000032782534}
   _Depth: 3
   _Index: 57
+  _UseForSurfaceCollision: 1
 --- !u!1 &1906767902457978
 GameObject:
   m_ObjectHideFlags: 0
@@ -23710,6 +24659,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -2.0865672e-15, z: -0.00000014656204}
   _Depth: 2
   _Index: 13
+  _UseForSurfaceCollision: 1
 --- !u!1 &1906983727128712
 GameObject:
   m_ObjectHideFlags: 0
@@ -23760,6 +24710,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 14
+  _UseForSurfaceCollision: 1
 --- !u!1 &1907371472858272
 GameObject:
   m_ObjectHideFlags: 0
@@ -23811,6 +24762,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000024090168, z: -0.0000045557117}
   _Depth: 2
   _Index: 18
+  _UseForSurfaceCollision: 1
 --- !u!1 &1909291261989062
 GameObject:
   m_ObjectHideFlags: 0
@@ -23862,6 +24814,7 @@ MonoBehaviour:
   _BoneAxis: {x: -0.99989367, y: -0.01457686, z: -0.0003546962}
   _Depth: 0
   _Index: 17
+  _UseForSurfaceCollision: 1
 --- !u!1 &1910333141924286
 GameObject:
   m_ObjectHideFlags: 0
@@ -23943,6 +24896,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000025544841, z: 0.0000029802316}
   _Depth: 3
   _Index: 9
+  _UseForSurfaceCollision: 1
 --- !u!1 &1914711214219842
 GameObject:
   m_ObjectHideFlags: 0
@@ -24029,6 +24983,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000013038521, z: -0.0000008514952}
   _Depth: 0
   _Index: 14
+  _UseForSurfaceCollision: 1
 --- !u!1 &1930933765460096
 GameObject:
   m_ObjectHideFlags: 0
@@ -24080,6 +25035,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000003725289, z: 0.00000013969834}
   _Depth: 0
   _Index: 13
+  _UseForSurfaceCollision: 1
 --- !u!1 &1932660779837640
 GameObject:
   m_ObjectHideFlags: 0
@@ -24131,6 +25087,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 2.3592255e-17, z: -0.00000019099402}
   _Depth: 1
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1942530603288816
 GameObject:
   m_ObjectHideFlags: 0
@@ -24188,7 +25145,7 @@ Transform:
   m_GameObject: {fileID: 1943185768993734}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.0467, y: -0.012000084, z: -0.0000000081490725}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4562305988267556}
   m_RootOrder: 1
@@ -24212,6 +25169,7 @@ MonoBehaviour:
   _Height: 0.15
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &1944509681708552
 GameObject:
   m_ObjectHideFlags: 0
@@ -24298,6 +25256,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.000000025465857, z: 0.00000016807465}
   _Depth: 1
   _Index: 18
+  _UseForSurfaceCollision: 1
 --- !u!1 &1949878487794532
 GameObject:
   m_ObjectHideFlags: 0
@@ -24349,6 +25308,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000029802325, z: -0.000000043055483}
   _Depth: 2
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1949956968131768
 GameObject:
   m_ObjectHideFlags: 0
@@ -24399,6 +25359,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000005721784, z: 0.0000003867112}
   _Depth: 5
   _Index: 53
+  _UseForSurfaceCollision: 1
 --- !u!1 &1952718611064878
 GameObject:
   m_ObjectHideFlags: 0
@@ -24450,6 +25411,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.0000003492459, z: -0.00000006984918}
   _Depth: 0
   _Index: 7
+  _UseForSurfaceCollision: 1
 --- !u!1 &1952813690579432
 GameObject:
   m_ObjectHideFlags: 0
@@ -24501,6 +25463,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000017953202, z: 0.00000040394704}
   _Depth: 1
   _Index: 43
+  _UseForSurfaceCollision: 1
 --- !u!1 &1957840077743820
 GameObject:
   m_ObjectHideFlags: 0
@@ -24552,6 +25515,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: -0.00000023778449, z: -0.00000023778449}
   _Depth: 1
   _Index: 6
+  _UseForSurfaceCollision: 1
 --- !u!1 &1959625319105806
 GameObject:
   m_ObjectHideFlags: 0
@@ -24603,6 +25567,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.000003905737, z: 0.0000006482845}
   _Depth: 4
   _Index: 21
+  _UseForSurfaceCollision: 1
 --- !u!1 &1960197636469452
 GameObject:
   m_ObjectHideFlags: 0
@@ -24685,6 +25650,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.0000044703415, z: 0.000009992482}
   _Depth: 3
   _Index: 23
+  _UseForSurfaceCollision: 1
 --- !u!1 &1982590843377722
 GameObject:
   m_ObjectHideFlags: 0
@@ -25069,6 +26035,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0.00000020696062, z: -0.00000007761023}
   _Depth: 0
   _Index: 0
+  _UseForSurfaceCollision: 1
 --- !u!1 &1984380338411458
 GameObject:
   m_ObjectHideFlags: 0
@@ -25211,6 +26178,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 5
   _Index: 16
+  _UseForSurfaceCollision: 1
 --- !u!1 &1990501935110006
 GameObject:
   m_ObjectHideFlags: 0
@@ -25294,6 +26262,7 @@ MonoBehaviour:
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 4
   _Index: 19
+  _UseForSurfaceCollision: 1
 --- !u!1 &4124497377385453135
 GameObject:
   m_ObjectHideFlags: 0
@@ -25344,6 +26313,7 @@ MonoBehaviour:
   _Height: 0.22
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &6211532809491905435
 GameObject:
   m_ObjectHideFlags: 0
@@ -25394,6 +26364,7 @@ MonoBehaviour:
   _Height: 0.22
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0
 --- !u!1 &7868215005010336209
 GameObject:
   m_ObjectHideFlags: 0
@@ -25444,3 +26415,4 @@ MonoBehaviour:
   _Height: 0.15
   _Friction: 0.5
   _PushOutRate: 1
+  _SurfaceColliderForce: 0

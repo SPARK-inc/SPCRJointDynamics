@@ -11,18 +11,22 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SPCRJointDynamicsPointGrabber))]
-public class SPCRJointDynamicsGrabberEditor : Editor
+namespace SPCR
 {
-    public bool HasFrameBounds()
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(SPCRJointDynamicsPointGrabber))]
+    public class SPCRJointDynamicsGrabberEditor : Editor
     {
-        return true;
-    }
+        public bool HasFrameBounds()
+        {
+            return true;
+        }
 
-    public Bounds OnGetFrameBounds()
-    {
-        SPCRJointDynamicsPointGrabber jointGrabber = (SPCRJointDynamicsPointGrabber)target;
-        Bounds bounds = new Bounds(jointGrabber.transform.position, Vector3.one * jointGrabber.Radius);
-        return bounds;
+        public Bounds OnGetFrameBounds()
+        {
+            SPCRJointDynamicsPointGrabber jointGrabber = (SPCRJointDynamicsPointGrabber)target;
+            Bounds bounds = new Bounds(jointGrabber.transform.position, Vector3.one * jointGrabber.Radius);
+            return bounds;
+        }
     }
 }

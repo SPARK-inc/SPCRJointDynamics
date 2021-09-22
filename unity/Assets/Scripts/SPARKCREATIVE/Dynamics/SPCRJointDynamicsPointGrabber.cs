@@ -11,85 +11,90 @@
 
 using UnityEngine;
 
-public class SPCRJointDynamicsPointGrabber : MonoBehaviour
+namespace SPCR
 {
-    [SerializeField, HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID
+    public class SPCRJointDynamicsPointGrabber : MonoBehaviour
     {
-        get
+        [SerializeField, HideInInspector]
+        private string uniqueGUIID;
+        public string UniqueGUIID
         {
-            if (string.IsNullOrEmpty(uniqueGUIID))
-                GenerateNewID();
-            return uniqueGUIID;
+            get
+            {
+                if (string.IsNullOrEmpty(uniqueGUIID))
+                    GenerateNewID();
+                return uniqueGUIID;
+            }
         }
-    }
 
-    [SerializeField]
-    bool _IsEnabled = true;
-    [SerializeField, Range(0.0f, 5.0f)]
-    float _Radius = 0.05f;
-    [SerializeField, Range(0.0f, 1.0f)]
-    float _Force = 0.5f;
+        [SerializeField]
+        bool _IsEnabled = true;
+        [SerializeField, Range(0.0f, 5.0f)]
+        float _Radius = 0.05f;
+        [SerializeField, Range(0.0f, 1.0f)]
+        float _Force = 0.5f;
 
-    public Transform RefTransform { get; private set; }
-    public bool IsEnabled { get { return enabled && _IsEnabled; } set { _IsEnabled = value; } }
-    public float RadiusRaw { get => _Radius; set => _Radius = value; }
-    public float Radius {
-        get{
-            return _Radius *
-                Mathf.Max(
-                new float[] {
+        public Transform RefTransform { get; private set; }
+        public bool IsEnabled { get { return enabled && _IsEnabled; } set { _IsEnabled = value; } }
+        public float RadiusRaw { get => _Radius; set => _Radius = value; }
+        public float Radius
+        {
+            get
+            {
+                return _Radius *
+                    Mathf.Max(
+                    new float[] {
                     Mathf.Abs(transform.localScale.x),
                     Mathf.Abs(transform.localScale.y),
                     Mathf.Abs(transform.localScale.z)});
+            }
+            set { _Radius = value; }
         }
-        set { _Radius = value; }
-    }
-    public float Force { get { return _Force; } set { _Force = value; } }
+        public float Force { get { return _Force; } set { _Force = value; } }
 
-    void Awake()
-    {
-        RefTransform = transform;
-    }
+        void Awake()
+        {
+            RefTransform = transform;
+        }
 
-    void OnDrawGizmos()
-    {
+        void OnDrawGizmos()
+        {
 #if UNITY_EDITOR
-        if (UnityEditor.Selection.Contains(gameObject))
-            Gizmos.color = Color.green;
-        else
-            Gizmos.color = new Color(0.8f, 1, 0.8f);
+            if (UnityEditor.Selection.Contains(gameObject))
+                Gizmos.color = Color.green;
+            else
+                Gizmos.color = new Color(0.8f, 1, 0.8f);
 #else
         Gizmos.color = Color.black;
 #endif
-        ResetTransform();
-        Gizmos.DrawWireSphere(transform.position, Radius);
-    }
+            ResetTransform();
+            Gizmos.DrawWireSphere(transform.position, Radius);
+        }
 
-    void ResetTransform()
-    {
-        if (transform.localScale.x == 0)
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-        if (transform.localScale.y == 0)
-            transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
-        if (transform.localScale.z == 0)
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, 1);
-    }
+        void ResetTransform()
+        {
+            if (transform.localScale.x == 0)
+                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+            if (transform.localScale.y == 0)
+                transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
+            if (transform.localScale.z == 0)
+                transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, 1);
+        }
 
-    public void Reset()
-    {
-        if (string.IsNullOrEmpty(uniqueGUIID))
-            GenerateNewID();
-    }
+        public void Reset()
+        {
+            if (string.IsNullOrEmpty(uniqueGUIID))
+                GenerateNewID();
+        }
 
-    void GenerateNewID()
-    {
-        uniqueGUIID = System.Guid.NewGuid().ToString();
-    }
+        void GenerateNewID()
+        {
+            uniqueGUIID = System.Guid.NewGuid().ToString();
+        }
 
-    public void SetGUIIIde(string guiiid)
-    {
-        uniqueGUIID = guiiid;
+        public void SetGUIIIde(string guiiid)
+        {
+            uniqueGUIID = guiiid;
+        }
     }
 }

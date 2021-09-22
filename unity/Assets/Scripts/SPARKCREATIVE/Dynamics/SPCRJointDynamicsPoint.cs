@@ -11,42 +11,47 @@
 
 using UnityEngine;
 
-[DisallowMultipleComponent]
-public class SPCRJointDynamicsPoint : MonoBehaviour
+namespace SPCR
 {
-    [SerializeField, HideInInspector]
-    private string uniqueGUIID;
-    public string UniqueGUIID { get
+    [DisallowMultipleComponent]
+    public class SPCRJointDynamicsPoint : MonoBehaviour
+    {
+        [SerializeField, HideInInspector]
+        private string uniqueGUIID;
+        public string UniqueGUIID
         {
-            if (string.IsNullOrEmpty(uniqueGUIID))
-                GenerateNewID();
-            return uniqueGUIID;
+            get
+            {
+                if (string.IsNullOrEmpty(uniqueGUIID))
+                    GenerateNewID();
+                return uniqueGUIID;
+            }
         }
-    }
 
-    [Header("=== 物理設定項目 ===")]
-    public float _Mass = 1.0f;
+        [Header("=== 物理設定項目 ===")]
+        public float _Mass = 1.0f;
 
-    [Header("=== 物理自動設定項目 ===")]
-    public SPCRJointDynamicsPoint _RefChildPoint;
-    public bool _IsFixed;
-    [HideInInspector]
-    public Vector3 _BoneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
-    [HideInInspector]
-    public float _Depth;
-    [HideInInspector]
-    public int _Index;
+        [Header("=== 物理自動設定項目 ===")]
+        public SPCRJointDynamicsPoint _RefChildPoint;
+        public bool _IsFixed;
+        [HideInInspector]
+        public Vector3 _BoneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
+        [HideInInspector]
+        public float _Depth;
+        [HideInInspector]
+        public int _Index;
 
-    public bool _UseForSurfaceCollision = true;
+        public bool _UseForSurfaceCollision = true;
 
-    public void Reset()
-    {
-        if (string.IsNullOrEmpty(UniqueGUIID))
-            GenerateNewID();
-    }
+        public void Reset()
+        {
+            if (string.IsNullOrEmpty(UniqueGUIID))
+                GenerateNewID();
+        }
 
-    void GenerateNewID()
-    {
-        uniqueGUIID = System.Guid.NewGuid().ToString();
+        void GenerateNewID()
+        {
+            uniqueGUIID = System.Guid.NewGuid().ToString();
+        }
     }
 }
