@@ -160,7 +160,7 @@ namespace SPCR
             public int IndexD;
         }
 
-        bool _IsAnimated;
+        bool _IsReferToAnimation;
         Transform _RootBone;
         Vector3 _OldRootPosition;
         Vector3 _OldRootScale;
@@ -180,9 +180,9 @@ namespace SPCR
         NativeArray<GrabberEx> _GrabberExs;
         JobHandle _hJob = default(JobHandle);
 
-        public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers, SurfaceFaceConstraints[] SurfaceConstraints, bool IsAnimated)
+        public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers, SurfaceFaceConstraints[] SurfaceConstraints, bool IsReferToAnimation)
         {
-            _IsAnimated = IsAnimated;
+            _IsReferToAnimation = IsReferToAnimation;
             _RootBone = RootBone;
             _PointCount = Points.Length;
             _OldRootPosition = _RootBone.position;
@@ -367,7 +367,7 @@ namespace SPCR
 
         public void RestoreTransform()
         {
-            if (_IsAnimated)
+            if (_IsReferToAnimation)
             {
                 var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
 
@@ -436,7 +436,7 @@ namespace SPCR
             var pGrabberExs = (GrabberEx*)_GrabberExs.GetUnsafePtr();
             var pSurfaceFaces = (SurfaceFaceConstraints*)_SurfaceConstraints.GetUnsafePtr();
 
-            if (_IsAnimated)
+            if (_IsReferToAnimation)
             {
                 var CopyAnimatedPoint = new JobCopyFromAnimatedPoint();
                 CopyAnimatedPoint.pRWPoints = pRWPoints;
@@ -541,7 +541,7 @@ namespace SPCR
                 PointUpdate.SystemOffset = SystemOffset;
                 PointUpdate.SystemRotation = SystemRotation;
                 PointUpdate.IsPaused = IsPaused;
-                PointUpdate.IsAnimated = _IsAnimated;
+                PointUpdate.IsReferToAnimation = _IsReferToAnimation;
                 _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
 
                 if (!IsPaused)
@@ -731,7 +731,7 @@ namespace SPCR
             [ReadOnly]
             public bool IsPaused;
             [ReadOnly]
-            public bool IsAnimated;
+            public bool IsReferToAnimation;
 
             private Vector3 ApplySystemTransform(Vector3 Point, Vector3 Pivot)
             {
@@ -777,7 +777,7 @@ namespace SPCR
 
                 if (pR->Hardness > 0.0f)
                 {
-                    if (IsAnimated)
+                    if (IsReferToAnimation)
                     {
                         var Target = pRW->InitialWorldPosition;
                         pRW->Position += (Target - pRW->Position) * pR->Hardness;

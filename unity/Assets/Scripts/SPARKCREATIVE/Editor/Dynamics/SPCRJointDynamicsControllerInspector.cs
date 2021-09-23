@@ -62,13 +62,6 @@ namespace SPCR
             return display;
         }
 
-        bool _Opened_BaseSettings = false;
-        bool _Opened_PhysicsSettings = false;
-        bool _Opened_ConstraintSettings = false;
-        bool _Opened_AngleLockSettings = false;
-        bool _Opened_OptionSettings = false;
-        bool _Opened_PreSettings = false;
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -76,306 +69,404 @@ namespace SPCR
             var controller = target as SPCRJointDynamicsController;
 
             GUILayout.Space(8);
-            controller.Name = EditorGUILayout.TextField("名称", controller.Name);
+            controller.InspectorLang = (SPCRJointDynamicsController.eInspectorLang)EditorGUILayout.EnumPopup("言語(Language)", controller.InspectorLang);
+            var Lang = (int)controller.InspectorLang;
+            var TextShrink = new string[] { "伸びた時縮む力", "Shrink when stretched" }[Lang];
+            var TextStretch = new string[] { "縮む時伸びる力", "Stretch when shrinking" }[Lang];
+            var TextIndividual = new string[] { "個別設定", "Individual setting" }[Lang];
+            var TextConstraintForce = new string[] { "拘束力", "Constraint Force" }[Lang];
+            var TextCurve = new string[] { "カーブ", "Curve" }[Lang];
 
-            _Opened_BaseSettings = Foldout(_Opened_BaseSettings, "基本設定", new Color(1.0f, 0.7f, 1.0f));
-            if (_Opened_BaseSettings)
+            controller.Name = EditorGUILayout.TextField(new string[] { "名称", "Name" }[Lang], controller.Name);
+
+            controller.Opened_BaseSettings = Foldout(controller.Opened_BaseSettings, new string[] { "基本設定", "Basic settings" }[Lang], new Color(1.0f, 0.7f, 1.0f));
+            if (controller.Opened_BaseSettings)
             {
-                var _RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent("親Transform"), controller._RootTransform, typeof(Transform), true);
+                var _RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent(new string[] { "親 Transform", "Parent Transform" }[Lang]), controller._RootTransform, typeof(Transform), true);
                 if (controller._RootTransform != _RootTransform)
                 {
                     controller._RootTransform = _RootTransform;
                     EditorUtility.SetDirty(controller);
                 }
 
-                if (GUILayout.Button("ルートの点群自動検出", GUILayout.Height(22.0f)))
+                if (GUILayout.Button(new GUIContent(new string[] { "ルートの点群自動検出", "Automatically detect the root points" }[Lang]), GUILayout.Height(22.0f)))
                 {
                     SearchRootPoints(controller);
                 }
 
-                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_RootPointTbl"), new GUIContent("ルートの点群"), true))
+                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_RootPointTbl"), new GUIContent(new string[] { "ルートの点群", "Root points" }[Lang]), true))
                 {
                     EditorUtility.SetDirty(controller);
                 }
                 GUILayout.Space(5);
 
-                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_ColliderTbl"), new GUIContent("コライダー"), true))
+                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_ColliderTbl"), new GUIContent(new string[] { "コライダー", "Colliders" }[Lang]), true))
                 {
                     EditorUtility.SetDirty(controller);
                 }
-                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_PointGrabberTbl"), new GUIContent("グラバー"), true))
+                if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_PointGrabberTbl"), new GUIContent(new string[] { "グラバー", "Grabbers" }[Lang]), true))
                 {
                     EditorUtility.SetDirty(controller);
                 }
             }
 
-            _Opened_PhysicsSettings = Foldout(_Opened_PhysicsSettings, "物理設定", new Color(1.0f, 1.0f, 0.7f));
-            if (_Opened_PhysicsSettings)
+            controller.Opened_PhysicsSettings = Foldout(controller.Opened_PhysicsSettings, new string[] { "物理設定", "Physics settings" }[Lang], new Color(1.0f, 1.0f, 0.7f));
+            if (controller.Opened_PhysicsSettings)
             {
-                var _UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup("更新タイミング", controller._UpdateTiming);
+                var _UpdateTiming = (SPCRJointDynamicsController.UpdateTiming)EditorGUILayout.EnumPopup(new string[] { "更新タイミング", "Update timing" }[Lang], controller._UpdateTiming);
                 if (controller._UpdateTiming != _UpdateTiming)
                 {
                     controller._UpdateTiming = _UpdateTiming;
                     EditorUtility.SetDirty(controller);
                 }
 
-                UpdateIntSlider("演算安定化回数", controller, ref controller._Relaxation, 1, 16);
-                UpdateIntSlider("演算分割数", controller, ref controller._SubSteps, 1, 16);
-
                 if (controller._UpdateTiming == SPCRJointDynamicsController.UpdateTiming.LateUpdate)
-                    UpdateToggle("FixedUpdateシミュレーション", controller, ref controller._IsFixedUpdateSimulation);
+                    UpdateToggle(new string[] { "LateUpdate安定化", "LateUpdate stabilization" }[Lang], controller, ref controller._IsLateUpdateStabilization);
+
+                UpdateIntSlider(new string[] { "演算安定化回数", "Number of Relaxation" }[Lang], controller, ref controller._Relaxation, 1, 16);
+                UpdateIntSlider(new string[] { "演算分割数", "Number of calculation steps" }[Lang], controller, ref controller._SubSteps, 1, 16);
 
                 GUILayout.Space(8);
-                UpdateToggle("物理リセットを拒否", controller, ref controller._IsCancelResetPhysics);
+                UpdateToggle(new string[] { "物理リセットを拒否", "Reject physics reset" }[Lang], controller, ref controller._IsCancelResetPhysics);
                 GUILayout.Space(8);
-                UpdateToggle("質点とコライダーの衝突判定をする", controller, ref controller._IsEnableColliderCollision);
+                UpdateToggle(new string[] { "質点とコライダーの衝突判定をする", "Point and collider collide" }[Lang], controller, ref controller._IsEnableColliderCollision);
                 GUILayout.Space(8);
-                UpdateToggle("質点と床の衝突判定をする", controller, ref controller._IsEnableFloorCollision);
+                UpdateToggle(new string[] { "質点と床の衝突判定をする", "Point and floor collide" }[Lang], controller, ref controller._IsEnableFloorCollision);
                 if (controller._IsEnableFloorCollision)
                 {
-                    UpdateFloat("床の高さ", controller, ref controller._FloorHeight);
+                    UpdateFloat(new string[] { "床の高さ", "Floor height" }[Lang], controller, ref controller._FloorHeight);
                 }
                 GUILayout.Space(8);
-                UpdateIntSlider("詳細な衝突判定の最大分割数", controller, ref controller._DetailHitDivideMax, 0, 16);
+                UpdateIntSlider(new string[] { "詳細な衝突判定の最大分割数", "Max divisions for collision detection" }[Lang], controller, ref controller._DetailHitDivideMax, 0, 16);
 
                 GUILayout.Space(8);
-                UpdateToggle("表面衝突", controller, ref controller._IsEnableSurfaceCollision);
+                UpdateToggle(new string[] { "表面衝突", "Surface collision" }[Lang], controller, ref controller._IsEnableSurfaceCollision);
                 if (controller._IsEnableSurfaceCollision)
                 {
-                    UpdateIntSlider("表面衝突分割数", controller, ref controller._SurfaceCollisionDivision, 1, 16);
+                    UpdateIntSlider(new string[] { "表面衝突分割数", "Surface collision division" }[Lang], controller, ref controller._SurfaceCollisionDivision, 1, 16);
                 }
 
                 GUILayout.Space(8);
-                UpdateFloat("ルートの最大移動距離", controller, ref controller._RootSlideLimit);
-                UpdateFloat("ルートの最大回転角", controller, ref controller._RootRotateLimit);
+                UpdateFloat(new string[] { "ルートの最大移動距離", "Maximum move distance of root" }[Lang], controller, ref controller._RootSlideLimit);
+                UpdateFloat(new string[] { "ルートの最大回転角", "Maximum rotate angle of root" }[Lang], controller, ref controller._RootRotateLimit);
 
                 GUILayout.Space(8);
-                UpdateSlider("バネ係数", controller, ref controller._SpringK, 0.0f, 1.0f);
+                UpdateVector3(new string[] { "重力", "" }[Lang], controller, ref controller._Gravity);
+                UpdateVector3(new string[] { "風力", "" }[Lang], controller, ref controller._WindForce);
 
                 GUILayout.Space(8);
-                UpdateVector3("重力", controller, ref controller._Gravity);
-                UpdateVector3("風力", controller, ref controller._WindForce);
+                UpdateCurve(new string[] { "質量", "Mass" }[Lang], controller, ref controller._MassScaleCurve);
+                UpdateCurve(new string[] { "重力", "Gravity scale" }[Lang], controller, ref controller._GravityScaleCurve);
+                UpdateCurve(new string[] { "風力", "Wind force scale" }[Lang], controller, ref controller._WindForceScaleCurve);
+                UpdateCurve(new string[] { "空気抵抗", "Resistance" }[Lang], controller, ref controller._ResistanceCurve);
+                UpdateCurve(new string[] { "硬さ", "Hardness" }[Lang], controller, ref controller._HardnessCurve);
+                UpdateCurve(new string[] { "摩擦", "Friction" }[Lang], controller, ref controller._FrictionCurve);
 
                 GUILayout.Space(8);
-                UpdateCurve("質量", controller, ref controller._MassScaleCurve);
-                UpdateCurve("重力", controller, ref controller._GravityScaleCurve);
-                UpdateCurve("風力", controller, ref controller._WindForceScaleCurve);
-                UpdateCurve("空気抵抗", controller, ref controller._ResistanceCurve);
-                UpdateCurve("硬さ", controller, ref controller._HardnessCurve);
-                UpdateCurve("摩擦", controller, ref controller._FrictionCurve);
-
-                GUILayout.Space(8);
-                UpdateToggle("アニメーション情報を参照する", controller, ref controller._IsAnimated);
+                UpdateToggle(new string[] { "アニメーションを参照する", "Refer to animation" }[Lang], controller, ref controller._IsReferToAnimation);
             }
 
-            _Opened_ConstraintSettings = Foldout(_Opened_ConstraintSettings, "拘束設定", new Color(0.7f, 1.0f, 1.0f));
-            if (_Opened_ConstraintSettings)
+            controller.Opened_ConstraintSettings = Foldout(controller.Opened_ConstraintSettings, new string[] { "拘束設定", "Constraint settings" }[Lang], new Color(0.7f, 1.0f, 1.0f));
+            if (controller.Opened_ConstraintSettings)
             {
-                EditorGUILayout.LabelField("=============== スライダージョイント長さ（一括）");
-                UpdateCurve("水平方向への伸び", controller, ref controller._SliderJointLengthCurve);
-                UpdateCurve("ジョイント内バネ", controller, ref controller._SliderJointSpringCurve);
-
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                UpdateToggle(new string[] { "水平拘束のループ", "Horizontal Point Loop" }[Lang], controller, ref controller._IsLoopRootPoints);
+                EditorGUILayout.EndVertical();
                 GUILayout.Space(5);
-                EditorGUILayout.LabelField("=============== 拘束（一括）");
-                UpdateSlider("伸びた時縮む力", controller, ref controller._AllShrink, 0.0f, 1.0f);
-                UpdateSlider("縮む時伸びる力", controller, ref controller._AllStretch, 0.0f, 1.0f);
-                UpdateCurve("伸びた時縮む力", controller, ref controller._AllShrinkScaleCurve);
-                UpdateCurve("縮む時伸びる力", controller, ref controller._AllStretchScaleCurve);
 
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "水平方向スライダージョイント", "Horizontal Slider Joint" }[Lang], new Color(96, 96, 96));
+                UpdateCurve(new string[] { "伸び", "Expand Limit" }[Lang], controller, ref controller._SliderJointLengthCurve);
+                UpdateCurve(new string[] { "バネ", "Spring" }[Lang], controller, ref controller._SliderJointSpringCurve);
+                EditorGUILayout.EndVertical();
                 GUILayout.Space(5);
-                EditorGUILayout.LabelField("=============== 構成拘束（垂直）");
+
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "拘束力の一括設定", "Common Parameter" }[Lang], new Color(96, 96, 96));
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                UpdateSlider(TextShrink, controller, ref controller._AllShrink, 0.0f, 1.0f);
+                UpdateCurve(TextCurve, controller, ref controller._AllShrinkScaleCurve);
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                UpdateSlider(TextStretch, controller, ref controller._AllStretch, 0.0f, 1.0f);
+                UpdateCurve(TextCurve, controller, ref controller._AllStretchScaleCurve);
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndVertical();
+                GUILayout.Space(5);
+                
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "垂直構造", "Structural (Vertical)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeStructuralVertical)
                 {
-                    UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllStructuralShrinkVertical);
-                    UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllStructuralStretchVertical);
-                    GUILayout.Space(5);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextShrink, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllStructuralShrinkVertical, true);
                     if (!controller._IsAllStructuralShrinkVertical)
-                        UpdateSlider("伸びた時縮む力", controller, ref controller._StructuralShrinkVertical, 0.0f, 1.0f);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._StructuralShrinkVertical, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._StructuralShrinkVerticalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextStretch, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllStructuralStretchVertical, true);
                     if (!controller._IsAllStructuralStretchVertical)
-                        UpdateSlider("縮む時伸びる力", controller, ref controller._StructuralStretchVertical, 0.0f, 1.0f);
-                    GUILayout.Space(5);
-                    if (!controller._IsAllStructuralShrinkVertical)
-                        UpdateCurve("伸びた時縮む力", controller, ref controller._StructuralShrinkVerticalScaleCurve);
-                    if (!controller._IsAllStructuralStretchVertical)
-                        UpdateCurve("縮む時伸びる力", controller, ref controller._StructuralStretchVerticalScaleCurve);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateCurve(TextConstraintForce, controller, ref controller._StructuralStretchVerticalScaleCurve);
+                        UpdateSlider(TextCurve, controller, ref controller._StructuralStretchVertical, 0.0f, 1.0f);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
-                else
-                {
-                    EditorGUILayout.LabelField("※ 無効 ※");
-                }
+                EditorGUILayout.EndVertical();
 
-                EditorGUILayout.LabelField("=============== 構成拘束（水平）");
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "水平構造", "Structural (Horizontal)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeStructuralHorizontal)
                 {
-                    UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllStructuralShrinkHorizontal);
-                    UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllStructuralStretchHorizontal);
-                    GUILayout.Space(5);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextShrink, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllStructuralShrinkHorizontal, true);
                     if (!controller._IsAllStructuralShrinkHorizontal)
-                        UpdateSlider("伸びた時縮む力", controller, ref controller._StructuralShrinkHorizontal, 0.0f, 1.0f);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._StructuralShrinkHorizontal, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._StructuralShrinkHorizontalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextStretch, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllStructuralStretchHorizontal, true);
                     if (!controller._IsAllStructuralStretchHorizontal)
-                        UpdateSlider("縮む時伸びる力", controller, ref controller._StructuralStretchHorizontal, 0.0f, 1.0f);
-                    GUILayout.Space(5);
-                    if (!controller._IsAllStructuralShrinkHorizontal)
-                        UpdateCurve("伸びた時縮む力", controller, ref controller._StructuralShrinkHorizontalScaleCurve);
-                    if (!controller._IsAllStructuralStretchHorizontal)
-                        UpdateCurve("縮む時伸びる力", controller, ref controller._StructuralStretchHorizontalScaleCurve);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._StructuralStretchHorizontal, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._StructuralStretchHorizontalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
-                else
-                {
-                    EditorGUILayout.LabelField("※ 無効 ※");
-                }
+                EditorGUILayout.EndVertical();
 
-                EditorGUILayout.LabelField("=============== せん断拘束");
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "せん断", "Shear" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeShear)
                 {
-                    UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllShearShrink);
-                    UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllShearStretch);
-                    GUILayout.Space(5);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextShrink, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllShearShrink, true);
                     if (!controller._IsAllShearShrink)
-                        UpdateSlider("伸びた時縮む力", controller, ref controller._ShearShrink, 0.0f, 1.0f);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._ShearShrink, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._ShearShrinkScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextStretch, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllShearStretch, true);
                     if (!controller._IsAllShearStretch)
-                        UpdateSlider("縮む時伸びる力", controller, ref controller._ShearStretch, 0.0f, 1.0f);
-                    GUILayout.Space(5);
-                    if (!controller._IsAllShearShrink)
-                        UpdateCurve("伸びた時縮む力", controller, ref controller._ShearShrinkScaleCurve);
-                    if (!controller._IsAllShearStretch)
-                        UpdateCurve("縮む時伸びる力", controller, ref controller._ShearStretchScaleCurve);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._ShearStretch, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._ShearStretchScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
-                else
-                {
-                    EditorGUILayout.LabelField("※ 無効 ※");
-                }
+                EditorGUILayout.EndVertical();
 
-                EditorGUILayout.LabelField("=============== 曲げ拘束（垂直）");
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "垂直曲げ", "Bending (Vertical)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeBendingVertical)
                 {
-                    UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllBendingShrinkVertical);
-                    UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllBendingStretchVertical);
-                    GUILayout.Space(5);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextShrink, new Color(255, 255, 255));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllBendingShrinkVertical, true);
                     if (!controller._IsAllBendingShrinkVertical)
-                        UpdateSlider("伸びた時縮む力", controller, ref controller._BendingShrinkVertical, 0.0f, 1.0f);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._BendingShrinkVertical, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._BendingShrinkVerticalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextStretch, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllBendingStretchVertical, true);
                     if (!controller._IsAllBendingStretchVertical)
-                        UpdateSlider("縮む時伸びる力", controller, ref controller._BendingStretchVertical, 0.0f, 1.0f);
-                    GUILayout.Space(5);
-                    if (!controller._IsAllBendingShrinkVertical)
-                        UpdateCurve("伸びた時縮む力", controller, ref controller._BendingShrinkVerticalScaleCurve);
-                    if (!controller._IsAllBendingStretchVertical)
-                        UpdateCurve("縮む時伸びる力", controller, ref controller._BendingStretchVerticalScaleCurve);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._BendingStretchVertical, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._BendingStretchVerticalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
-                else
-                {
-                    EditorGUILayout.LabelField("※ 無効 ※");
-                }
+                EditorGUILayout.EndVertical();
 
-                EditorGUILayout.LabelField("=============== 曲げ拘束（水平）");
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "水平曲げ", "Bending (Horizontal)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeBendingHorizontal)
                 {
-                    UpdateToggle("伸びた時縮む力（一括設定）", controller, ref controller._IsAllBendingShrinkHorizontal);
-                    UpdateToggle("縮む時伸びる力（一括設定）", controller, ref controller._IsAllBendingStretchHorizontal);
-                    GUILayout.Space(5);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextShrink, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllBendingShrinkHorizontal, true);
                     if (!controller._IsAllBendingShrinkHorizontal)
-                        UpdateSlider("伸びた時縮む力", controller, ref controller._BendingShrinkHorizontal, 0.0f, 1.0f);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._BendingShrinkHorizontal, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._BendingShrinkHorizontalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
+                    TitlebarSub(TextStretch, new Color(192, 192, 192));
+                    UpdateToggle(TextIndividual, controller, ref controller._IsAllBendingStretchHorizontal, true);
                     if (!controller._IsAllBendingStretchHorizontal)
-                        UpdateSlider("縮む時伸びる力", controller, ref controller._BendingStretchHorizontal, 0.0f, 1.0f);
-                    GUILayout.Space(5);
-                    if (!controller._IsAllBendingShrinkHorizontal)
-                        UpdateCurve("伸びた時縮む力", controller, ref controller._BendingShrinkHorizontalScaleCurve);
-                    if (!controller._IsAllBendingStretchHorizontal)
-                        UpdateCurve("縮む時伸びる力", controller, ref controller._BendingStretchHorizontalScaleCurve);
+                    {
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                        UpdateSlider(TextConstraintForce, controller, ref controller._BendingStretchHorizontal, 0.0f, 1.0f);
+                        UpdateCurve(TextCurve, controller, ref controller._BendingStretchHorizontalScaleCurve);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
-                else
-                {
-                    EditorGUILayout.LabelField("※ 無効 ※");
-                }
+                EditorGUILayout.EndVertical();
             }
 
-            _Opened_AngleLockSettings = Foldout(_Opened_AngleLockSettings, "角度制限", new Color(0.7f, 0.7f, 1.0f));
-            if (_Opened_AngleLockSettings)
+            controller.Opened_AngleLockSettings = Foldout(controller.Opened_AngleLockSettings, new string[] { "角度制限設定", "Angle lock settings" }[Lang], new Color(0.7f, 0.7f, 1.0f));
+            if (controller.Opened_AngleLockSettings)
             {
-                controller._UseLimitAngles = EditorGUILayout.Toggle("角度制限", controller._UseLimitAngles);
+                controller._UseLimitAngles = EditorGUILayout.Toggle(new string[] { "角度制限", "Angle limit" }[Lang], controller._UseLimitAngles);
                 if (controller._UseLimitAngles)
                 {
-                    controller._LimitAngle = EditorGUILayout.IntSlider("角度制限", controller._LimitAngle, 0, 180);
-                    controller._LimitPowerCurve = EditorGUILayout.CurveField("制限力", controller._LimitPowerCurve);
-                    controller._LimitFromRoot = EditorGUILayout.Toggle("ルートから角度制限", controller._LimitFromRoot);
+                    controller._LimitAngle = EditorGUILayout.IntSlider(new string[] { "制限角度", "Limit angle" }[Lang], controller._LimitAngle, 0, 180);
+                    controller._LimitPowerCurve = EditorGUILayout.CurveField(new string[] { "制限力", "Limit power curve" }[Lang], controller._LimitPowerCurve);
+                    controller._LimitFromRoot = EditorGUILayout.Toggle(new string[] { "ルートから角度制限", "Limit from root" }[Lang], controller._LimitFromRoot);
                 }
             }
 
-            _Opened_OptionSettings = Foldout(_Opened_OptionSettings, "オプション", new Color(0.7f, 1.0f, 0.7f));
-            if (_Opened_OptionSettings)
+            controller.Opened_OptionSettings = Foldout(controller.Opened_OptionSettings, new string[] { "オプション", "Option" }[Lang], new Color(0.7f, 1.0f, 0.7f));
+            if (controller.Opened_OptionSettings)
             {
-                if (GUILayout.Button("物理初期化"))
+                if (GUILayout.Button(new string[] { "物理初期化", "Physics reset" }[Lang]))
                 {
                     controller.ResetPhysics(0.3f);
                 }
 
                 GUILayout.Space(8);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent("一時停止"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent(new string[] { "一時停止", "Pause" }[Lang]), true);
 
-                Titlebar("デバッグ表示", new Color(0.7f, 1.0f, 1.0f));
-                UpdateToggle("垂直構造", controller, ref controller._IsDebugDraw_StructuralVertical);
-                UpdateToggle("水平構造", controller, ref controller._IsDebugDraw_StructuralHorizontal);
-                UpdateToggle("せん断", controller, ref controller._IsDebugDraw_Shear);
-                UpdateToggle("垂直曲げ", controller, ref controller._IsDebugDraw_BendingVertical);
-                UpdateToggle("水平曲げ", controller, ref controller._IsDebugDraw_BendingHorizontal);
-                UpdateToggle("表面三角フェース", controller, ref controller._IsDebugDraw_SurfaceFace);
+                Titlebar(new string[] { "デバッグ表示", "Show debug information" }[Lang], new Color(0.7f, 1.0f, 1.0f));
+                UpdateToggle(new string[] { "垂直構造", "Structural (Vertical)" }[Lang], controller, ref controller._IsDebugDraw_StructuralVertical);
+                UpdateToggle(new string[] { "水平構造", "Structural (Horizontal)" }[Lang], controller, ref controller._IsDebugDraw_StructuralHorizontal);
+                UpdateToggle(new string[] { "せん断", "Shear" }[Lang], controller, ref controller._IsDebugDraw_Shear);
+                UpdateToggle(new string[] { "垂直曲げ", "Bending (Vertical);" }[Lang], controller, ref controller._IsDebugDraw_BendingVertical);
+                UpdateToggle(new string[] { "水平曲げ", "Bending (Horizontal);" }[Lang], controller, ref controller._IsDebugDraw_BendingHorizontal);
+                UpdateToggle(new string[] { "ポリゴン面", "Surface Face" }[Lang], controller, ref controller._IsDebugDraw_SurfaceFace);
                 if (controller._IsDebugDraw_SurfaceFace)
                 {
-                    UpdateSlider("表面の法線長", controller, ref controller._Debug_SurfaceNormalLength, 0, 1);
+                    UpdateSlider(new string[] { "ポリゴン法線の長さ", "Surface normal length" }[Lang], controller, ref controller._Debug_SurfaceNormalLength, 0, 1);
                 }
-                UpdateToggle("実行中のコリジョン情報", controller, ref controller._IsDebugDraw_RuntimeColliderBounds);
+                UpdateToggle(new string[] { "実行中のコリジョン情報", "Runtime collider bounds" }[Lang], controller, ref controller._IsDebugDraw_RuntimeColliderBounds);
             }
 
-            _Opened_PreSettings = Foldout(_Opened_PreSettings, "事前設定", new Color(1.0f, 0.7f, 0.7f));
-            if (_Opened_PreSettings)
+            controller.Opened_PreSettings = Foldout(controller.Opened_PreSettings, new string[] { "拘束情報事前計算", "Constraint information pre-calculation" }[Lang], new Color(1.0f, 0.7f, 0.7f));
+            if (controller.Opened_PreSettings)
             {
-                UpdateToggle("拘束のループ", controller, ref controller._IsLoopRootPoints);
-                GUILayout.Space(5);
-                EditorGUILayout.LabelField("=============== 拘束の有無");
-                UpdateToggle("拘束：垂直構造", controller, ref controller._IsComputeStructuralVertical);
-                UpdateToggle("拘束：水平構造", controller, ref controller._IsComputeStructuralHorizontal);
-                UpdateToggle("拘束：せん断", controller, ref controller._IsComputeShear);
-                UpdateToggle("拘束：垂直曲げ", controller, ref controller._IsComputeBendingVertical);
-                UpdateToggle("拘束：水平曲げ", controller, ref controller._IsComputeBendingHorizontal);
-                GUILayout.Space(5);
-                EditorGUILayout.LabelField("=============== コリジョン");
-                UpdateToggle("衝突：垂直構造", controller, ref controller._IsCollideStructuralVertical);
-                UpdateToggle("衝突：水平構造", controller, ref controller._IsCollideStructuralHorizontal);
-                UpdateToggle("衝突：せん断", controller, ref controller._IsCollideShear);
-                UpdateToggle("衝突：垂直曲げ", controller, ref controller._IsCollideBendingVertical);
-                UpdateToggle("衝突：水平曲げ", controller, ref controller._IsCollideBendingHorizontal);
-                GUILayout.Space(10);
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                Titlebar(new string[] { "拘束条件", "Constraint rules" }[Lang], new Color(96, 96, 96));
 
-                if (GUILayout.Button("自動設定"))
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginHorizontal();
+                UpdateToggle(new string[] { "垂直構造", "Structural (Vertical)" }[Lang], controller, ref controller._IsComputeStructuralVertical);
+                GUILayout.Space(5);
+                if (controller._IsComputeStructuralVertical)
+                {
+                    UpdateToggle(new string[] { "コリジョン", "Collision" }[Lang], controller, ref controller._IsCollideStructuralVertical);
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginHorizontal();
+                UpdateToggle(new string[] { "水平構造", "Structural (Horizontal)" }[Lang], controller, ref controller._IsComputeStructuralHorizontal);
+                if (controller._IsComputeStructuralHorizontal)
+                {
+                    UpdateToggle(new string[] { "コリジョン", "Collision" }[Lang], controller, ref controller._IsCollideStructuralHorizontal);
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginHorizontal();
+                UpdateToggle(new string[] { "せん断", "Shear" }[Lang], controller, ref controller._IsComputeShear);
+                if (controller._IsComputeShear)
+                {
+                    UpdateToggle(new string[] { "コリジョン", "Collision" }[Lang], controller, ref controller._IsCollideShear);
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginHorizontal();
+                UpdateToggle(new string[] { "垂直曲げ", "Bending (Vertical)" }[Lang], controller, ref controller._IsComputeBendingVertical);
+                if (controller._IsComputeBendingVertical)
+                {
+                    UpdateToggle(new string[] { "コリジョン", "Collision" }[Lang], controller, ref controller._IsCollideBendingVertical);
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginHorizontal();
+                UpdateToggle(new string[] { "水平曲げ", "Bending (Horizontal)" }[Lang], controller, ref controller._IsComputeBendingHorizontal);
+                if (controller._IsComputeBendingHorizontal)
+                {
+                    UpdateToggle(new string[] { "コリジョン", "Collision" }[Lang], controller, ref controller._IsCollideBendingHorizontal);
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.EndVertical();
+
+                Titlebar(new string[] { "拘束情報を計算", "Calculate constraint information" }[Lang], new Color(96, 96, 96));
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算", "From Root points" }[Lang]))
                 {
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button("自動設定（近ポイント自動検索XYZ）"))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XYZ）", "Near point automatic search XYZ" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button("自動設定（近ポイント自動検索XZ）"))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XZ）", "Near point automatic search XZ" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button("自動設定（近ポイント自動検索XYZ：先端終端固定）"))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算", "Near point automatic search XYZ (Fixed tip)" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button("自動設定（近ポイント自動検索XZ：先端終端固定）"))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XYZ：先端終端固定）", "Near point automatic search XZ (Fixed tip)" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button("拘束長さ再計算"))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XZ：先端終端固定）", "Constraint length recalculation" }[Lang]))
                 {
                     controller.UpdateJointDistance();
                     EditorUtility.SetDirty(controller);
@@ -385,7 +476,7 @@ namespace SPCR
                     var contentColor = GUI.contentColor;
                     GUI.contentColor = Color.yellow;
                     GUI.backgroundColor = new Color(1.0f, 0.5f, 0.5f);
-                    if (GUILayout.Button("拘束の設定を破棄"))
+                    if (GUILayout.Button(new string[] { "拘束の設定を破棄", "Discard constraint settings" }[Lang]))
                     {
                         controller.DeleteJointConnection();
                         EditorUtility.SetDirty(controller);
@@ -394,38 +485,38 @@ namespace SPCR
                     GUI.contentColor = contentColor;
                 }
 
-                Titlebar("設定保存", new Color(1.0f, 0.7f, 0.7f));
-                if (GUILayout.Button("設定を保存する"))
+                Titlebar(new string[] { "設定保存", "Save settings" }[Lang], new Color(1.0f, 0.7f, 0.7f));
+                if (GUILayout.Button(new string[] { "設定を保存する", "Save settings" }[Lang]))
                 {
                     SPCRJointSettingLocalSave.Save(controller);
                 }
-                if (GUILayout.Button("設定をロードする"))
+                if (GUILayout.Button(new string[] { "設定をロードする", "Load settings" }[Lang]))
                 {
                     SPCRJointSettingLocalSave.Load(controller);
                 }
 
                 GUILayout.Space(5);
 
-                Titlebar("細分化", new Color(0.7f, 1.0f, 0.7f));
+                Titlebar(new string[] { "細分化", "Subdivision" }[Lang], new Color(0.7f, 1.0f, 0.7f));
                 if (PrefabUtility.IsPartOfAnyPrefab(controller.gameObject))
                 {
-                    EditorGUILayout.HelpBox("UnpackされていないPrefabは細分化できません", MessageType.Warning);
+                    EditorGUILayout.HelpBox(new string[] { "UnpackされていないPrefabは細分化できません", "Unpacked Prefabs cannot be subdivided" }[Lang], MessageType.Warning);
                 }
                 else
                 {
-                    if (GUILayout.Button("垂直の拘束を挿入"))
+                    if (GUILayout.Button(new string[] { "垂直の拘束を挿入", "Insert vertical constraint" }[Lang]))
                     {
                         SubdivideVerticalChain(controller, 1);
                         EditorUtility.SetDirty(controller);
                     }
-                    if (GUILayout.Button("水平の拘束を挿入"))
+                    if (GUILayout.Button(new string[] { "水平の拘束を挿入", "Insert horizontal constraint" }[Lang]))
                     {
                         SubdivideHorizontalChain(controller, 1);
                         EditorUtility.SetDirty(controller);
                     }
                     if (controller._SubDivInsertedPoints.Count > 0)
                     {
-                        if (GUILayout.Button("細分化を元に戻す"))
+                        if (GUILayout.Button(new string[] { "細分化を元に戻す", "Undo subdivision" }[Lang]))
                         {
                             RemoveInsertedPoints(controller);
                             EditorUtility.SetDirty(controller);
@@ -435,7 +526,7 @@ namespace SPCR
                             var contentColor = GUI.contentColor;
                             GUI.contentColor = Color.yellow;
                             GUI.backgroundColor = new Color(0.6f, 0.0f, 0.0f);
-                            if (GUILayout.Button("細分化の確定"))
+                            if (GUILayout.Button(new string[] { "細分化の確定", "Confirmation of subdivision" }[Lang]))
                             {
                                 PurgeSubdivideOriginalInfo(controller);
                                 EditorUtility.SetDirty(controller);
@@ -443,12 +534,12 @@ namespace SPCR
                             GUI.backgroundColor = bgColor;
                             GUI.contentColor = contentColor;
                         }
-                        // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivInsertedPoints"), new GUIContent("追加された点群"), true);
-                        // EditorGUILayout.PropertyField(serializedObject.FindProperty("_SubDivOriginalPoints"), new GUIContent("オリジナルの点群"), true);
 
                         {
                             var message = string.Format(
-                                "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
+                                new string[] {
+                                    "分割後には自動設定を行ってください\nオリジナルの点:{0}個\n追加された点:{1}個",
+                                    "Please set automatically after splitting\nOriginal points: {0}\nAdded points: {1}" }[Lang],
                                 controller._SubDivOriginalPoints.Count,
                                 controller._SubDivInsertedPoints.Count);
                             EditorGUILayout.HelpBox(message, MessageType.Warning);
@@ -465,9 +556,12 @@ namespace SPCR
             serializedObject.ApplyModifiedProperties();
         }
 
-        void UpdateToggle(string Label, SPCRJointDynamicsController Source, ref bool Value)
+        void UpdateToggle(string Label, SPCRJointDynamicsController Source, ref bool Value, bool Reverse = false)
         {
-            Value = EditorGUILayout.Toggle(Label, Value);
+            if (Reverse)
+                Value = !EditorGUILayout.Toggle(Label, !Value);
+            else
+                Value = EditorGUILayout.Toggle(Label, Value);
         }
 
         void UpdateIntSlider(string Label, SPCRJointDynamicsController Source, ref int Value, int Min, int Max)
@@ -497,12 +591,24 @@ namespace SPCR
 
         void Titlebar(string text, Color color)
         {
-            GUILayout.Space(12);
-
             var backgroundColor = GUI.backgroundColor;
             GUI.backgroundColor = color;
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            GUILayout.Label(text);
+            EditorGUILayout.EndHorizontal();
+
+            GUI.backgroundColor = backgroundColor;
+
+            GUILayout.Space(3);
+        }
+
+        void TitlebarSub(string text, Color color)
+        {
+            var backgroundColor = GUI.backgroundColor;
+            GUI.backgroundColor = color;
+
+            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
             GUILayout.Label(text);
             EditorGUILayout.EndHorizontal();
 

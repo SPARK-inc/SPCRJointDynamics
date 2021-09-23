@@ -19,6 +19,22 @@ namespace SPCR
     [DefaultExecutionOrder(10000)]
     public class SPCRJointDynamicsController : MonoBehaviour
     {
+#if UNITY_EDITOR
+        public enum eInspectorLang
+        {
+            JP,
+            EN,
+        }
+        [HideInInspector]
+        public eInspectorLang InspectorLang = eInspectorLang.JP;
+        public bool Opened_BaseSettings { get; set; }
+        public bool Opened_PhysicsSettings { get; set; }
+        public bool Opened_ConstraintSettings { get; set; }
+        public bool Opened_AngleLockSettings { get; set; }
+        public bool Opened_OptionSettings { get; set; }
+        public bool Opened_PreSettings { get; set; }
+#endif//UNITY_EDITOR
+
         public enum ConstraintType
         {
             Structural_Vertical,
@@ -174,8 +190,8 @@ namespace SPCR
         public bool _LimitFromRoot = false;
         public AnimationCurve _LimitPowerCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 0.0f) });
 
-        public bool _IsAnimated;
-        public bool _IsFixedUpdateSimulation;
+        public bool _IsReferToAnimation;
+        public bool _IsLateUpdateStabilization;
         float _TimeRest;
 
         [SerializeField]
@@ -214,7 +230,7 @@ namespace SPCR
         public bool _IsDebugDraw_BendingVertical = false;
         public bool _IsDebugDraw_BendingHorizontal = false;
         public bool _IsDebugDraw_SurfaceFace = false;
-        public float _Debug_SurfaceNormalLength = 0.5f;
+        public float _Debug_SurfaceNormalLength = 0.25f;
         public bool _IsDebugDraw_RuntimeColliderBounds = false;
 
         [SerializeField]
@@ -336,7 +352,15 @@ namespace SPCR
 
             List<SPCRJointDynamicsJob.SurfaceFaceConstraints> surfaceConstraints = GetSurfaceFaceConstraints();
 
-            _Job.Initialize(_RootTransform, Points, PointTransforms, _ConstraintTable, _ColliderTbl, _PointGrabberTbl, surfaceConstraints.ToArray(), _IsAnimated);
+            _Job.Initialize(
+                _RootTransform,
+                Points,
+                PointTransforms,
+                _ConstraintTable,
+                _ColliderTbl,
+                _PointGrabberTbl,
+                surfaceConstraints.ToArray(),
+                _IsReferToAnimation && (_UpdateTiming == UpdateTiming.LateUpdate));
 
             _Delay = 0.1f;
             _TimeRest = 0.0f;
@@ -371,7 +395,7 @@ namespace SPCR
         {
             if (_UpdateTiming == UpdateTiming.LateUpdate)
             {
-                if (_IsFixedUpdateSimulation)
+                if (_IsLateUpdateStabilization)
                 {
                     if (Time.deltaTime < Time.fixedDeltaTime)
                     {
