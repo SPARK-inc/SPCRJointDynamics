@@ -7177,6 +7177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u30B9\u30AB\u30FC\u30C8"
   _RootTransform: {fileID: 4927924021798734}
   _RootPointTbl:
@@ -7750,8 +7751,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 1
   _PointTbl:
   - {fileID: 114791030858528614}
   - {fileID: 114818259583863178}
@@ -9789,6 +9790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u9AEA\u306E\u6BDB"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -10355,8 +10357,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 114709563767558228}
   - {fileID: 114649034701611030}
@@ -11178,6 +11180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u9AEA\u306E\u6BDB\uFF1A\u5185\u5074\u5F8C"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -11741,8 +11744,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 114700514368092546}
   - {fileID: 114866584082114080}
@@ -12439,6 +12442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u9AEA\u306E\u6BDB\uFF1A\u6A2A"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -13001,8 +13005,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 114491280639140564}
   - {fileID: 114488442926231340}
@@ -13222,6 +13226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u9AEA\u306E\u6BDB\u524D"
   _RootTransform: {fileID: 4650814430088828}
   _RootPointTbl:
@@ -13784,8 +13789,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 114841922343152656}
   - {fileID: 114207385132218904}
@@ -14409,6 +14414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u30EA\u30DC\u30F3"
   _RootTransform: {fileID: 4840837466078988}
   _RootPointTbl:
@@ -14965,8 +14971,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 114172629759796326}
   - {fileID: 114036122444029814}
@@ -15186,6 +15192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e331b232753e6e43b86eaedb4329fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InspectorLang: 0
   Name: "\u80F8\u30EA\u30DC\u30F3"
   _RootTransform: {fileID: 4415447140615780}
   _RootPointTbl:
@@ -15744,8 +15751,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _IsAnimated: 0
-  _IsFixedUpdateSimulation: 1
+  _IsReferToAnimation: 0
+  _IsLateUpdateStabilization: 0
   _PointTbl:
   - {fileID: 534202194}
   - {fileID: 1647070468}

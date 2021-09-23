@@ -22,11 +22,11 @@ namespace SPCR
 #if UNITY_EDITOR
         public enum eInspectorLang
         {
-            JP,
-            EN,
+            日本語,
+            English,
         }
         [HideInInspector]
-        public eInspectorLang InspectorLang = eInspectorLang.JP;
+        public eInspectorLang InspectorLang = eInspectorLang.日本語;
         public bool Opened_BaseSettings { get; set; }
         public bool Opened_PhysicsSettings { get; set; }
         public bool Opened_ConstraintSettings { get; set; }

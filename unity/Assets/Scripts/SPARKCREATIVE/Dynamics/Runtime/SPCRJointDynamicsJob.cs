@@ -9,6 +9,8 @@
  *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
 */
 
+#define ENABLE_BURST
+
 using UnityEngine;
 using UnityEngine.Jobs;
 using Unity.Jobs;

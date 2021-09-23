@@ -35,3 +35,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 unity/Logs/
+unity/.vsconfig
