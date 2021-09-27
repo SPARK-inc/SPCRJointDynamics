@@ -193,7 +193,7 @@ namespace SPCR
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.EndVertical();
                 GUILayout.Space(5);
-                
+
                 EditorGUILayout.BeginVertical(GUI.skin.box);
                 Titlebar(new string[] { "垂直構造", "Structural (Vertical)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeStructuralVertical)
@@ -281,7 +281,7 @@ namespace SPCR
                 }
                 EditorGUILayout.EndVertical();
 
-                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                EditorGUILayout.BeginVertical(GUI.skin.box);
                 Titlebar(new string[] { "垂直曲げ", "Bending (Vertical)" }[Lang], new Color(96, 96, 96));
                 if (controller._IsComputeBendingVertical)
                 {
@@ -454,19 +454,19 @@ namespace SPCR
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button(new string[] { "拘束情報を事前計算", "Near point automatic search XYZ (Fixed tip)" }[Lang]))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XYZ：先端終端固定）", "Near point automatic search XYZ (Fixed tip)" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XYZ：先端終端固定）", "Near point automatic search XZ (Fixed tip)" }[Lang]))
+                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XZ：先端終端固定）", "Near point automatic search XZ (Fixed tip)" }[Lang]))
                 {
                     SortConstraintsHorizontalRoot(controller, UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd);
                     controller.UpdateJointConnection();
                     EditorUtility.SetDirty(controller);
                 }
-                if (GUILayout.Button(new string[] { "拘束情報を事前計算（近ポイント自動検索XZ：先端終端固定）", "Constraint length recalculation" }[Lang]))
+                if (GUILayout.Button(new string[] { "拘束間の長さを再計算", "Constraint length recalculation" }[Lang]))
                 {
                     controller.UpdateJointDistance();
                     EditorUtility.SetDirty(controller);
@@ -592,7 +592,7 @@ namespace SPCR
         void Titlebar(string text, Color color)
         {
             var backgroundColor = GUI.backgroundColor;
-            GUI.backgroundColor = color;
+            GUI.backgroundColor = Color.gray;// color;
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.Label(text);
@@ -964,7 +964,7 @@ namespace SPCR
 #if UNITY_2018_3_OR_NEWER
             PrefabUtility.UnpackPrefabInstance(Controller.gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
 #else//UNITY_2018_3_OR_NEWER
-        PrefabUtility.DisconnectPrefabInstance(Controller.gameObject);
+            PrefabUtility.DisconnectPrefabInstance(Controller.gameObject);
 #endif//UNITY_2018_3_OR_NEWER
 
             for (int i = 0; i < RootTbl.Length; ++i)
