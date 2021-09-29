@@ -192,6 +192,7 @@ namespace SPCR
 
         public bool _IsReferToAnimation;
         public bool _IsLateUpdateStabilization;
+        public int _StabilizationFrameRate = 60;
         float _TimeRest;
 
         [SerializeField]
@@ -397,7 +398,8 @@ namespace SPCR
             {
                 if (_IsLateUpdateStabilization)
                 {
-                    if (Time.deltaTime < Time.fixedDeltaTime)
+                    float DELTA = 1.0f / ((float)_StabilizationFrameRate * 1.1f);
+                    if (Time.deltaTime < DELTA)
                     {
                         UpdateImpl(Time.deltaTime);
                         _TimeRest = 0.0f;
@@ -405,10 +407,10 @@ namespace SPCR
                     else
                     {
                         _TimeRest += Time.deltaTime;
-                        while (_TimeRest >= Time.fixedDeltaTime)
+                        while (_TimeRest >= DELTA)
                         {
-                            UpdateImpl(Time.fixedDeltaTime);
-                            _TimeRest -= Time.fixedDeltaTime;
+                            UpdateImpl(DELTA);
+                            _TimeRest -= DELTA;
                         }
                     }
                 }

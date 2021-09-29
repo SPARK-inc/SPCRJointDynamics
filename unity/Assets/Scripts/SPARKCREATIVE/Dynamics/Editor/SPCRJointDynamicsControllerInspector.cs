@@ -122,6 +122,10 @@ namespace SPCR
 
                 if (controller._UpdateTiming == SPCRJointDynamicsController.UpdateTiming.LateUpdate)
                     UpdateToggle(new string[] { "LateUpdate安定化", "LateUpdate stabilization" }[Lang], controller, ref controller._IsLateUpdateStabilization);
+                if (controller._IsLateUpdateStabilization)
+                {
+                    UpdateIntSlider(new string[] { "安定化フレームレート", "FrameRate for Stabilization" }[Lang], controller, ref controller._StabilizationFrameRate, 10, 240);
+                }
 
                 UpdateIntSlider(new string[] { "演算安定化回数", "Number of Relaxation" }[Lang], controller, ref controller._Relaxation, 1, 16);
                 UpdateIntSlider(new string[] { "演算分割数", "Number of calculation steps" }[Lang], controller, ref controller._SubSteps, 1, 16);
@@ -964,7 +968,7 @@ namespace SPCR
 #if UNITY_2018_3_OR_NEWER
             PrefabUtility.UnpackPrefabInstance(Controller.gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
 #else//UNITY_2018_3_OR_NEWER
-            PrefabUtility.DisconnectPrefabInstance(Controller.gameObject);
+        PrefabUtility.DisconnectPrefabInstance(Controller.gameObject);
 #endif//UNITY_2018_3_OR_NEWER
 
             for (int i = 0; i < RootTbl.Length; ++i)
