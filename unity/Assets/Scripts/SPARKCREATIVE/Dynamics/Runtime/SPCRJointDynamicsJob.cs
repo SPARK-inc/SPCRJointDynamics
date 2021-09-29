@@ -134,6 +134,7 @@ namespace SPCR
             public Vector3 SourceDirection;
             public Matrix4x4 WorldToLocal;
             public Bounds LocalBounds;
+            public int Enabled;
         }
 
         struct Grabber
@@ -144,7 +145,7 @@ namespace SPCR
 
         struct GrabberEx
         {
-            public int IsEnabled;
+            public int Enabled;
             public Vector3 Position;
         }
 
@@ -277,6 +278,7 @@ namespace SPCR
                     ColliderR[i].RadiusHead = src.RadiusHead;
                     ColliderR[i].Height = 0.0f;
                 }
+                ColliderExR[i].Enabled = src.isActiveAndEnabled ? 1 : 0;
                 ColliderR[i].Friction = src.Friction;
                 ColliderR[i].PushOutRate = src.PushOutRate;
                 ColliderR[i].ForceType = src._SurfaceColliderForce;
@@ -453,7 +455,7 @@ namespace SPCR
             {
                 var pDst = pGrabberExs + i;
 
-                pDst->IsEnabled = _RefGrabbers[i].IsEnabled ? 1 : 0;
+                pDst->Enabled = (_RefGrabbers[i].isActiveAndEnabled && _RefGrabbers[i].IsEnabled) ? 1 : 0;
                 pDst->Position = _RefGrabbers[i].RefTransform.position;
             }
 
@@ -473,6 +475,10 @@ namespace SPCR
                 {
                     var pDst = pColliderExs + i;
                     var Src = _RefColliders[i];
+
+                    pDst->Enabled = Src.isActiveAndEnabled ? 1 : 0;
+                    if (pDst->Enabled == 0)
+                        continue;
 
                     if (iSubStep == 1)
                     {
@@ -643,6 +649,9 @@ namespace SPCR
             var BoundsColor = new Color(0.4f, 0.4f, 0.4f, 1.0f);
             for (int i = 0; i < _ColliderExs.Length; i++)
             {
+                if (_ColliderExs[i].Enabled == 0)
+                    continue;
+
                 var CurHead = _ColliderExs[i].Position;
                 var CurTail = _ColliderExs[i].Position + _ColliderExs[i].Direction;
                 var OldHead = _ColliderExs[i].OldPosition;
@@ -795,7 +804,7 @@ namespace SPCR
                 {
                     Grabber* pGR = pGrabbers + pRW->GrabberIndex;
                     GrabberEx* pGRW = pGrabberExs + pRW->GrabberIndex;
-                    if (pGRW->IsEnabled == 0)
+                    if (pGRW->Enabled == 0)
                     {
                         pRW->GrabberIndex = -1;
                         return;
@@ -814,7 +823,8 @@ namespace SPCR
                         Grabber* pGR = pGrabbers + i;
                         GrabberEx* pGRW = pGrabberExs + i;
 
-                        if (pGRW->IsEnabled == 0) continue;
+                        if (pGRW->Enabled == 0)
+                            continue;
 
                         var Vec = pGRW->Position - pRW->Position;
                         var sqrVecLength = Vec.sqrMagnitude;
@@ -877,6 +887,9 @@ namespace SPCR
                         continue;
 
                     ColliderEx* pColliderEx = pColliderExs + i;
+                    if (pColliderEx->Enabled == 0)
+                        continue;
+
                     Vector3 intersectionPoint, pointOnCollider, pushOut;
                     float radius;
 
@@ -1195,6 +1208,8 @@ namespace SPCR
                 {
                     Collider* pCollider = pColliders + i;
                     ColliderEx* pColliderEx = pColliderExs + i;
+                    if (pColliderEx->Enabled == 0)
+                        continue;
 
                     float Radius;
                     Vector3 pointOnLine, pointOnCollider;
@@ -1323,9 +1338,9 @@ namespace SPCR
                     ColliderEx* pColliderEx = pColliderExs + i;
 
                     if (pCollider->PushOutRate < 1.0f)
-                    {
                         continue;
-                    }
+                    if (pColliderEx->Enabled == 0)
+                        continue;
 
                     var Point0 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->OriginalOldPosition);
                     var Point1 = pColliderEx->WorldToLocal.MultiplyPoint3x4(pRW->Position);
@@ -1522,6 +1537,8 @@ namespace SPCR
                     {
                         Collider* pCollider = pColliders + i;
                         ColliderEx* pColliderEx = pColliderExs + i;
+                        if (pColliderEx->Enabled == 0)
+                            continue;
 
                         Vector3 point = pRW->Position;
 
