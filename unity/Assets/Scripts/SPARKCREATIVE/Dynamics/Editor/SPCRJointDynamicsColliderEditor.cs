@@ -49,6 +49,9 @@ namespace SPCR
                 collider._SurfaceColliderForce = (SPCRJointDynamicsCollider.ColliderForce)EditorGUILayout.EnumPopup(new GUIContent("Force Type", "表面がコライダーに刺さった時のフォース"), collider._SurfaceColliderForce);
             }
 
+            Titlebar("デバッグ", new Color(0.5f, 0.5f, 0.5f));
+            UpdateToggle("Gizmo", collider, ref collider._ShowColiiderGizmo);
+
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(collider);
@@ -83,6 +86,14 @@ namespace SPCR
                 Undo.RecordObject(target, "SPCRColliderUndo");
                 Value = Newvalue;
             }
+        }
+
+        void UpdateToggle(string Label, SPCRJointDynamicsCollider Source, ref bool Value, bool Reverse = false)
+        {
+            if (Reverse)
+                Value = !EditorGUILayout.Toggle(Label, !Value);
+            else
+                Value = EditorGUILayout.Toggle(Label, Value);
         }
     }
 }

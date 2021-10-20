@@ -53,6 +53,8 @@ namespace SPCR
 
         public ColliderForce _SurfaceColliderForce = ColliderForce.Off;
 
+        public bool _ShowColiiderGizmo = true;
+
         public Transform RefTransform { get; private set; }
         public float RadiusHead { get { return Radius * _HeadRadiusScale; } set { _HeadRadiusScale = value; } }
         public float RadiusTail { get { return Radius * _TailRadiusScale; } }
@@ -69,14 +71,17 @@ namespace SPCR
 
         void OnDrawGizmos()
         {
+            if (!_ShowColiiderGizmo) return;
+
 #if UNITY_EDITOR
             if (UnityEditor.Selection.Contains(gameObject))
                 Gizmos.color = Color.green;
             else
                 Gizmos.color = Color.gray;
 #else
-Gizmos.color = Color.gray;
+            Gizmos.color = Color.gray;
 #endif
+
             ResetTransform();
             var pos = transform.position;
             var rot = transform.rotation;
