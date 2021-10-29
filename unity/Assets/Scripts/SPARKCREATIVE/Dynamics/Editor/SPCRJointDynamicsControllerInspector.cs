@@ -163,6 +163,7 @@ namespace SPCR
                 UpdateCurve(new string[] { "重力", "Gravity scale" }[Lang], controller, ref controller._GravityScaleCurve);
                 UpdateCurve(new string[] { "風力", "Wind force scale" }[Lang], controller, ref controller._WindForceScaleCurve);
                 UpdateCurve(new string[] { "空気抵抗", "Resistance" }[Lang], controller, ref controller._ResistanceCurve);
+                UpdateCurve(new string[] { "Bone twist strength", "Bone twist strength" }[Lang], controller, ref controller._BoneTwistStrength);
                 UpdateCurve(new string[] { "硬さ", "Hardness" }[Lang], controller, ref controller._HardnessCurve);
                 UpdateCurve(new string[] { "摩擦", "Friction" }[Lang], controller, ref controller._FrictionCurve);
 

@@ -47,6 +47,7 @@ namespace SPCR
             public float BendingStretchHorizontal;
             public float LimitPower;
             public float WindForceScale;
+            public float BoneTwistStrength;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 InitialPosition;
@@ -81,6 +82,7 @@ namespace SPCR
             public float BendingStretchHorizontal;
             public float LimitPower;
             public float WindForceScale;
+            public float BoneTwistStrength;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 LocalPosition;
@@ -226,6 +228,7 @@ namespace SPCR
                 PointsR[i].LimitPower = src.LimitPower;
                 PointsR[i].Gravity = src.Gravity;
                 PointsR[i].WindForceScale = src.WindForceScale;
+                PointsR[i].BoneTwistStrength = src.BoneTwistStrength;
                 PointsR[i].BoneAxis = src.BoneAxis;
                 PointsR[i].LocalPosition = src.LocalPosition;
                 PointsR[i].LocalRotation = src.LocalRotation;
@@ -636,6 +639,7 @@ namespace SPCR
             for (int i = 0; i < _PointCount; ++i)
             {
                 Gizmos.DrawSphere(_PointsRW[i].Position, 0.005f);
+               
             }
         }
 
@@ -1707,12 +1711,18 @@ namespace SPCR
                 {
                     var pRWC = pRWPoints + pR->Child;
                     var Direction = pRWC->Position - pRW->Position;
+                    Direction = Vector3.Lerp(pR->BoneAxis, Direction, pR->BoneTwistStrength);
                     if (Direction.sqrMagnitude > EPSILON)
                     {
                         Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
                         Vector3 AimVector = mRotate * pR->BoneAxis;
                         Quaternion AimRotation = Quaternion.FromToRotation(AimVector, Direction);
                         transform.rotation = AimRotation * transform.rotation;
+
+                        //Vector3 localEular = transform.localRotation.eulerAngles;
+                        //localEular.y = Mathf.Lerp(localEular.y, pR->LocalRotation.eulerAngles.y, pR->BoneTwistStrength);
+                        //transform.localRotation = Quaternion.Euler(localEular);
+                        //Debug.Log("Index: " + index + " Locyaw: " + pR->LocalRotation.eulerAngles.y + " NewYaw: " + transform.localRotation.eulerAngles.y);
                     }
                 }
             }
