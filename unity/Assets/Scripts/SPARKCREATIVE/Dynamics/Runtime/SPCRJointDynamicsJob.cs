@@ -1725,7 +1725,7 @@ namespace SPCR
                 var pRp = pRPoints + pR->Parent;
                 var pRWP = pRWPoints + pR->Parent;
 
-                Vector3 initialDeltaPos = pRWP->InitialWorldPosition - pRWP->InitialWorldPosition;
+                Vector3 initialDeltaPos = pRW->InitialWorldPosition - pRWP->InitialWorldPosition;
                 Vector3 superParentpos = (pRp->Parent != -1 ? (pRWPoints + pRp->Parent)->Position : pRWP->Position);
                 Vector3 deltaPositionFromParent = pRWP->Position - superParentpos;
 
