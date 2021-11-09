@@ -292,6 +292,9 @@ namespace SPCR
             public SPCRAnimCurveKeyFrameSave[] LimitPowerCurve { get; set; }
             public bool LimitFromRoot { get; set; }
 
+            public bool IsReferAnimation = false;
+            public bool IsPreventBoneTwist = false;
+
             public string[] PointTblIDs { get; set; }
 
             public bool IsLoopRootPoints { get; set; }
@@ -426,6 +429,9 @@ namespace SPCR
             spcrJointDynamicsSave.LimitAngle = SPCRJointDynamicsContoller._LimitAngle;
             spcrJointDynamicsSave.LimitPowerCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._LimitPowerCurve);
             spcrJointDynamicsSave.LimitFromRoot = SPCRJointDynamicsContoller._LimitFromRoot;
+
+            spcrJointDynamicsSave.IsReferAnimation = SPCRJointDynamicsContoller._IsReferToAnimation;
+            spcrJointDynamicsSave.IsPreventBoneTwist = SPCRJointDynamicsContoller._IsPreventBoneTwist;
 
             spcrJointDynamicsSave.PointTblIDs = new string[SPCRJointDynamicsContoller.PointTbl.Length];
 
@@ -731,6 +737,9 @@ namespace SPCR
             SPCRJointDynamicsContoller._LimitAngle = spcrJointDynamicsSave.LimitAngle;
             SPCRJointDynamicsContoller._LimitPowerCurve = GetAnimCurve(spcrJointDynamicsSave.LimitPowerCurve);
             SPCRJointDynamicsContoller._LimitFromRoot = spcrJointDynamicsSave.LimitFromRoot;
+
+            SPCRJointDynamicsContoller._IsReferToAnimation = spcrJointDynamicsSave.IsReferAnimation;
+            SPCRJointDynamicsContoller._IsPreventBoneTwist = spcrJointDynamicsSave.IsPreventBoneTwist;
 
             SPCRJointDynamicsContoller._IsLoopRootPoints = spcrJointDynamicsSave.IsLoopRootPoints;
             SPCRJointDynamicsContoller._IsComputeStructuralVertical = spcrJointDynamicsSave.IsComputeStructuralVertical;

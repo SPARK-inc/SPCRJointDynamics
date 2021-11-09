@@ -30,6 +30,8 @@ namespace SPCR
 
         [Header("=== 物理設定項目 ===")]
         public float _Mass = 1.0f;
+        public float _MovableRadius = -1.0f;
+        public GameObject MovableTarget { get; private set; }
 
         [Header("=== 物理自動設定項目 ===")]
         public SPCRJointDynamicsPoint _RefChildPoint;
@@ -40,6 +42,8 @@ namespace SPCR
         public float _Depth;
         [HideInInspector]
         public int _Index;
+        [HideInInspector]
+        public int _MovableTargetIndex;
 
         public bool _UseForSurfaceCollision = true;
 
@@ -52,6 +56,42 @@ namespace SPCR
         void GenerateNewID()
         {
             uniqueGUIID = System.Guid.NewGuid().ToString();
+        }
+
+        public bool CreateMovableTargetPoint()
+        {
+            if (_MovableRadius > 0.0f)
+            {
+                if (this.transform.parent != null)
+                {
+                    if (this.transform.parent.parent != null)
+                    {
+                        MovableTarget = new GameObject(this.gameObject.name + "_target");
+                        MovableTarget.transform.SetParent(this.transform.parent.parent);
+                        MovableTarget.transform.position = this.transform.position;
+                        MovableTarget.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                        MovableTarget.transform.localEulerAngles = Vector3.zero;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        void OnDrawGizmos()
+        {
+            if (_MovableRadius > 0.0f)
+            {
+#if UNITY_EDITOR
+                if (UnityEditor.Selection.Contains(gameObject))
+                    Gizmos.color = Color.green;
+                else
+                    Gizmos.color = Color.gray;
+#else
+                Gizmos.color = Color.gray;
+#endif
+                Gizmos.DrawWireSphere(transform.position, _MovableRadius);
+            }
         }
     }
 }

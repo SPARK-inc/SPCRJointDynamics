@@ -163,12 +163,12 @@ namespace SPCR
                 UpdateCurve(new string[] { "重力", "Gravity scale" }[Lang], controller, ref controller._GravityScaleCurve);
                 UpdateCurve(new string[] { "風力", "Wind force scale" }[Lang], controller, ref controller._WindForceScaleCurve);
                 UpdateCurve(new string[] { "空気抵抗", "Resistance" }[Lang], controller, ref controller._ResistanceCurve);
-                UpdateCurve(new string[] { "Bone twist strength", "Bone twist strength" }[Lang], controller, ref controller._BoneTwistStrength);
                 UpdateCurve(new string[] { "硬さ", "Hardness" }[Lang], controller, ref controller._HardnessCurve);
                 UpdateCurve(new string[] { "摩擦", "Friction" }[Lang], controller, ref controller._FrictionCurve);
 
                 GUILayout.Space(8);
                 UpdateToggle(new string[] { "アニメーションを参照する", "Refer to animation" }[Lang], controller, ref controller._IsReferToAnimation);
+                UpdateToggle(new string[] { "骨のねじれを防ぐ", "Prevent Bone Twist" }[Lang], controller, ref controller._IsPreventBoneTwist);
             }
 
             controller.Opened_ConstraintSettings = Foldout(controller.Opened_ConstraintSettings, new string[] { "拘束設定", "Constraint settings" }[Lang], new Color(0.7f, 1.0f, 1.0f));
@@ -369,6 +369,7 @@ namespace SPCR
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("_IsPaused"), new GUIContent(new string[] { "一時停止", "Pause" }[Lang]), true);
 
                 Titlebar(new string[] { "デバッグ表示", "Show debug information" }[Lang], new Color(0.7f, 1.0f, 1.0f));
+                UpdateToggle(new string[] { "ポイントギズモ", "3D point gizmo" }[Lang], controller, ref controller._IsDebugDrawPointGizmo);
                 UpdateToggle(new string[] { "垂直構造", "Structural (Vertical)" }[Lang], controller, ref controller._IsDebugDraw_StructuralVertical);
                 UpdateToggle(new string[] { "水平構造", "Structural (Horizontal)" }[Lang], controller, ref controller._IsDebugDraw_StructuralHorizontal);
                 UpdateToggle(new string[] { "せん断", "Shear" }[Lang], controller, ref controller._IsDebugDraw_Shear);

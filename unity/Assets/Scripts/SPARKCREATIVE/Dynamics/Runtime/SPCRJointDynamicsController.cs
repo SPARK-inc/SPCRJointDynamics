@@ -119,7 +119,6 @@ namespace SPCR
         public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _WindForceScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.05f) });
-        public AnimationCurve _BoneTwistStrength = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
         public AnimationCurve _FrictionCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.7f), new Keyframe(1.0f, 0.7f) });
         public AnimationCurve _SliderJointLengthCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
@@ -192,6 +191,7 @@ namespace SPCR
         public AnimationCurve _LimitPowerCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 0.0f) });
 
         public bool _IsReferToAnimation;
+        public bool _IsPreventBoneTwist;
         public bool _IsLateUpdateStabilization;
         public int _StabilizationFrameRate = 60;
         float _TimeRest;
@@ -226,6 +226,7 @@ namespace SPCR
         public bool _IsComputeBendingVertical = true;
         public bool _IsComputeBendingHorizontal = true;
 
+        public bool _IsDebugDrawPointGizmo = false;
         public bool _IsDebugDraw_StructuralVertical = false;
         public bool _IsDebugDraw_StructuralHorizontal = false;
         public bool _IsDebugDraw_Shear = false;
@@ -259,6 +260,7 @@ namespace SPCR
 
         void Awake()
         {
+            var MovableTargetPoints = new List<Transform>(_PointTbl.Length);
             var PointTransforms = new Transform[_PointTbl.Length];
             var Points = new SPCRJointDynamicsJob.Point[_PointTbl.Length];
             for (int i = 0; i < _PointTbl.Length; ++i)
@@ -276,7 +278,6 @@ namespace SPCR
                 Points[i].Hardness = Mathf.Clamp01(_HardnessCurve.Evaluate(rate));
                 Points[i].Gravity = _Gravity * _GravityScaleCurve.Evaluate(rate);
                 Points[i].WindForceScale = _WindForceScaleCurve.Evaluate(rate) * rate;
-                Points[i].BoneTwistStrength = Mathf.Clamp01(_BoneTwistStrength.Evaluate(rate));
                 Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
                 Points[i].LimitPower = _LimitPowerCurve.Evaluate(rate);
                 Points[i].SliderJointLength = _SliderJointLengthCurve.Evaluate(rate);
@@ -284,10 +285,23 @@ namespace SPCR
                 Points[i].BoneAxis = src._BoneAxis;
                 Points[i].Position = PointTransforms[i].position;
                 Points[i].OldPosition = PointTransforms[i].position;
+                Points[i].LocalPosition = PointTransforms[i].rotation * -PointTransforms[i].localPosition;
+                Points[i].Rotation = PointTransforms[i].rotation;
                 Points[i].InitialPosition = _RootTransform.InverseTransformPoint(PointTransforms[i].position);
                 Points[i].PreviousDirection = PointTransforms[i].parent.position - PointTransforms[i].position;
                 Points[i].ParentLength = Points[i].PreviousDirection.magnitude;
                 Points[i].LocalRotation = PointTransforms[i].localRotation;
+
+                if (src.CreateMovableTargetPoint())
+                {
+                    Points[i].MobableTargetIndex = MovableTargetPoints.Count;
+                    Points[i].MobableTargetRadius = src._MovableRadius;
+                    MovableTargetPoints.Add(src.MovableTarget.transform);
+                }
+                else
+                {
+                    Points[i].MobableTargetIndex = -1;
+                }
 
                 var AllShrinkScale = _AllShrink * _AllShrinkScaleCurve.Evaluate(rate);
                 var AllStretchScale = _AllStretch * _AllStretchScaleCurve.Evaluate(rate);
@@ -359,11 +373,12 @@ namespace SPCR
                 _RootTransform,
                 Points,
                 PointTransforms,
+                MovableTargetPoints.ToArray(),
                 _ConstraintTable,
                 _ColliderTbl,
                 _PointGrabberTbl,
                 surfaceConstraints.ToArray(),
-                _IsReferToAnimation && (_UpdateTiming == UpdateTiming.LateUpdate));
+                _IsReferToAnimation && (_UpdateTiming == UpdateTiming.LateUpdate), _IsPreventBoneTwist);
 
             _Delay = 0.1f;
             _TimeRest = 0.0f;
@@ -438,7 +453,7 @@ namespace SPCR
 
             _Job.Execute(
                 _RootTransform, _RootSlideLimit, _RootRotateLimit,
-                StepTime, _SubSteps,
+                StepTime, _SubSteps, Time.fixedDeltaTime,
                 _WindForce,
                 _Relaxation, _SpringK,
                 _IsEnableFloorCollision, _FloorHeight,
@@ -1011,7 +1026,7 @@ namespace SPCR
                     IndexA = SurfaceFacePoints[i].PointA._Index,
                     IndexB = SurfaceFacePoints[i].PointB._Index,
                     IndexC = SurfaceFacePoints[i].PointC._Index,
-                    IndexD = SurfaceFacePoints[i].PointD._Index
+                    IndexD = SurfaceFacePoints[i].PointD._Index,
                 });
             }
 
@@ -1082,7 +1097,7 @@ namespace SPCR
             }
 
             Gizmos.color = Color.magenta;
-            _Job.DrawGizmos_Points();
+            _Job.DrawGizmos_Points(_IsDebugDrawPointGizmo);
 
             if (_IsDebugDraw_RuntimeColliderBounds && _ColliderTbl.Length > 0)
             {

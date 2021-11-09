@@ -27,6 +27,8 @@ namespace SPCR
         {
             public int Parent;
             public int Child;
+            public int MobableTargetIndex;
+            public float MobableTargetRadius;
             public float Weight;
             public float Mass;
             public float Resistance;
@@ -47,12 +49,12 @@ namespace SPCR
             public float BendingStretchHorizontal;
             public float LimitPower;
             public float WindForceScale;
-            public float BoneTwistStrength;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 InitialPosition;
             public Vector3 LocalPosition;
             public Quaternion LocalRotation;
+            public Quaternion Rotation;
             public Vector3 Position;
             public Vector3 OldPosition;
             public Vector3 PreviousDirection;
@@ -62,6 +64,8 @@ namespace SPCR
         {
             public int Parent;
             public int Child;
+            public int MobableTargetIndex;
+            public float MobableTargetRadius;
             public float Weight;
             public float Mass;
             public float Resistance;
@@ -82,11 +86,12 @@ namespace SPCR
             public float BendingStretchHorizontal;
             public float LimitPower;
             public float WindForceScale;
-            public float BoneTwistStrength;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
+            public Vector3 ParentBoneAxis;
             public Vector3 LocalPosition;
             public Quaternion LocalRotation;
+            public Quaternion Rotation;
             public Vector3 TransformLocalScale;
             public Quaternion TransformLocalRotation;
             public Vector3 TransformLocalPosition;
@@ -166,17 +171,21 @@ namespace SPCR
         }
 
         bool _IsReferToAnimation;
+        bool _IsPreventBoneTwist;
         Transform _RootBone;
         Vector3 _OldRootPosition;
         Vector3 _OldRootScale;
         Quaternion _OldRootRotation;
         int _PointCount;
         NativeArray<PointRead> _PointsR;
+        NativeArray<Vector3> _MovableTargetPointsR;
         NativeArray<PointReadWrite> _PointsRW;
         NativeArray<Constraint>[] _Constraints;
         NativeArray<SurfaceFaceConstraints> _SurfaceConstraints;
         Transform[] _PointTransforms;
         TransformAccessArray _TransformArray;
+        Transform[] _MovableTargetPointTransforms;
+        TransformAccessArray _MovableTargetTransformArray;
         SPCRJointDynamicsCollider[] _RefColliders;
         NativeArray<Collider> _Colliders;
         NativeArray<ColliderEx> _ColliderExs;
@@ -185,20 +194,22 @@ namespace SPCR
         NativeArray<GrabberEx> _GrabberExs;
         JobHandle _hJob = default(JobHandle);
 
-        public void Initialize(Transform RootBone, Point[] Points, Transform[] PointTransforms, Constraint[][] Constraints, SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers, SurfaceFaceConstraints[] SurfaceConstraints, bool IsReferToAnimation)
+        public void Initialize(
+            Transform RootBone,
+            Point[] Points, Transform[] PointTransforms, Transform[] MovableTargetPointTransforms,
+            Constraint[][] Constraints,
+            SPCRJointDynamicsCollider[] Colliders, SPCRJointDynamicsPointGrabber[] Grabbers,
+            SurfaceFaceConstraints[] SurfaceConstraints, bool IsReferToAnimation, bool IsPreventBoneTwist)
         {
             _IsReferToAnimation = IsReferToAnimation;
+            _IsPreventBoneTwist = IsPreventBoneTwist;
             _RootBone = RootBone;
             _PointCount = Points.Length;
             _OldRootPosition = _RootBone.position;
             _OldRootRotation = _RootBone.rotation;
             _OldRootScale = _RootBone.lossyScale;
-
-            _PointTransforms = new Transform[_PointCount];
-            for (int i = 0; i < _PointCount; ++i)
-            {
-                _PointTransforms[i] = PointTransforms[i];
-            }
+            _PointTransforms = PointTransforms;
+            _MovableTargetPointTransforms = MovableTargetPointTransforms;
 
             var PointsR = new PointRead[_PointCount];
             var PointsRW = new PointReadWrite[_PointCount];
@@ -207,6 +218,8 @@ namespace SPCR
                 var src = Points[i];
                 PointsR[i].Parent = src.Parent;
                 PointsR[i].Child = src.Child;
+                PointsR[i].MobableTargetIndex = src.MobableTargetIndex;
+                PointsR[i].MobableTargetRadius = src.MobableTargetRadius;
                 PointsR[i].Weight = src.Weight;
                 PointsR[i].Mass = src.Mass;
                 PointsR[i].Resistance = src.Resistance;
@@ -228,9 +241,10 @@ namespace SPCR
                 PointsR[i].LimitPower = src.LimitPower;
                 PointsR[i].Gravity = src.Gravity;
                 PointsR[i].WindForceScale = src.WindForceScale;
-                PointsR[i].BoneTwistStrength = src.BoneTwistStrength;
                 PointsR[i].BoneAxis = src.BoneAxis;
+                PointsR[i].ParentBoneAxis = src.Parent == -1 ? Vector3.zero : (src.Position - Points[src.Parent].Position).normalized;
                 PointsR[i].LocalPosition = src.LocalPosition;
+                PointsR[i].Rotation = src.Rotation;
                 PointsR[i].LocalRotation = src.LocalRotation;
                 PointsR[i].TransformLocalScale = PointTransforms[i].localScale;
                 PointsR[i].TransformLocalRotation = PointTransforms[i].localRotation;
@@ -251,7 +265,9 @@ namespace SPCR
             _PointsRW = new NativeArray<PointReadWrite>(_PointCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             _PointsRW.CopyFrom(PointsRW);
 
+            _MovableTargetPointsR = new NativeArray<Vector3>(MovableTargetPointTransforms.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             _TransformArray = new TransformAccessArray(_PointTransforms);
+            _MovableTargetTransformArray = new TransformAccessArray(_MovableTargetPointTransforms);
 
             _Constraints = new NativeArray<Constraint>[Constraints.Length];
             for (int i = 0; i < Constraints.Length; ++i)
@@ -281,10 +297,10 @@ namespace SPCR
                     ColliderR[i].RadiusHead = src.RadiusHead;
                     ColliderR[i].Height = 0.0f;
                 }
-                ColliderExR[i].Enabled = src.isActiveAndEnabled ? 1 : 0;
                 ColliderR[i].Friction = src.Friction;
                 ColliderR[i].PushOutRate = src.PushOutRate;
                 ColliderR[i].ForceType = src._SurfaceColliderForce;
+                ColliderExR[i].Enabled = src.isActiveAndEnabled ? 1 : 0;
                 ColliderExR[i].Position = ColliderExR[i].OldPosition = src.transform.position;
                 ColliderExR[i].Direction = ColliderExR[i].OldDirection = src.transform.rotation * Vector3.up * src.Height;
                 ColliderExR[i].LocalBounds = new Bounds();
@@ -303,6 +319,7 @@ namespace SPCR
             }
             _Grabbers = new NativeArray<Grabber>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             _Grabbers.CopyFrom(GrabberR);
+
             _GrabberExs = new NativeArray<GrabberEx>(Grabbers.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
             _hJob = default(JobHandle);
@@ -321,6 +338,8 @@ namespace SPCR
             {
                 _Constraints[i].Dispose();
             }
+            _MovableTargetPointsR.Dispose();
+            _MovableTargetTransformArray.Dispose();
             _TransformArray.Dispose();
             _PointsR.Dispose();
             _PointsRW.Dispose();
@@ -386,7 +405,7 @@ namespace SPCR
 
         public void Execute(
             Transform RootTransform, float RootSlideLimit, float RootRotateLimit,
-            float StepTime, int SubSteps,
+            float StepTime, int SubSteps, float FixedTimeStep,
             Vector3 WindForce,
             int Relaxation, float SpringK,
             bool IsEnableFloorCollision, float FloorHeight,
@@ -437,6 +456,7 @@ namespace SPCR
 
             var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
             var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
+            var pRMovableTargetPoints = (Vector3*)_MovableTargetPointsR.GetUnsafePtr();            
             var pColliders = (Collider*)_Colliders.GetUnsafePtr();
             var pColliderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
             var pGrabbers = (Grabber*)_Grabbers.GetUnsafePtr();
@@ -449,6 +469,10 @@ namespace SPCR
                 CopyAnimatedPoint.pRWPoints = pRWPoints;
                 _hJob = CopyAnimatedPoint.Schedule(_TransformArray, _hJob);
             }
+
+            var CopyFromTransformPosition = new JobCopyFromTransformPosition();
+            CopyFromTransformPosition.pPositions = pRMovableTargetPoints;
+            _hJob = CopyFromTransformPosition.Schedule(_MovableTargetTransformArray, _hJob);
 
             int ColliderCount = _RefColliders.Length;
             Bounds TempBounds = new Bounds();
@@ -468,6 +492,7 @@ namespace SPCR
 
             float DeltaStepMulDeltaRelax = (1.0f / SubSteps) * (1.0f / Relaxation);
             StepTime /= SubSteps;
+            FixedTimeStep /= SubSteps;
 
             for (int iSubStep = 1; iSubStep <= SubSteps; iSubStep++)
             {
@@ -547,8 +572,11 @@ namespace SPCR
                 PointUpdate.pGrabberExs = pGrabberExs;
                 PointUpdate.pRPoints = pRPoints;
                 PointUpdate.pRWPoints = pRWPoints;
+                PointUpdate.pRMovableTargetPoints = pRMovableTargetPoints;
                 PointUpdate.WindForce = WindForce;
                 PointUpdate.StepTime_x2_Half = StepTime * StepTime * 0.5f * SubSteps;
+                PointUpdate.StepTime = StepTime;
+                PointUpdate.FixedDeltaTimeStep = FixedTimeStep;
                 PointUpdate.SystemOffset = SystemOffset;
                 PointUpdate.SystemRotation = SystemRotation;
                 PointUpdate.IsPaused = IsPaused;
@@ -619,6 +647,7 @@ namespace SPCR
                 PointToTransform.pRWPoints = pRWPoints;
                 PointToTransform.UpdateTransform = iSubStep == SubSteps;
                 PointToTransform.angleLockConfig = angleLockConfig;
+                PointToTransform.isPreventBoneTwist = _IsPreventBoneTwist;
                 _hJob = PointToTransform.Schedule(_TransformArray, _hJob);
             }
 
@@ -633,14 +662,70 @@ namespace SPCR
             _hJob = default(JobHandle);
         }
 
-        public void DrawGizmos_Points()
+        public void DrawGizmos_Points(bool Draw3DGizmo)
         {
-            Gizmos.color = Color.blue;
-            for (int i = 0; i < _PointCount; ++i)
+            if(Draw3DGizmo)
             {
-                Gizmos.DrawSphere(_PointsRW[i].Position, 0.005f);
-               
+                if (_PointTransforms == null) return;
+
+                for (int i = 0; i < _PointTransforms.Length; ++i)
+                {
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawSphere(_PointTransforms[i].position, 0.06f);
+                    Gizmos.color = Color.blue;
+                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].forward * 0.4f);
+                    Gizmos.color = Color.green;
+                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].up * 0.4f);
+                    Gizmos.color = Color.red;
+                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].right * 0.4f);
+                }
             }
+            else
+            {
+                Gizmos.color = Color.blue;
+                for (int i = 0; i < _PointCount; ++i)
+                {
+                    Gizmos.DrawSphere(_PointsRW[i].Position, 0.005f);
+                }
+            }
+
+            Gizmos.matrix = Matrix4x4.identity;
+        }
+
+        void DrawArrow(Vector3 pos, Vector3 direction)
+        {
+            if (direction == Vector3.zero) return;
+            Gizmos.DrawLine(pos, pos + direction);
+            float arrowHeight = 0.15f;
+            float coneAngle = 20.0f;
+
+            Vector3 up = Quaternion.LookRotation(direction) * Quaternion.Euler(180 + coneAngle, 0, 0) * new Vector3(0, 0, 1);
+            Vector3 down = Quaternion.LookRotation(direction) * Quaternion.Euler(180 - coneAngle, 0, 0) * new Vector3(0, 0, 1);
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + coneAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - coneAngle, 0) * new Vector3(0, 0, 1);
+
+            Vector3 arrowPos = pos + direction;
+            up = arrowPos + up * arrowHeight;
+            down = arrowPos + down * arrowHeight;
+            right = arrowPos + right * arrowHeight;
+            left = arrowPos + left * arrowHeight;
+
+
+            Gizmos.DrawLine(arrowPos, up);
+            Gizmos.DrawLine(arrowPos, down);
+            Gizmos.DrawLine(arrowPos, right);
+            Gizmos.DrawLine(arrowPos, left);
+
+            Gizmos.DrawLine(up, right);
+            Gizmos.DrawLine(right, down);
+            Gizmos.DrawLine(down, left);
+            Gizmos.DrawLine(left, up);
+
+            arrowPos = arrowPos - direction * (arrowHeight - 0.01f);
+            Gizmos.DrawLine(arrowPos, up);
+            Gizmos.DrawLine(arrowPos, down);
+            Gizmos.DrawLine(arrowPos, right);
+            Gizmos.DrawLine(arrowPos, left);
         }
 
         public void DrawGizmos_Constraints(int A, int B)
@@ -729,6 +814,8 @@ namespace SPCR
             public PointRead* pRPoints;
             [NativeDisableUnsafePtrRestriction]
             public PointReadWrite* pRWPoints;
+            [NativeDisableUnsafePtrRestriction]
+            public Vector3* pRMovableTargetPoints;
 
             [ReadOnly]
             public Matrix4x4 RootMatrix;
@@ -738,6 +825,10 @@ namespace SPCR
             public Vector3 WindForce;
             [ReadOnly]
             public float StepTime_x2_Half;
+            [ReadOnly]
+            public float StepTime;
+            [ReadOnly]
+            public float FixedDeltaTimeStep;
 
             [ReadOnly]
             public Vector3 SystemOffset;
@@ -779,6 +870,7 @@ namespace SPCR
                     ExternalForce += pR->Gravity;
                     ExternalForce += WindForce * pR->WindForceScale / pR->Mass;
                     ExternalForce *= StepTime_x2_Half;
+                    ExternalForce /= StepTime / FixedDeltaTimeStep;
 
                     Displacement = pRW->TargetDisplacement;
                     Displacement += ExternalForce;
@@ -790,6 +882,20 @@ namespace SPCR
                 pRW->Position += Displacement;
                 pRW->Friction = 0.0f;
 
+                if (!IsPaused)
+                {
+                    if (pR->MobableTargetIndex != -1)
+                    {
+                        var Target = pRMovableTargetPoints[pR->MobableTargetIndex];
+                        var Move = Target - pRW->Position;
+                        var MoveLength = Move.magnitude;
+                        if (MoveLength > pR->MobableTargetRadius)
+                        {
+                            pRW->Position += Move / MoveLength * (MoveLength - pR->MobableTargetRadius);
+                        }
+                    }
+                }
+
                 if (pR->Hardness > 0.0f)
                 {
                     if (IsReferToAnimation)
@@ -800,7 +906,8 @@ namespace SPCR
                     else
                     {
                         var Target = RootMatrix.MultiplyPoint3x4(pRW->InitialPosition);
-                        pRW->Position += (Target - pRW->Position) * pR->Hardness;
+                        Vector3 DisplacementFromOrigin = (Target - pRW->Position);
+                        pRW->Position += DisplacementFromOrigin * pR->Hardness * (StepTime / FixedDeltaTimeStep);
                     }
                 }
 
@@ -1636,7 +1743,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobCopyFromAnimatedPoint : IJobParallelForTransform
         {
@@ -1652,7 +1759,21 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
+#endif
+        struct JobCopyFromTransformPosition : IJobParallelForTransform
+        {
+            [NativeDisableUnsafePtrRestriction]
+            public Vector3* pPositions;
+
+            void IJobParallelForTransform.Execute(int index, TransformAccess transform)
+            {
+                pPositions[index] = transform.position;
+            }
+        }
+
+#if ENABLE_BURST
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobPointToTransform : IJobParallelForTransform
         {
@@ -1664,6 +1785,9 @@ namespace SPCR
             public bool UpdateTransform;
             [ReadOnly]
             public AngleLimitConfig angleLockConfig;
+
+            [ReadOnly]
+            public bool isPreventBoneTwist;
 
             void IJobParallelForTransform.Execute(int index, TransformAccess transform)
             {
@@ -1709,22 +1833,44 @@ namespace SPCR
                 transform.localRotation = pR->LocalRotation;
                 if (pR->Child != -1)
                 {
+                    Quaternion ParentRotation = Quaternion.identity;
+                    if(pR->Parent != -1 && isPreventBoneTwist)
+                    {
+                        var pRP = pRPoints + pR->Parent;
+                        var pRWP = pRWPoints + pR->Parent;
+                        Vector3 parentBoneAxis = (pRW->Position - pRWP->Position).normalized;
+
+                        if(pRP->Weight < EPSILON)
+                        {
+                            transform.rotation = pR->Rotation;
+
+                            Vector3 oldVecProj = ProjectOnPlane(pR->ParentBoneAxis, Vector3.down);
+                            Vector3 newVecProj = ProjectOnPlane(parentBoneAxis, Vector3.down);
+                            Vector3 refVec = Quaternion.Euler(0, -90, 0) * pR->ParentBoneAxis;
+
+                            float angle = Vector3.Angle(oldVecProj, newVecProj);
+                            float dot = Vector3.Dot(refVec, newVecProj);
+                            if (dot >= 0)
+                                angle = -angle;
+                            ParentRotation = Quaternion.AngleAxis(angle, Vector3.down);
+                        }
+                    }
+
                     var pRWC = pRWPoints + pR->Child;
                     var Direction = pRWC->Position - pRW->Position;
-                    Direction = Vector3.Lerp(pR->BoneAxis, Direction, pR->BoneTwistStrength);
                     if (Direction.sqrMagnitude > EPSILON)
                     {
                         Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
                         Vector3 AimVector = mRotate * pR->BoneAxis;
                         Quaternion AimRotation = Quaternion.FromToRotation(AimVector, Direction);
-                        transform.rotation = AimRotation * transform.rotation;
-
-                        //Vector3 localEular = transform.localRotation.eulerAngles;
-                        //localEular.y = Mathf.Lerp(localEular.y, pR->LocalRotation.eulerAngles.y, pR->BoneTwistStrength);
-                        //transform.localRotation = Quaternion.Euler(localEular);
-                        //Debug.Log("Index: " + index + " Locyaw: " + pR->LocalRotation.eulerAngles.y + " NewYaw: " + transform.localRotation.eulerAngles.y);
+                        transform.rotation = AimRotation * transform.rotation * ParentRotation;
                     }
                 }
+            }
+
+            Vector3 ProjectOnPlane(Vector3 vec, Vector3 normal)
+            {
+                return vec - normal * Vector3.Dot(vec, normal);
             }
 
             void LockAngle(PointRead* pR, PointReadWrite* pRW)
