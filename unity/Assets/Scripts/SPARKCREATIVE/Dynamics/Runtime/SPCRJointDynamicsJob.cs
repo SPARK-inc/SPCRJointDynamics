@@ -1839,8 +1839,9 @@ namespace SPCR
                         var pRP = pRPoints + pR->Parent;
                         var pRWP = pRWPoints + pR->Parent;
                         Vector3 parentBoneAxis = (pRW->Position - pRWP->Position).normalized;
+                        float oneMinusParentDot = 1 - Mathf.Abs(Vector3.Dot(pR->ParentBoneAxis, Vector3.down));
 
-                        if(pRP->Weight < EPSILON)
+                        if (pRP->Weight < EPSILON && oneMinusParentDot > EPSILON)
                         {
                             transform.rotation = pR->Rotation;
 
@@ -1890,18 +1891,21 @@ namespace SPCR
                     deltaPositionFromParent = initialDeltaPos;
                 }
 
+                float deltaParentMagnitude = deltaPositionFromParent.magnitude;
+                float initialDeltaMagnitude = initialDeltaPos.magnitude;
+
                 Vector3 finalPostion = pRW->Position;
                 //X軸の制限
                 {
                     Vector3 currDeltaPosition = finalPostion - pRWP->Position;
                     float currAngleX = Mathf.Acos(currDeltaPosition.x / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
-                    float parentAngleX = Mathf.Acos(deltaPositionFromParent.x / deltaPositionFromParent.magnitude) * Mathf.Rad2Deg;
+                    float parentAngleX = Mathf.Acos(deltaPositionFromParent.x / deltaParentMagnitude) * Mathf.Rad2Deg;
                     float minAngleX = parentAngleX - angleLockConfig.angleLimit;
                     float maxAngleX = parentAngleX + angleLockConfig.angleLimit;
                     if (currAngleX <= minAngleX || currAngleX >= maxAngleX)
                     {
                         float angle = currAngleX <= minAngleX ? minAngleX : maxAngleX;
-                        float X = pRWP->Position.x + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaPos.magnitude;
+                        float X = pRWP->Position.x + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaMagnitude;
                         finalPostion.x = Mathf.Lerp(finalPostion.x, X, pR->LimitPower);
                     }
                 }
@@ -1909,14 +1913,14 @@ namespace SPCR
                 {
                     Vector3 currDeltaPosition = finalPostion - pRWP->Position;
                     float currAngleY = Mathf.Acos(currDeltaPosition.y / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
-                    float parentAngleY = Mathf.Acos(deltaPositionFromParent.y / deltaPositionFromParent.magnitude) * Mathf.Rad2Deg;
+                    float parentAngleY = Mathf.Acos(deltaPositionFromParent.y / deltaParentMagnitude) * Mathf.Rad2Deg;
                     float minAngleY = parentAngleY - angleLockConfig.angleLimit;
                     float maxAngleY = parentAngleY + angleLockConfig.angleLimit;
 
                     if (currAngleY <= minAngleY || currAngleY >= maxAngleY)
                     {
                         float angle = currAngleY <= minAngleY ? minAngleY : maxAngleY;
-                        float Y = pRWP->Position.y + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaPos.magnitude;
+                        float Y = pRWP->Position.y + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaMagnitude;
                         finalPostion.y = Mathf.Lerp(finalPostion.y, Y, pR->LimitPower);
                     }
                 }
@@ -1924,13 +1928,13 @@ namespace SPCR
                 {
                     Vector3 currDeltaPosition = finalPostion - pRWP->Position;
                     float currAngleZ = Mathf.Acos(currDeltaPosition.z / currDeltaPosition.magnitude) * Mathf.Rad2Deg;
-                    float parentAngleZ = Mathf.Acos(deltaPositionFromParent.z / deltaPositionFromParent.magnitude) * Mathf.Rad2Deg;
+                    float parentAngleZ = Mathf.Acos(deltaPositionFromParent.z / deltaParentMagnitude) * Mathf.Rad2Deg;
                     float minAngleZ = parentAngleZ - angleLockConfig.angleLimit;
                     float maxAngleZ = parentAngleZ + angleLockConfig.angleLimit;
                     if (currAngleZ <= minAngleZ || currAngleZ >= maxAngleZ)
                     {
                         float angle = currAngleZ <= minAngleZ ? minAngleZ : maxAngleZ;
-                        float Z = pRWP->Position.z + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaPos.magnitude;
+                        float Z = pRWP->Position.z + Mathf.Cos(angle * Mathf.Deg2Rad) * initialDeltaMagnitude;
                         finalPostion.z = Mathf.Lerp(finalPostion.z, Z, pR->LimitPower);
                     }
                 }
