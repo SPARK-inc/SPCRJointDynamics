@@ -19,6 +19,9 @@ namespace SPCR
     [DefaultExecutionOrder(10000)]
     public class SPCRJointDynamicsController : MonoBehaviour
     {
+        float _TimeScale = 1.0f;
+        public float TimeScale { set { _TimeScale = value; } }
+
 #if UNITY_EDITOR
         public enum eInspectorLang
         {
@@ -194,7 +197,18 @@ namespace SPCR
         public bool _IsPreventBoneTwist;
         public bool _IsLateUpdateStabilization;
         public int _StabilizationFrameRate = 60;
+
         float _TimeRest;
+        public enum eFade
+        {
+            None,
+            In,
+            Out,
+        }
+        eFade _eFade;
+        float _FadeSec;
+        float _FadeSecLength;
+        float _BlendRatio = 0.0f;
 
         [SerializeField]
         SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
@@ -257,6 +271,13 @@ namespace SPCR
         [SerializeField]
         public List<SPCRJointDynamicsPoint> _SubDivOriginalPoints = new List<SPCRJointDynamicsPoint>();
 #endif
+
+        public void FadeInOut(eFade fade, float fadeSec)
+        {
+            _eFade = fade;
+            _FadeSec = 0.0f;
+            _FadeSecLength = fadeSec;
+        }
 
         void Awake()
         {
@@ -441,6 +462,30 @@ namespace SPCR
 
         void UpdateImpl(float DeltaTime)
         {
+            DeltaTime *= _TimeScale;
+
+            switch (_eFade)
+            {
+            case eFade.In:
+                _BlendRatio = 1.0f - _FadeSec / _FadeSecLength;
+                _FadeSec += DeltaTime;
+                if (_FadeSec >= _FadeSecLength)
+                {
+                    _eFade = eFade.None;
+                    _BlendRatio = 0.0f;
+                }
+                break;
+            case eFade.Out:
+                _BlendRatio = _FadeSec / _FadeSecLength;
+                _FadeSec += DeltaTime;
+                if (_FadeSec >= _FadeSecLength)
+                {
+                    _eFade = eFade.None;
+                    _BlendRatio = 1.0f;
+                }
+                break;
+            }
+
             if (_Delay > 0.0f)
             {
                 _Delay -= DeltaTime;
@@ -461,7 +506,8 @@ namespace SPCR
                 _IsEnableColliderCollision,
                 _IsEnableSurfaceCollision,
                 _SurfaceCollisionDivision,
-                GetAnglesConfig());
+                GetAnglesConfig(),
+                _BlendRatio);
         }
 
         void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)

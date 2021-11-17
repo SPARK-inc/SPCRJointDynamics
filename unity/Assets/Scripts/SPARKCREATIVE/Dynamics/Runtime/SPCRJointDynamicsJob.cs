@@ -102,6 +102,7 @@ namespace SPCR
             public Vector3 InitialPosition;
             public Vector3 InitialWorldPosition;
             public Vector3 Position;
+            public Vector3 BlendPosition;
             public Vector3 TargetDisplacement;
             public Vector3 OldPosition;
             public Vector3 OriginalOldPosition;
@@ -413,7 +414,8 @@ namespace SPCR
             bool IsEnableColliderCollision,
             bool EnableSurfaceCollision,
             int SurfaceCollisionDivision,
-            AngleLimitConfig angleLockConfig)
+            AngleLimitConfig angleLockConfig,
+            float BlendRatio)
         {
             bool IsPaused = StepTime <= 0.0f;
             if (IsPaused)
@@ -581,6 +583,7 @@ namespace SPCR
                 PointUpdate.SystemRotation = SystemRotation;
                 PointUpdate.IsPaused = IsPaused;
                 PointUpdate.IsReferToAnimation = _IsReferToAnimation;
+                PointUpdate.BlendRatio = BlendRatio;
                 _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
 
                 if (!IsPaused)
@@ -839,6 +842,9 @@ namespace SPCR
             [ReadOnly]
             public bool IsReferToAnimation;
 
+            [ReadOnly]
+            public float BlendRatio;
+
             private Vector3 ApplySystemTransform(Vector3 Point, Vector3 Pivot)
             {
                 return SystemRotation * (Point - Pivot) + Pivot + SystemOffset;
@@ -896,17 +902,19 @@ namespace SPCR
                     }
                 }
 
+                Vector3 BlendPosition = IsReferToAnimation
+                    ? pRW->InitialWorldPosition
+                    : RootMatrix.MultiplyPoint3x4(pRW->InitialPosition);
+
                 if (pR->Hardness > 0.0f)
                 {
                     if (IsReferToAnimation)
                     {
-                        var Target = pRW->InitialWorldPosition;
-                        pRW->Position += (Target - pRW->Position) * pR->Hardness;
+                        pRW->Position += (BlendPosition - pRW->Position) * pR->Hardness;
                     }
                     else
                     {
-                        var Target = RootMatrix.MultiplyPoint3x4(pRW->InitialPosition);
-                        Vector3 DisplacementFromOrigin = (Target - pRW->Position);
+                        Vector3 DisplacementFromOrigin = (BlendPosition - pRW->Position);
                         pRW->Position += DisplacementFromOrigin * pR->Hardness * (StepTime / FixedDeltaTimeStep);
                     }
                 }
@@ -954,6 +962,8 @@ namespace SPCR
                         pRW->GrabberDistance = Mathf.Sqrt(sqrNearRange) / 2.0f;
                     }
                 }
+
+                pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, BlendRatio);
             }
         }
 
@@ -1797,25 +1807,25 @@ namespace SPCR
                 if (pR->Weight >= EPSILON)
                 {
                     var pRWP = pRWPoints + pR->Parent;
-                    var Direction = pRW->Position - pRWP->Position;
+                    var Direction = pRW->BlendPosition - pRWP->BlendPosition;
                     var RealLength = Direction.magnitude;
                     if (RealLength > EPSILON)
                     {
                         pRW->PreviousDirection = Direction;
                         if (UpdateTransform)
                         {
-                            transform.position = pRW->Position;
+                            transform.position = pRW->BlendPosition;
                             SetRotation(index, transform);
                         }
                     }
                     else
                     {
-                        pRW->Position = pRWP->Position + pRW->PreviousDirection;
+                        pRW->BlendPosition = pRWP->BlendPosition + pRW->PreviousDirection;
                     }
                 }
                 else
                 {
-                    pRW->Position = transform.position;
+                    pRW->BlendPosition = transform.position;
                     if (UpdateTransform)
                     {
                         SetRotation(index, transform);
@@ -1838,7 +1848,7 @@ namespace SPCR
                     {
                         var pRP = pRPoints + pR->Parent;
                         var pRWP = pRWPoints + pR->Parent;
-                        Vector3 parentBoneAxis = (pRW->Position - pRWP->Position).normalized;
+                        Vector3 parentBoneAxis = (pRW->BlendPosition - pRWP->BlendPosition).normalized;
                         float oneMinusParentDot = 1 - Mathf.Abs(Vector3.Dot(pR->ParentBoneAxis, Vector3.down));
 
                         if (pRP->Weight < EPSILON && oneMinusParentDot > EPSILON)
@@ -1858,7 +1868,7 @@ namespace SPCR
                     }
 
                     var pRWC = pRWPoints + pR->Child;
-                    var Direction = pRWC->Position - pRW->Position;
+                    var Direction = pRWC->BlendPosition - pRW->BlendPosition;
                     if (Direction.sqrMagnitude > EPSILON)
                     {
                         Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
