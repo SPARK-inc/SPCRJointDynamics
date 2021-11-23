@@ -995,10 +995,10 @@ namespace SPCR
                     }
                 }
 
-                if (IsFadeIn)
-                    pRW->BlendPosition = Vector3.Lerp(pRW->Position, pRW->FadeStartPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
-                else
-                    pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
+                pRW->BlendPosition = Vector3.Lerp(
+                    pRW->Position,
+                    IsFadeIn ? pRW->FadeStartPosition : BlendPosition,
+                    Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
             }
         }
 
