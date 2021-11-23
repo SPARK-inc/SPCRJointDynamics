@@ -101,6 +101,7 @@ namespace SPCR
         {
             public Vector3 InitialPosition;
             public Vector3 InitialWorldPosition;
+            public Vector3 FadeStartPosition;
             public Vector3 Position;
             public Vector3 BlendPosition;
             public Vector3 TargetDisplacement;
@@ -392,6 +393,15 @@ namespace SPCR
             _OldRootScale = _RootBone.lossyScale;
         }
 
+        public void CaptureSkeletonPositions()
+        {
+            var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
+
+            var CaptureFadeStartPoint = new JobCaptureFadeStartPoint();
+            CaptureFadeStartPoint.pRWPoints = pRWPoints;
+            CaptureFadeStartPoint.Schedule(_TransformArray, default(JobHandle)).Complete();
+        }
+
         public void RestoreTransform()
         {
             if (_IsReferToAnimation)
@@ -415,7 +425,8 @@ namespace SPCR
             bool EnableSurfaceCollision,
             int SurfaceCollisionDivision,
             AngleLimitConfig angleLockConfig,
-            float BlendRatio)
+            float BlendRatio,
+            bool IsFadeIn)
         {
             bool IsPaused = StepTime <= 0.0f;
             if (IsPaused)
@@ -582,6 +593,7 @@ namespace SPCR
                 PointUpdate.SystemOffset = SystemOffset;
                 PointUpdate.SystemRotation = SystemRotation;
                 PointUpdate.IsPaused = IsPaused;
+                PointUpdate.IsFadeIn = IsFadeIn;
                 PointUpdate.IsReferToAnimation = _IsReferToAnimation;
                 PointUpdate.BlendRatio = BlendRatio;
                 _hJob = PointUpdate.Schedule(_PointCount, 8, _hJob);
@@ -859,6 +871,8 @@ namespace SPCR
             public bool IsPaused;
             [ReadOnly]
             public bool IsReferToAnimation;
+            [ReadOnly]
+            public bool IsFadeIn;
 
             [ReadOnly]
             public float BlendRatio;
@@ -981,7 +995,10 @@ namespace SPCR
                     }
                 }
 
-                pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
+                if (IsFadeIn)
+                    pRW->BlendPosition = Vector3.Lerp(pRW->Position, pRW->FadeStartPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
+                else
+                    pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
             }
         }
 
@@ -1783,6 +1800,22 @@ namespace SPCR
                 var pRW = pRWPoints + index;
 
                 pRW->InitialWorldPosition = transform.position;
+            }
+        }
+
+#if ENABLE_BURST
+        [Unity.Burst.BurstCompile]
+#endif
+        struct JobCaptureFadeStartPoint : IJobParallelForTransform
+        {
+            [NativeDisableUnsafePtrRestriction]
+            public PointReadWrite* pRWPoints;
+
+            void IJobParallelForTransform.Execute(int index, TransformAccess transform)
+            {
+                var pRW = pRWPoints + index;
+
+                pRW->FadeStartPosition = transform.position;
             }
         }
 

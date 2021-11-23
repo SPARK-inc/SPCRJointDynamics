@@ -209,6 +209,7 @@ namespace SPCR
         float _FadeSec;
         float _FadeSecLength;
         float _BlendRatio = 0.0f;
+        bool _IsFadeReferToLastPoint;
 
         [SerializeField]
         SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
@@ -272,11 +273,17 @@ namespace SPCR
         public List<SPCRJointDynamicsPoint> _SubDivOriginalPoints = new List<SPCRJointDynamicsPoint>();
 #endif
 
-        public void FadeInOut(eFade fade, float fadeSec)
+        public void FadeInOut(eFade fade, float fadeSec, bool IsReferToLastPoint)
         {
+            _IsFadeReferToLastPoint = IsReferToLastPoint;
             _eFade = fade;
             _FadeSec = 0.0f;
             _FadeSecLength = fadeSec;
+
+            if ((_eFade == eFade.In) && _IsFadeReferToLastPoint)
+            {
+                _Job.CaptureSkeletonPositions();
+            }
         }
 
         void Awake()
@@ -507,7 +514,8 @@ namespace SPCR
                 _IsEnableSurfaceCollision,
                 _SurfaceCollisionDivision,
                 GetAnglesConfig(),
-                _BlendRatio);
+                _BlendRatio,
+                (_eFade == eFade.In) && _IsFadeReferToLastPoint);
         }
 
         void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)
