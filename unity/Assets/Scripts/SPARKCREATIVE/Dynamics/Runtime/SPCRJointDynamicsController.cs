@@ -1154,26 +1154,31 @@ namespace SPCR
             {
                 Gizmos.color = new Color(0.8f, 0.4f, 0.4f);
                 OnDrawGizms_Constraint(_ConstraintsStructuralVertical);
+                _Job.DrawGizmos_Constraint(true, false, false, false, false);
             }
             if (_IsDebugDraw_StructuralHorizontal)
             {
                 Gizmos.color = new Color(0.4f, 0.8f, 0.4f);
                 OnDrawGizms_Constraint(_ConstraintsStructuralHorizontal);
+                _Job.DrawGizmos_Constraint(false, true, false, false, false);
             }
             if (_IsDebugDraw_Shear)
             {
                 Gizmos.color = new Color(0.4f, 0.4f, 0.8f);
                 OnDrawGizms_Constraint(_ConstraintsShear);
+                _Job.DrawGizmos_Constraint(false, false, true, false, false);
             }
             if (_IsDebugDraw_BendingVertical)
             {
                 Gizmos.color = new Color(0.8f, 0.8f, 0.4f);
                 OnDrawGizms_Constraint(_ConstraintsBendingVertical);
+                _Job.DrawGizmos_Constraint(false, false, false, true, false);
             }
             if (_IsDebugDraw_BendingHorizontal)
             {
                 Gizmos.color = new Color(0.4f, 0.8f, 0.8f);
                 OnDrawGizms_Constraint(_ConstraintsBendingHorizontal);
+                _Job.DrawGizmos_Constraint(false, false, false, false, true);
             }
 
             if (_IsDebugDraw_SurfaceFace)

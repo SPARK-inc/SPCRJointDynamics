@@ -458,7 +458,7 @@ namespace SPCR
 
             var pRPoints = (PointRead*)_PointsR.GetUnsafePtr();
             var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
-            var pRMovableTargetPoints = (Vector3*)_MovableTargetPointsR.GetUnsafePtr();            
+            var pRMovableTargetPoints = (Vector3*)_MovableTargetPointsR.GetUnsafePtr();
             var pColliders = (Collider*)_Colliders.GetUnsafePtr();
             var pColliderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
             var pGrabbers = (Grabber*)_Grabbers.GetUnsafePtr();
@@ -667,7 +667,7 @@ namespace SPCR
 
         public void DrawGizmos_Points(bool Draw3DGizmo)
         {
-            if(Draw3DGizmo)
+            if (Draw3DGizmo)
             {
                 if (_PointTransforms == null) return;
 
@@ -736,6 +736,24 @@ namespace SPCR
             Gizmos.DrawLine(_PointTransforms[A].position, _PointTransforms[B].position);
         }
 
+        public void DrawGizmos_Constraint(bool StructuralVertical, bool StructuralHorizontal, bool Shear, bool BendingVertical, bool BendingHorizontal)
+        {
+            if (_Constraints == null) return;
+            if (_PointsRW == null) return;
+
+            Gizmos.color = new Color(0.4f, 0.4f, 0.4f);
+
+            foreach (var constraint in _Constraints)
+            {
+                for (int i = 0; i < constraint.Length; ++i)
+                {
+                    var A = _PointsRW[constraint[i].IndexA];
+                    var B = _PointsRW[constraint[i].IndexB];
+                    Gizmos.DrawLine(A.Position, B.Position);
+                }
+            }
+        }
+
         public void DrawGizmos_ColliderEx()
         {
             var BoundsColor = new Color(0.4f, 0.4f, 0.4f, 1.0f);
@@ -789,7 +807,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobCalculateDisplacement : IJobParallelFor
         {
@@ -803,7 +821,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobPointUpdate : IJobParallelFor
         {
@@ -963,12 +981,12 @@ namespace SPCR
                     }
                 }
 
-                pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, BlendRatio);
+                pRW->BlendPosition = Vector3.Lerp(pRW->Position, BlendPosition, Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
             }
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobSurfaceCollision : IJobParallelFor
         {
@@ -1205,7 +1223,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobConstraintUpdate : IJobParallelFor
         {
@@ -1422,7 +1440,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobMovingCollisionPoint : IJobParallelFor
         {
@@ -1619,7 +1637,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobCollisionPoint : IJobParallelFor
         {
@@ -1735,7 +1753,7 @@ namespace SPCR
         }
 
 #if ENABLE_BURST
-    [Unity.Burst.BurstCompile]
+        [Unity.Burst.BurstCompile]
 #endif
         struct JobCopyToAnimatedPoint : IJobParallelForTransform
         {
@@ -1844,7 +1862,7 @@ namespace SPCR
                 if (pR->Child != -1)
                 {
                     Quaternion ParentRotation = Quaternion.identity;
-                    if(pR->Parent != -1 && isPreventBoneTwist)
+                    if (pR->Parent != -1 && isPreventBoneTwist)
                     {
                         var pRP = pRPoints + pR->Parent;
                         var pRWP = pRWPoints + pR->Parent;
