@@ -397,9 +397,18 @@ namespace SPCR
         {
             var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
 
-            var CaptureFadeStartPoint = new JobCaptureFadeStartPoint();
-            CaptureFadeStartPoint.pRWPoints = pRWPoints;
-            CaptureFadeStartPoint.Schedule(_TransformArray, default(JobHandle)).Complete();
+            var Job = new JobCaptureFadeStartPoint();
+            Job.pRWPoints = pRWPoints;
+            Job.Schedule(_TransformArray, default(JobHandle)).Complete();
+        }
+
+        public void ApplySkeletonPositionsToPhysicsPoint()
+        {
+            var pRWPoints = (PointReadWrite*)_PointsRW.GetUnsafePtr();
+
+            var Job = new JobApplySkeletonPositionsToPhysicsPoint();
+            Job.pRWPoints = pRWPoints;
+            Job.Schedule(_TransformArray, default(JobHandle)).Complete();
         }
 
         public void RestoreTransform()
@@ -1816,6 +1825,24 @@ namespace SPCR
                 var pRW = pRWPoints + index;
 
                 pRW->FadeStartPosition = transform.position;
+            }
+        }
+
+#if ENABLE_BURST
+        [Unity.Burst.BurstCompile]
+#endif
+        struct JobApplySkeletonPositionsToPhysicsPoint : IJobParallelForTransform
+        {
+            [NativeDisableUnsafePtrRestriction]
+            public PointReadWrite* pRWPoints;
+
+            void IJobParallelForTransform.Execute(int index, TransformAccess transform)
+            {
+                var pRW = pRWPoints + index;
+
+                pRW->FadeStartPosition = transform.position;
+                pRW->Position = transform.position;
+                pRW->OldPosition = transform.position;
             }
         }
 

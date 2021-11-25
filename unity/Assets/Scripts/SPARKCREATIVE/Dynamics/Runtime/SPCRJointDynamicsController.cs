@@ -210,6 +210,7 @@ namespace SPCR
         float _FadeSecLength;
         float _BlendRatio = 0.0f;
         bool _IsFadeReferToLastPoint;
+        bool _IsFadeResetToLastPoint;
 
         [SerializeField]
         SPCRJointDynamicsPoint[] _PointTbl = new SPCRJointDynamicsPoint[0];
@@ -273,16 +274,24 @@ namespace SPCR
         public List<SPCRJointDynamicsPoint> _SubDivOriginalPoints = new List<SPCRJointDynamicsPoint>();
 #endif
 
-        public void FadeInOut(eFade fade, float fadeSec, bool IsReferToLastPoint)
+        public void FadeInOut(eFade fade, float fadeSec, bool IsReferToLastPoint, bool IsFadeResetToLastPoint)
         {
             _IsFadeReferToLastPoint = IsReferToLastPoint;
+            _IsFadeResetToLastPoint = IsFadeResetToLastPoint;
             _eFade = fade;
             _FadeSec = 0.0f;
             _FadeSecLength = fadeSec;
 
-            if ((_eFade == eFade.In) && _IsFadeReferToLastPoint)
+            if (_eFade == eFade.In)
             {
-                _Job.CaptureSkeletonPositions();
+                if (_IsFadeResetToLastPoint)
+                {
+                    _Job.ApplySkeletonPositionsToPhysicsPoint();
+                }
+                else if (_IsFadeReferToLastPoint)
+                {
+                    _Job.CaptureSkeletonPositions();
+                }
             }
         }
 
