@@ -28,11 +28,11 @@ Since adding bones is still a manual process in most 3D software, and therefore 
 ![](./image/BuildSetting.png)  
 Set scripting runtime version to .Net 4 and check the allow unsafe code.  
   
-## How to use  
-### When using the package manager
+## When using the package manager
 ![](./image/PackageManager.png)  
 URL:https://github.com/SPARK-inc/SPCRJointDynamics.git?path=unity/Packages/SPCRJointDynamics  
   
+## How to use  
 ![](./image/SpcrJointDynamcis_1.png)  
 Add SPCRJointDynamicsPoint component on all the child / hierarchical bones, which you would like to be get affected.  
 
