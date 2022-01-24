@@ -831,7 +831,7 @@ namespace SPCR
                 _eFade = eFade.None;
                 _FadeSec = 0.0f;
                 _FadeSecLength = 0.0f;
-                _FadeBlendRatio = 1.0f;
+                _FadeBlendRatio = 0.0f;
             }
             else
             {
