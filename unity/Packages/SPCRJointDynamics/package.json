@@ -1,0 +1,11 @@
+{
+  "name": "inc.sparkcreative.spcrjointdynamics",
+  "displayName": "SPCRJointDynamics",
+  "version": "2.0.0",
+  "unity": "2018.4",
+  "description": "skeleton base cloth-like simulation.",
+  "author": {
+    "name": "SPCRJointDynamics"
+  },
+  "type": "module"
+}
