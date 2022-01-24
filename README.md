@@ -31,6 +31,9 @@ Set scripting runtime version to .Net 4 and check the allow unsafe code.
 ## How to use  
 ![](./image/SpcrJointDynamcis_1.png)  
 Add SPCRJointDynamicsPoint component on all the child / hierarchical bones, which you would like to be get affected.  
+
+### When using the package manager  
+URL:https://github.com/SPARK-inc/SPCRJointDynamics.git?path=unity/Packages/SPCRJointDynamics  
   
 ![](./image/SpcrJointDynamcis_2.png)  
 Then add SPCRJointDynamicsController component on the root of the character.  
