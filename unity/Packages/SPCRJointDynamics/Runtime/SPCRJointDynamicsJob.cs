@@ -501,6 +501,17 @@ namespace SPCR
             {
                 Vector3 RotateAxis;
                 RootDeltaRotation.ToAngleAxis(out RotateAngle, out RotateAxis);
+
+                /*
+                 * Fixed in 2022.1.X
+                 * QUATERNION TOANGLEAXIS DOES NOT DEAL WITH SINGULARITY AT (0, 0, 0, -1)
+                */
+                if (float.IsNaN(RotateAxis.x) || float.IsNaN(RotateAxis.y) || float.IsNaN(RotateAxis.x) ||
+                    float.IsInfinity(RotateAxis.x) || float.IsInfinity(RotateAxis.y) || float.IsInfinity(RotateAxis.x))
+                {
+                    RotateAxis = Vector3.up;
+                }
+
                 var Angle = (RotateAngle > 0.0f) ? (RotateAngle - RootRotateLimit) : (RotateAngle + RootRotateLimit);
                 Angle /= SubSteps;
                 SystemRotation = Quaternion.AngleAxis(Angle, RotateAxis);
