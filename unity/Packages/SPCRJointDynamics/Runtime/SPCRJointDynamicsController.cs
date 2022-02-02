@@ -281,7 +281,7 @@ namespace SPCR
 
         public void PostUpdateImpl()
         {
-            _Job.WaitInitialize();
+            _Job.WaitInitialize(_EnableCaptureAnimationTransform);
         }
 
         public void PreLateUpdateImpl()
