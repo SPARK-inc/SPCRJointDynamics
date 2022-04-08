@@ -81,6 +81,7 @@ namespace SPCR
             public float BendingShrinkHorizontal;
             public float BendingStretchHorizontal;
             public float WindForceScale;
+            public float ForceFadeRatio;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 ParentBoneAxis;
@@ -100,7 +101,6 @@ namespace SPCR
             public Vector3 OldPosition;
             public Vector3 OriginalOldPosition;
             public Vector3 PreviousDirection;
-            public Vector3 PushOutForce;
             public int GrabberIndex;
             public float GrabberDistance;
             public float Friction;
@@ -189,6 +189,12 @@ namespace SPCR
         NativeArray<Plane> _FlatPlanes;
         AngleLimitConfig _AngleLockConfig;
 
+        public void SetPointDynamicsRatio(int Index, float Ratio)
+        {
+            var pPointsR = (PointRead*)_PointsR.GetUnsafePtr();
+            pPointsR[Index].ForceFadeRatio = Ratio;
+        }
+
         public bool Initialize(
             Transform RootBone,
             Point[] Points, Transform[] PointTransforms, Transform[] MovableLimitTargetTransforms,
@@ -236,6 +242,7 @@ namespace SPCR
                 PointsR[i].BendingStretchHorizontal = src.BendingStretchHorizontal * 0.5f;
                 PointsR[i].BendingShrinkVertical = src.BendingShrinkVertical * 0.5f;
                 PointsR[i].BendingStretchVertical = src.BendingStretchVertical * 0.5f;
+                PointsR[i].ForceFadeRatio = 0.0f;
 
                 PointsR[i].Gravity = src.Gravity;
                 PointsR[i].WindForceScale = src.WindForceScale;
@@ -386,7 +393,6 @@ namespace SPCR
             {
                 pPointsRW[i].OldPosition = pPointsRW[i].Position;
                 pPointsRW[i].CurrentTransformPosition = pPointsRW[i].Position;
-                pPointsRW[i].PushOutForce = Vector3.zero;
             }
 
             var pColloderExs = (ColliderEx*)_ColliderExs.GetUnsafePtr();
@@ -458,8 +464,6 @@ namespace SPCR
 #endif//ENABLE_JOBSYSTEM
             }
         }
-
-        const int _InnerJobCount = 4;
 
         public void Simulation(
             Transform RootTransform,
@@ -643,7 +647,7 @@ namespace SPCR
                     Job.FlatPlaneCount = _FlatPlanes.Length;
                     Job.IsCaptureAnimationTransform = IsCaptureAnimationTransform;
 #if ENABLE_JOBSYSTEM
-                    _hJob = Job.Schedule(_PointCount, _InnerJobCount, _hJob);
+                    _hJob = Job.Schedule(_PointCount, _PointCount, _hJob);
 #else//ENABLE_JOBSYSTEM
                     JobSchedule(_PointCount, Job);
 #endif//ENABLE_JOBSYSTEM
@@ -660,7 +664,7 @@ namespace SPCR
                     //    Job.pColliderExs = pColliderExs;
                     //    Job.ColliderCount = ColliderCount;
                     //    Job.DivideMax = DetailHitDivideMax;
-                    //    _hJob = Job.Schedule(_PointCount, _InnerJobCount, _hJob);
+                    //    _hJob = Job.Schedule(_PointCount, _PointCount, _hJob);
                     //}
 
                     //if (EnablePointCollision)
@@ -671,8 +675,27 @@ namespace SPCR
                     //    Job.pColliderExs = pColliderExs;
                     //    Job.ColliderCount = ColliderCount;
                     //    Job.IsEnableCollider = EnablePointCollision;
-                    //    _hJob = Job.Schedule(_PointCount, _InnerJobCount, _hJob);
+                    //    _hJob = Job.Schedule(_PointCount, _PointCount, _hJob);
                     //}
+
+                    if (EnableSurfaceCollision)
+                    {
+                        {
+                            var Job = new JobSurfaceCollision();
+                            Job.pRPoints = pRPoints;
+                            Job.pRWPoints = pRWPoints;
+                            Job.pSurfaceConstraint = pSurfaceFaces;
+                            Job.pColliders = pColliders;
+                            Job.pColliderExs = pColliderExs;
+                            Job.ColliderCount = ColliderCount;
+                            Job.CollisionDivision = Mathf.Clamp(SurfaceCollisionDivision, 1, SurfaceCollisionDivision);
+#if ENABLE_JOBSYSTEM
+                            _hJob = Job.Schedule(_SurfaceConstraints.Length, _SurfaceConstraints.Length, _hJob);
+#else//ENABLE_JOBSYSTEM
+                            JobSchedule(_SurfaceConstraints.Length, Job);
+#endif//ENABLE_JOBSYSTEM
+                        }
+                    }
 
                     for (var i = Relaxation - 1; i >= 0; --i)
                     {
@@ -687,28 +710,11 @@ namespace SPCR
                             Job.pColliderExs = pColliderExs;
                             Job.ColliderCount = ColliderCount;
 #if ENABLE_JOBSYSTEM
-                            _hJob = Job.Schedule(constraint.Length, _InnerJobCount, _hJob);
+                            _hJob = Job.Schedule(constraint.Length, constraint.Length, _hJob);
 #else//ENABLE_JOBSYSTEM
                             JobSchedule(constraint.Length, Job);
 #endif//ENABLE_JOBSYSTEM
                         }
-                    }
-
-                    if (EnableSurfaceCollision)
-                    {
-                        var Job = new JobSurfaceCollision();
-                        Job.pRPoints = pRPoints;
-                        Job.pRWPoints = pRWPoints;
-                        Job.pSurfaceConstraint = pSurfaceFaces;
-                        Job.pColliders = pColliders;
-                        Job.pColliderExs = pColliderExs;
-                        Job.ColliderCount = ColliderCount;
-                        Job.CollisionDivision = Mathf.Clamp(SurfaceCollisionDivision, 1, SurfaceCollisionDivision);
-#if ENABLE_JOBSYSTEM
-                        _hJob = Job.Schedule(_SurfaceConstraints.Length, _InnerJobCount, _hJob);
-#else//ENABLE_JOBSYSTEM
-                        JobSchedule(_SurfaceConstraints.Length, Job);
-#endif//ENABLE_JOBSYSTEM
                     }
                 }
             }
@@ -927,6 +933,7 @@ namespace SPCR
         [Unity.Burst.BurstCompile]
 #endif//ENABLE_BURST
         struct JobPointUpdate : IJobParallelFor
+
 #else//ENABLE_JOBSYSTEM
         struct JobPointUpdate : JobParallelFor
 #endif//ENABLE_JOBSYSTEM
@@ -1014,16 +1021,22 @@ namespace SPCR
                 var pR = pRPoints + index;
                 var pRW = pRWPoints + index;
 
+                pRW->OriginalOldPosition = pRW->Position;
+
                 if (pR->Weight <= EPSILON)
                 {
-                    pRW->OriginalOldPosition = pRW->Position;
                     pRW->OldPosition = ApplySystemTransform(pRW->Position, OldRootPosition);
-                    pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialRootSpacePosition);
-                    pRW->Friction = 0.0f;
+                    if (IsCaptureAnimationTransform)
+                    {
+                        pRW->Position = pRW->CurrentTransformPosition;
+                    }
+                    else
+                    {
+                        pRW->Position = RootMatrix.MultiplyPoint3x4(pR->InitialRootSpacePosition);
+                    }
                     return;
                 }
 
-                pRW->OriginalOldPosition = pRW->Position;
                 pRW->OldPosition = ApplySystemTransform(pRW->OldPosition, OldRootPosition);
                 pRW->Position = ApplySystemTransform(pRW->Position, OldRootPosition);
 
@@ -1050,12 +1063,10 @@ namespace SPCR
 
                     Displacement = MoveDir;
                     Displacement += ExternalForce;
-                    Displacement += pRW->PushOutForce;
                     Displacement *= pR->Resistance;
                     Displacement *= 1.0f - Mathf.Clamp01(pRW->Friction * pR->FrictionScale);
                 }
 
-                pRW->PushOutForce = Vector3.zero;
                 pRW->OldPosition = pRW->Position;
                 pRW->Position += Displacement;
                 pRW->Friction = 0.0f;
@@ -1072,6 +1083,19 @@ namespace SPCR
                         {
                             var Target = RootMatrix.MultiplyPoint3x4(pR->InitialRootSpacePosition);
                             pRW->Position += (Target - pRW->Position) * pR->Hardness;
+                        }
+                    }
+
+                    if (pR->ForceFadeRatio > 0.0f)
+                    {
+                        if (IsCaptureAnimationTransform)
+                        {
+                            pRW->Position = Vector3.Lerp(pRW->Position, pRW->CurrentTransformPosition, pR->ForceFadeRatio);
+                        }
+                        else
+                        {
+                            var Target = RootMatrix.MultiplyPoint3x4(pR->InitialRootSpacePosition);
+                            pRW->Position = Vector3.Lerp(pRW->Position, Target, pR->ForceFadeRatio);
                         }
                     }
 
@@ -1560,29 +1584,12 @@ namespace SPCR
                         var rateP2 = Mathf.Clamp01((pointOnLine - RWptB->Position).magnitude / pointDistance);
 
                         Pushout /= PushoutDistance;
-#if true
-                        var PushoutForce = Mathf.Max(Radius - PushoutDistance, 0.0f);
-                        var PushoutRateR = PushoutForce * 0.5f;
-                        var PushoutRateV = (PushoutForce - PushoutRateR) * 0.5f;
-                        var PushoutR = Pushout * PushoutRateR;
-                        var PushoutF = Pushout * PushoutRateV;
-                        if (WeightA > EPSILON)
-                        {
-                            RWptA->Position += PushoutR * rateP2;
-                            RWptA->PushOutForce += PushoutF * rateP2;
-                        }
-                        if (WeightB > EPSILON)
-                        {
-                            RWptB->Position += PushoutR * rateP1;
-                            RWptB->PushOutForce += PushoutF * rateP1;
-                        }
-#else
+
                         Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
                         if (WeightA > EPSILON)
                             RWptA->Position += Pushout * rateP2;
                         if (WeightB > EPSILON)
                             RWptB->Position += Pushout * rateP1;
-#endif
 
                         var Dot = Vector3.Dot(Vector3.up, (pointOnLine - pointOnCollider).normalized);
                         Friction = Mathf.Max(Friction, pCollider->Friction * Mathf.Clamp01(Dot));

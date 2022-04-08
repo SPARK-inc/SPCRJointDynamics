@@ -78,6 +78,7 @@ namespace SPCR
         public string Name;
 
         public Transform _RootTransform;
+        public int _SearchPointDepth = 0;
         public SPCRJointDynamicsPoint[] _RootPointTbl = new SPCRJointDynamicsPoint[0];
         public Transform[] _PlaneLimitterTbl = new Transform[0];
         public SPCRJointDynamicsCollider[] _ColliderTbl = new SPCRJointDynamicsCollider[0];
@@ -244,6 +245,11 @@ namespace SPCR
         bool _ResetToTPose;
         SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
+        public void SetPointDynamicsRatio(int Index, float Ratio)
+        {
+            _Job.SetPointDynamicsRatio(Index, Ratio);
+        }
+
         void Awake()
         {
             for (int i = 0; i < _PointTbl.Length; ++i)
@@ -382,7 +388,7 @@ namespace SPCR
                         _WindForce,
                         _Relaxation,
                         _FlatPlanes,
-                        (i % 2) == 0,
+                        true,
                         _IsEnableSurfaceCollision,
                         _SurfaceCollisionDivision,
                         _CurrentBlendRatio,

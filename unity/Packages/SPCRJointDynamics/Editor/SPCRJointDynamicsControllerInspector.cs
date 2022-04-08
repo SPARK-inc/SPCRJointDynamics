@@ -81,10 +81,16 @@ namespace SPCR
             controller.Opened_BaseSettings = Foldout(controller.Opened_BaseSettings, new string[] { "基本設定", "Basic settings" }[Lang], new Color(1.0f, 0.7f, 1.0f));
             if (controller.Opened_BaseSettings)
             {
-                var _RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent(new string[] { "親 Transform", "Parent Transform" }[Lang]), controller._RootTransform, typeof(Transform), true);
+                var _RootTransform = (Transform)EditorGUILayout.ObjectField(new GUIContent(new string[] { "親Transform", "Parent Transform" }[Lang]), controller._RootTransform, typeof(Transform), true);
                 if (controller._RootTransform != _RootTransform)
                 {
                     controller._RootTransform = _RootTransform;
+                    EditorUtility.SetDirty(controller);
+                }
+                var _SearchPointDepth = EditorGUILayout.IntSlider(new GUIContent(new string[] { "'親Transform'からの子供の番号", "Child Index in 'Parent Transform'" }[Lang]), controller._SearchPointDepth, 0, 256);
+                if (controller._SearchPointDepth != _SearchPointDepth)
+                {
+                    controller._SearchPointDepth = _SearchPointDepth;
                     EditorUtility.SetDirty(controller);
                 }
 
@@ -94,6 +100,10 @@ namespace SPCR
                 }
 
                 if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_RootPointTbl"), new GUIContent(new string[] { "ルートの点群", "Root points" }[Lang]), true))
+                {
+                    EditorUtility.SetDirty(controller);
+                }
+                UpdateToggle(new string[] { "アニメーションを参照する", "Refer to animation information" }[Lang], controller, ref controller._EnableCaptureAnimationTransform);
                 {
                     EditorUtility.SetDirty(controller);
                 }
@@ -564,6 +574,23 @@ namespace SPCR
             GUILayout.Space(3);
         }
 
+        SPCRJointDynamicsPoint GetDynamicsPoint(Transform target, int depth)
+        {
+            var point = target.GetComponent<SPCRJointDynamicsPoint>();
+            if (point != null)
+            {
+                if (depth == 0) return point;
+
+                for (int i = 0; i < target.childCount; ++i)
+                {
+                    point = GetDynamicsPoint(target.GetChild(i), depth - 1);
+                    if (point != null) return point;
+                }
+            }
+
+            return null;
+        }
+
         void SearchRootPoints(SPCRJointDynamicsController controller)
         {
             if (controller._RootTransform != null)
@@ -572,7 +599,7 @@ namespace SPCR
                 for (int i = 0; i < controller._RootTransform.transform.childCount; ++i)
                 {
                     var child = controller._RootTransform.transform.GetChild(i);
-                    var point = child.GetComponent<SPCRJointDynamicsPoint>();
+                    var point = GetDynamicsPoint(child, controller._SearchPointDepth);
                     if (point != null)
                     {
                         PointList.Add(point);
