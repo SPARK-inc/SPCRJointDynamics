@@ -103,10 +103,6 @@ namespace SPCR
                 {
                     EditorUtility.SetDirty(controller);
                 }
-                UpdateToggle(new string[] { "アニメーションを参照する", "Refer to animation information" }[Lang], controller, ref controller._EnableCaptureAnimationTransform);
-                {
-                    EditorUtility.SetDirty(controller);
-                }
                 GUILayout.Space(5);
 
                 if (EditorGUILayout.PropertyField(serializedObject.FindProperty("_PlaneLimitterTbl"), new GUIContent(new string[] { "無限平面コライダー", "Flat place colliders" }[Lang]), true))
