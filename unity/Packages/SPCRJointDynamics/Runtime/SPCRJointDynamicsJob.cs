@@ -369,8 +369,13 @@ namespace SPCR
             _SurfaceConstraints.Dispose();
         }
 
-        public void Reset(bool ResetToTPose, Matrix4x4 LocalToWorldMatrix)
+        public void Reset(Constraint[][] Constraints, bool ResetToTPose, Matrix4x4 LocalToWorldMatrix)
         {
+            for (int i = 0; i < Constraints.Length; ++i)
+            {
+                _Constraints[i].CopyFrom(Constraints[i]);
+            }
+
             var pPointsR = (PointRead*)_PointsR.GetUnsafePtr();
             var pPointsRW = (PointReadWrite*)_PointsRW.GetUnsafePtr();
             if (ResetToTPose)

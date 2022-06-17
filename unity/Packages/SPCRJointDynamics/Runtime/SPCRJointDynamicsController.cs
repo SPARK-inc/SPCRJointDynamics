@@ -1,11 +1,11 @@
 ﻿/*
  * MIT License
  *  Copyright (c) 2018 SPARKCREATIVE
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *  
+ *
  *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
 */
 
@@ -84,7 +84,7 @@ namespace SPCR
         public SPCRJointDynamicsCollider[] _ColliderTbl = new SPCRJointDynamicsCollider[0];
         public SPCRJointDynamicsPointGrabber[] _PointGrabberTbl = new SPCRJointDynamicsPointGrabber[0];
 
-        public int _Relaxation = 2;
+        public int _Relaxation = 1;
         public int _SubSteps = 1;
 
         public bool _IsCancelResetPhysics = false;
@@ -322,7 +322,8 @@ namespace SPCR
                 _DelayTime -= DeltaTime;
                 if (_DelayTime <= 0.0f)
                 {
-                    _Job.Reset(_ResetToTPose, _RootTransform.localToWorldMatrix);
+                    CreationConstraintTable();
+                    _Job.Reset(_ConstraintTable, _ResetToTPose, _RootTransform.localToWorldMatrix);
                 }
                 else
                 {
@@ -568,7 +569,7 @@ namespace SPCR
             _FadeBlendRatio = 0.0f;
 
             _ResetToTPose = false;
-            _DelayTime = 0.1f;
+            _DelayTime = 0.001f;
         }
 
         void UninitializeAll()
@@ -786,12 +787,6 @@ namespace SPCR
             }
         }
 
-        public void ImmediateParameterReflection()
-        {
-            UninitializeAll();
-            InitializeAll();
-        }
-
         public void StretchBoneLength(float BoneStretchScale)
         {
             for (int i = 0; i < _ConstraintsStructuralVertical.Length; ++i)
@@ -819,13 +814,23 @@ namespace SPCR
 #endif
         }
 
-        public void ResetPhysics(float Delay)
+        public void ImmediateParameterReflection()
+        {
+            UninitializeAll();
+            InitializeAll();
+        }
+
+        public void ResetPhysics(float Delay, bool RebuildParameter = false)
         {
             if (!enabled) return;
             if (_IsCancelResetPhysics) return;
 
-            _ResetToTPose = true;
-            _DelayTime = Delay;
+            if (RebuildParameter)
+            {
+                ImmediateParameterReflection();
+            }
+
+            _DelayTime = Mathf.Max(Delay, 0.001f);
         }
 
         public void FadeIn(float fadeSec)
@@ -1238,6 +1243,7 @@ namespace SPCR
             return new SPCRJointDynamicsJob.AngleLimitConfig { angleLimit = _LimitAngle, limitFromRoot = _LimitFromRoot }; ;
         }
 
+#if UNITY_EDITOR
         public void OnDrawGizmos()
         {
             if (!this.enabled)
@@ -1289,14 +1295,7 @@ namespace SPCR
                 Gizmos.color = Color.red;
                 OnDrawGizmo_SurfaceFaces();
             }
-
-            if (_IsDebugDraw_Collider)
-            {
-                foreach (var collider in _ColliderTbl)
-                {
-                    collider.OnDrawGizmoImpl();
-                }
-            }
         }
+#endif//UNITY_EDITOR
     }
 }

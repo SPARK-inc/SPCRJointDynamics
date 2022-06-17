@@ -88,20 +88,58 @@ namespace SPCR
             RefTransform = transform;
         }
 
-        public void OnDrawGizmoImpl()
+        public void Reset()
         {
-            if (!_ShowColiiderGizmo) return;
+            if (string.IsNullOrEmpty(uniqueGUIID))
+                GenerateNewID();
+        }
+
+        void GenerateNewID()
+        {
+            uniqueGUIID = System.Guid.NewGuid().ToString();
+        }
+
+        public void SetGUIIIde(string guiiId)
+        {
+            uniqueGUIID = guiiId;
+        }
 
 #if UNITY_EDITOR
-            if (UnityEditor.Selection.Contains(gameObject))
-                Gizmos.color = Color.green;
+        void OnDrawGizmos()
+        {
+            if (!_ShowColiiderGizmo)
+                return;
+
+            var bRegistered = false;
+            var RequireDrawGizmo = false;
+            foreach (var ctrl in GetComponentsInParent<SPCRJointDynamicsController>())
+            {
+                foreach (var col in ctrl._ColliderTbl)
+                {
+                    if (this == col)
+                    {
+                        bRegistered = true;
+                        if (ctrl._IsDebugDraw_Collider)
+                        {
+                            RequireDrawGizmo = true;
+                        }
+                    }
+                }
+            }
+
+            if (!RequireDrawGizmo && bRegistered)
+                return;
+
+            if (bRegistered)
+                if (UnityEditor.Selection.Contains(gameObject))
+                    Gizmos.color = Color.green;
+                else
+                    Gizmos.color = new Color(0.6f, 0.6f, 0.8f);
             else
                 Gizmos.color = Color.gray;
-#else
-            Gizmos.color = Color.gray;
-#endif
 
             ResetTransform();
+
             var pos = transform.position;
             var rot = transform.rotation;
 
@@ -146,7 +184,6 @@ namespace SPCR
                 Gizmos.DrawWireSphere(pos, Radius);
             }
 
-#if UNITY_EDITOR
             if (IsCapsule)
             {
                 if (UnityEditor.Selection.Contains(gameObject))
@@ -164,13 +201,8 @@ namespace SPCR
                 case ColliderForce.Pull:
                     DrawArrow(transform.position - transform.up * Height * 0.5f, transform.up);
                     break;
-                    //case ColliderForce.Auto:
-                    //    DrawArrow(transform.position, -transform.up);
-                    //    DrawArrow(transform.position, transform.up);
-                    //    break;
                 }
             }
-#endif//UNITY_EDITOR
         }
 
         void ResetTransform()
@@ -194,22 +226,6 @@ namespace SPCR
                 Gizmos.DrawLine(from, to);
                 from = to;
             }
-        }
-
-        public void Reset()
-        {
-            if (string.IsNullOrEmpty(uniqueGUIID))
-                GenerateNewID();
-        }
-
-        void GenerateNewID()
-        {
-            uniqueGUIID = System.Guid.NewGuid().ToString();
-        }
-
-        public void SetGUIIIde(string guiiId)
-        {
-            uniqueGUIID = guiiId;
         }
 
         void DrawArrow(Vector3 pos, Vector3 direction)
@@ -246,5 +262,6 @@ namespace SPCR
             Gizmos.DrawLine(arrowPos, right);
             Gizmos.DrawLine(arrowPos, left);
         }
+#endif//UNITY_EDITOR
     }
 }
