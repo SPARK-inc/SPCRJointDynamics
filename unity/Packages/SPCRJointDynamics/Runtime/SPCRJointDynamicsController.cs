@@ -271,7 +271,7 @@ namespace SPCR
         void OnEnable()
         {
             _ResetToTPose = false;
-            _DelayTime = 0.1f;
+            _DelayTime = 5.0f / 60.0f;
             SPCRJointDynamicsJobManager.Push(this);
         }
 
@@ -569,7 +569,7 @@ namespace SPCR
             _FadeBlendRatio = 0.0f;
 
             _ResetToTPose = false;
-            _DelayTime = 0.001f;
+            _DelayTime = 10.0f / 60.0f;
         }
 
         void UninitializeAll()

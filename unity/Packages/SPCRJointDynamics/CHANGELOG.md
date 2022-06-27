@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.5] - 2022-06-27
+###Added
+Fix AreaLimit
+
 ## [2.0.4] - 2022-06-17
 ###Added
 Fix PhysicsReset

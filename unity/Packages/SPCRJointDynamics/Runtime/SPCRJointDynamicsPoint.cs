@@ -71,12 +71,17 @@ namespace SPCR
         {
             if (EnableMovableLimit)
             {
+                if (MovableLimitTarget != null)
+                {
+                    Destroy(MovableLimitTarget);
+                    MovableLimitTarget = null;
+                }
                 if (MovableLimitTarget == null)
                 {
                     if (this.transform.parent?.parent != null)
                     {
                         MovableLimitTarget = new GameObject(this.gameObject.name + "@MovableLimitTarget");
-                        MovableLimitTarget.hideFlags = HideFlags.HideAndDontSave;
+                        MovableLimitTarget.hideFlags = HideFlags.DontSave;
                         MovableLimitTarget.transform.SetParent(this.transform.parent.parent);
                         MovableLimitTarget.transform.position = this.transform.position;
                         MovableLimitTarget.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -91,16 +96,17 @@ namespace SPCR
 #if UNITY_EDITOR
         void OnDrawGizmos()
         {
-            CreateMovableLimitTarget();
-
-            if (EnableMovableLimit && (MovableLimitTarget != null))
+            if (EnableMovableLimit)
             {
                 if (UnityEditor.Selection.Contains(gameObject))
                     Gizmos.color = Color.green;
                 else
                     Gizmos.color = Color.gray;
 
-                Gizmos.DrawWireSphere(MovableLimitTarget.transform.position, _MovableLimitRadius);
+                if (MovableLimitTarget != null)
+                    Gizmos.DrawWireSphere(MovableLimitTarget.transform.position, _MovableLimitRadius);
+                else
+                    Gizmos.DrawWireSphere(transform.position, _MovableLimitRadius);
             }
         }
 #endif//UNITY_EDITOR

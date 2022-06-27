@@ -742,6 +742,7 @@ namespace SPCR
                 JobSchedule(_PointTransforms, Job);
 #endif//ENABLE_JOBSYSTEM
             }
+
             if (_MovableLimitTargetTransforms.Length > 0)
             {
                 var Job = new JobCaptureTransformPosition();
