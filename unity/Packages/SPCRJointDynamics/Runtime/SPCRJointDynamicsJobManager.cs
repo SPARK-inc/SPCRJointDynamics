@@ -1,39 +1,45 @@
 ﻿/*
  * MIT License
  *  Copyright (c) 2018 SPARKCREATIVE
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *  
- *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
+ *
+ *  @author Hiromoto Noriyuki <hrmtnryk@sparkfx.jp>
+ *          Piyush Nitnaware <nitnaware.piyush@spark-creative.co.jp>
 */
 
-#define ENABLE_BURST
-
 using UnityEngine;
-using Unity.Jobs;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SPCR
 {
-    [DefaultExecutionOrder(30001)]
+    [DisallowMultipleComponent, DefaultExecutionOrder(100)]
+    [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step1))]
+    [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step2))]
+    [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step3))]
+    [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step4))]
     public class SPCRJointDynamicsJobManager : MonoBehaviour
     {
+        public int _OrderStepCount = 0;
+        public List<SPCRJointDynamicsController>[] _Controllers;
+
         static SPCRJointDynamicsJobManager _Instance;
-
-        List<SPCRJointDynamicsController> _Controllers = new List<SPCRJointDynamicsController>();
-
         static public SPCRJointDynamicsJobManager Instance
         {
             get
             {
                 if (_Instance == null)
                 {
-                    var obj = new GameObject("SPCRJointDynamicsJobManager");
-                    DontDestroyOnLoad(obj);
-                    _Instance = obj.AddComponent<SPCRJointDynamicsJobManager>();
+                    _Instance = GameObject.FindObjectOfType<SPCRJointDynamicsJobManager>();
+                    if (_Instance == null)
+                    {
+                        var obj = new GameObject("SPCRJointDynamicsJobManager");
+                        GameObject.DontDestroyOnLoad(obj);
+                        _Instance = obj.AddComponent<SPCRJointDynamicsJobManager>();
+                        _Instance.Initialize();
+                    }
                 }
                 return _Instance;
             }
@@ -41,7 +47,7 @@ namespace SPCR
 
         static public void Push(SPCRJointDynamicsController ctrl)
         {
-            Instance._Controllers.Add(ctrl);
+            Instance._Controllers[(int)ctrl.ExecutionOrder].Add(ctrl);
 
             Instance._DynamicsBoneCount += ctrl.PointTbl.Length;
             Instance._DynamicsColliderCount += ctrl._ColliderTbl.Length;
@@ -49,66 +55,88 @@ namespace SPCR
 
         static public void Pop(SPCRJointDynamicsController ctrl)
         {
-            Instance._Controllers.Remove(ctrl);
+            Instance._Controllers[(int)ctrl.ExecutionOrder].Remove(ctrl);
 
             Instance._DynamicsBoneCount -= ctrl.PointTbl.Length;
             Instance._DynamicsColliderCount -= ctrl._ColliderTbl.Length;
         }
 
-        private void Awake()
+        void Initialize()
         {
-            StartCoroutine("EndOfFrame");
-        }
-
-        private void OnDestroy()
-        {
-            StopCoroutine("EndOfFrame");
-
-            _Instance = null;
-        }
-
-        void Update()
-        {
-            foreach (var ctrl in _Controllers)
+            _OrderStepCount = System.Enum.GetValues(typeof(SPCRJointDynamicsController.eExecutionOrder)).Length;
+            _Controllers = new List<SPCRJointDynamicsController>[_OrderStepCount];
+            for (int i = 0; i < _OrderStepCount; ++i)
             {
-                ctrl.UpdateImpl();
-            }
-
-            foreach (var ctrl in _Controllers)
-            {
-                ctrl.PostUpdateImpl();
+                _Controllers[i] = new List<SPCRJointDynamicsController>();
             }
         }
 
-        void LateUpdate()
+        public void Update_Step1()
         {
-            foreach (var ctrl in _Controllers)
+            for (int i = 0; i < _OrderStepCount; ++i)
             {
-                ctrl.PreLateUpdateImpl();
-            }
-
-            foreach (var ctrl in _Controllers)
-            {
-                ctrl.LateUpdateImpl();
-            }
-
-            foreach (var ctrl in _Controllers)
-            {
-                ctrl.PostLateUpdateImpl();
-            }
-        }
-
-        IEnumerator EndOfFrame()
-        {
-            var EoF = new WaitForEndOfFrame();
-
-            for (; ; )
-            {
-                yield return EoF;
-
-                foreach (var ctrl in _Controllers)
+                foreach (var ctrl in _Controllers[i])
                 {
-                    ctrl.WaitLateUpdateImpl();
+                    ctrl.InitializeBonePose();
+                }
+            }
+        }
+
+        public void Update_Step2()
+        {
+            for (int i = 0; i < _OrderStepCount; ++i)
+            {
+                foreach (var ctrl in _Controllers[i])
+                {
+                    ctrl.WaitInitializeBoneJobs();
+                }
+            }
+        }
+
+        public void Step1()
+        {
+            var list = _Controllers[(int)SPCRJointDynamicsController.eExecutionOrder.Default];
+            foreach (var ctrl in list)
+            {
+                ctrl.GetCurrentBoneTransform();
+            }
+        }
+
+        public void Step2()
+        {
+            var list = _Controllers[(int)SPCRJointDynamicsController.eExecutionOrder.Default];
+            foreach (var ctrl in list)
+            {
+                ctrl.ExecuteSimulation();
+            }
+        }
+
+        public void Step3()
+        {
+            var list = _Controllers[(int)SPCRJointDynamicsController.eExecutionOrder.Default];
+            foreach (var ctrl in list)
+            {
+                ctrl.ApplySimulationToBoneTransform();
+            }
+        }
+
+        public void Step4()
+        {
+            {
+                var list = _Controllers[(int)SPCRJointDynamicsController.eExecutionOrder.Default];
+                foreach (var ctrl in list)
+                {
+                    ctrl.WaitBoneTransformJobs();
+                }
+            }
+            {
+                var list = _Controllers[(int)SPCRJointDynamicsController.eExecutionOrder.AfterDefault];
+                foreach (var ctrl in list)
+                {
+                    ctrl.GetCurrentBoneTransform();
+                    ctrl.ExecuteSimulation();
+                    ctrl.ApplySimulationToBoneTransform();
+                    ctrl.WaitBoneTransformJobs();
                 }
             }
         }

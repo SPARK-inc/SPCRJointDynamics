@@ -6,7 +6,9 @@
  *  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
+ *  @author Hiromoto Noriyuki <hrmtnryk@sparkfx.jp>
+ *          Nakajima Satoru <nakajima.satoru@spark-creative.co.jp>
+ *          Piyush Nitnaware <nitnaware.piyush@spark-creative.co.jp>
 */
 
 using System;
@@ -75,7 +77,14 @@ namespace SPCR
             public SPCRJointDynamicsPoint PointA, PointB, PointC, PointD;
         }
 
+        public enum eExecutionOrder
+        {
+            Default,
+            AfterDefault,
+        }
+
         public string Name;
+        public eExecutionOrder ExecutionOrder = eExecutionOrder.Default;
 
         public Transform _RootTransform;
         public int _SearchPointDepth = 0;
@@ -89,22 +98,18 @@ namespace SPCR
 
         public bool _IsCancelResetPhysics = false;
 
-        //@public bool _IsEnablePointCollision = false;
-        //@public int _DetailHitDivideMax = 0;
-
         public bool _IsEnableSurfaceCollision = false;
-        public int _SurfaceCollisionDivision = 1;
 
         public AnimationCurve _MassScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _GravityScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _WindForceScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
-        public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.05f) });
-        public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
+        public AnimationCurve _ResistanceCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 5.0f) });
+        public AnimationCurve _HardnessCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 5.0f), new Keyframe(1.0f, 0.1f) });
         public AnimationCurve _FrictionCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.7f), new Keyframe(1.0f, 0.7f) });
         public AnimationCurve _SliderJointLengthCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
 
-        public AnimationCurve _AllShrinkScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
-        public AnimationCurve _AllStretchScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
+        public AnimationCurve _AllShrinkScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.8f), new Keyframe(1.0f, 0.7f) });
+        public AnimationCurve _AllStretchScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.8f), new Keyframe(1.0f, 0.7f) });
         public AnimationCurve _StructuralShrinkVerticalScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _StructuralStretchVerticalScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _StructuralShrinkHorizontalScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
@@ -116,14 +121,20 @@ namespace SPCR
         public AnimationCurve _BendingShrinkHorizontalScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
         public AnimationCurve _BendingStretchHorizontalScaleCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 1.0f) });
 
+        public AnimationCurve _CollisionAnimateRadius = new AnimationCurve(new Keyframe[] { new Keyframe(0.7f, 0.0f), new Keyframe(1.0f, 1.0f) });
+        public float _CollisionReturn_Start = 0.5f;
+        public float _CollisionReturn_Speed = 0.5f;
+
         public Vector3 _Gravity = new Vector3(0.0f, -9.8f, 0.0f);
         public Vector3 _WindForce = new Vector3(0.0f, 0.0f, 0.0f);
 
         public bool _EnableWindForcePowerToAnimationBlendRatio = false;
         public AnimationCurve _WindForcePowerToAnimationBlendRatioCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 0.0f) });
 
-        public float _RootSlideLimit = 4.0f;    // Negative value is disable
-        public float _RootRotateLimit = 360.0f; // Negative value is disable
+        public float _RootSlideLimit = 5.0f;        // Negative value is disable
+        public float _RootRotateLimit = 540.0f;     // Negative value is disable
+        public float _ConstraintShrinkLimit = -1.0f;// Negative value is disable
+        public float _ResetDelaySeconds = 0.0f;
 
         public float _AllShrink = 1.0f;
         public float _AllStretch = 1.0f;
@@ -139,7 +150,7 @@ namespace SPCR
         public float _BendingStretchHorizontal = 1.0f;
 
         public bool _IsAllStructuralShrinkVertical = false;
-        public bool _IsAllStructuralStretchVertical = true;
+        public bool _IsAllStructuralStretchVertical = false;
         public bool _IsAllStructuralShrinkHorizontal = true;
         public bool _IsAllStructuralStretchHorizontal = true;
         public bool _IsAllShearShrink = true;
@@ -153,19 +164,6 @@ namespace SPCR
         public bool _IsCollideStructuralHorizontal = true;
         public bool _IsCollideShear = true;
 
-        public bool _EnableCaptureAnimationTransform = true;
-        public bool EnableCaptureAnimationTransform
-        {
-            get
-            {
-                return _EnableCaptureAnimationTransform;
-            }
-            set
-            {
-                _EnableCaptureAnimationTransform = value;
-            }
-        }
-
         public enum eFade
         {
             None,
@@ -177,6 +175,8 @@ namespace SPCR
         float _FadeSecLength;
         float _FadeBlendRatio;
         float _CurrentBlendRatio;
+        float _CollisionScale = 1.0f;
+
         public float _BlendRatio;
 
         [SerializeField]
@@ -239,14 +239,33 @@ namespace SPCR
         public bool _LimitFromRoot = false;
         public AnimationCurve _LimitPowerCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 1.0f), new Keyframe(1.0f, 0.0f) });
 
-        Plane[] _FlatPlanes = new Plane[0];
+        public bool _IsFakeWave = false;
+        [NonSerialized]
+        public float _FakeWaveSpeedScale = 1.0f;
+        [NonSerialized]
+        public float _FakeWavePowerScale = 1.0f;
+
+        public float _FakeWaveSpeed = 10.0f;
+        public float _FakeWavePower = 0.05f;
+        public AnimationCurve _FakeWavePowerCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 1.0f) });
+        public AnimationCurve _FakeWaveFreqCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0.0f, 0.0f), new Keyframe(1.0f, 2.0f) });
+
         float _RestDeltaTime;
         float _DelayTime;
-        bool _ResetToTPose;
         SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
         public void SetPointDynamicsRatio(int Index, float Ratio)
         {
+            if (!isActiveAndEnabled) return;
+
+            if ((Index < 0) || (Index >= _PointTbl.Length))
+            {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+                UnityEngine.Debug.Log("SetPointDynamicsRatio( " + Index + " ) <<< INVALID Index >>> " + gameObject.name + " [" + Name + "]");
+#endif//DEVELOPMENT_BUILD || UNITY_EDITOR
+                return;
+            }
+
             _Job.SetPointDynamicsRatio(Index, Ratio);
         }
 
@@ -259,39 +278,41 @@ namespace SPCR
                 pt._LocalPosition = pt.transform.localPosition;
                 pt._LocalRotation = pt.transform.localRotation;
             }
-
-            InitializeAll();
-        }
-
-        void OnDestroy()
-        {
-            _Job.Uninitialize();
         }
 
         void OnEnable()
         {
-            _ResetToTPose = false;
-            _DelayTime = 5.0f / 60.0f;
+            _DelayTime = _ResetDelaySeconds;
+            InitializeAll();
+
             SPCRJointDynamicsJobManager.Push(this);
         }
 
         void OnDisable()
         {
             SPCRJointDynamicsJobManager.Pop(this);
+
+            UninitializeAll();
         }
 
-        public void UpdateImpl()
+        public void InitializeBonePose()
         {
-            _Job.TransformInitialize(_EnableCaptureAnimationTransform);
+            if (!isActiveAndEnabled) return;
+
+            _Job.TransformInitialize();
         }
 
-        public void PostUpdateImpl()
+        public void WaitInitializeBoneJobs()
         {
-            _Job.WaitInitialize(_EnableCaptureAnimationTransform);
+            if (!isActiveAndEnabled) return;
+
+            _Job.WaitInitialize();
         }
 
-        public void PreLateUpdateImpl()
+        public void GetCurrentBoneTransform()
         {
+            if (!isActiveAndEnabled) return;
+
             float DeltaTime = Time.deltaTime * _TimeScale;
             _RestDeltaTime += DeltaTime;
 
@@ -323,7 +344,7 @@ namespace SPCR
                 if (_DelayTime <= 0.0f)
                 {
                     CreationConstraintTable();
-                    _Job.Reset(_ConstraintTable, _ResetToTPose, _RootTransform.localToWorldMatrix);
+                    _Job.Reset(_ConstraintTable, _RootTransform.localToWorldMatrix);
                 }
                 else
                 {
@@ -331,20 +352,13 @@ namespace SPCR
                 }
             }
 
-            _Job.PreSimulation(_EnableCaptureAnimationTransform);
+            _Job.PreSimulation();
         }
 
-        public void LateUpdateImpl()
+        public void ExecuteSimulation()
         {
+            if (!isActiveAndEnabled) return;
             if (_DelayTime > 0.0f) return;
-
-            if (_PlaneLimitterTbl != null)
-            {
-                for (int i = 0; i < _PlaneLimitterTbl.Length; ++i)
-                {
-                    _FlatPlanes[i].SetNormalAndPosition(_PlaneLimitterTbl[i].up, _PlaneLimitterTbl[i].position);
-                }
-            }
 
             _CurrentBlendRatio = (1.0f - _FadeBlendRatio) * (1.0f - _BlendRatio);
             if (_EnableWindForcePowerToAnimationBlendRatio)
@@ -353,62 +367,54 @@ namespace SPCR
             }
             _CurrentBlendRatio = 1.0f - _CurrentBlendRatio;
 
-            float StabilizationFrameRate = (float)_StabilizationFrameRate;
+            var StabilizationFrameRate = (float)_StabilizationFrameRate;
+            var ONE_STEP_DELTA_TIME = 1.0f / (StabilizationFrameRate + 1.0f);
+            var LoopCount = Mathf.FloorToInt(_RestDeltaTime / ONE_STEP_DELTA_TIME);
+            var ProcTime = LoopCount == 0 ? _RestDeltaTime : (float)LoopCount * ONE_STEP_DELTA_TIME;
 
-            float ONE_STEP_DELTA_TIME = 1.0f / (StabilizationFrameRate + 5.0f);
-            int LoopCount = Mathf.FloorToInt(_RestDeltaTime / ONE_STEP_DELTA_TIME);
-            if (LoopCount == 0)
+            if (!_IsPaused)
             {
-                _Job.Simulation(
-                    _RootTransform,
-                    _RootSlideLimit / StabilizationFrameRate,
-                    _RootRotateLimit / StabilizationFrameRate,
-                    _IsPaused ? 0.0f : _RestDeltaTime,
-                    _SubSteps,
-                    _WindForce,
-                    _Relaxation,
-                    _FlatPlanes,
-                    true,
-                    _IsEnableSurfaceCollision,
-                    _SurfaceCollisionDivision,
-                    _CurrentBlendRatio,
-                    _EnableCaptureAnimationTransform);
-
-                _RestDeltaTime = 0.0f;
-            }
-            else
-            {
-                for (int i = LoopCount - 1; i >= 0; --i)
+                if (_CurrentBlendRatio < _CollisionReturn_Start)
                 {
-                    _Job.Simulation(
-                        _RootTransform,
-                        _RootSlideLimit / StabilizationFrameRate,
-                        _RootRotateLimit / StabilizationFrameRate,
-                        _IsPaused ? 0.0f : ONE_STEP_DELTA_TIME,
-                        _SubSteps,
-                        _WindForce,
-                        _Relaxation,
-                        _FlatPlanes,
-                        true,
-                        _IsEnableSurfaceCollision,
-                        _SurfaceCollisionDivision,
-                        _CurrentBlendRatio,
-                        _EnableCaptureAnimationTransform);
-
-                    _RestDeltaTime -= ONE_STEP_DELTA_TIME;
+                    _CollisionScale += _CollisionReturn_Speed * ProcTime;
                 }
+                else
+                {
+                    _CollisionScale -= _CollisionReturn_Speed * ProcTime;
+                }
+                _CollisionScale = Mathf.Clamp01(_CollisionScale);
             }
+
+            _Job.Simulation(
+                _RootTransform,
+                _RootSlideLimit * ProcTime,
+                _RootRotateLimit * ProcTime,
+                _ConstraintShrinkLimit < 0.0f ? 1000000.0f: _ConstraintShrinkLimit,
+                _IsPaused ? 0.0f : ProcTime,
+                _SubSteps * Math.Max(1, LoopCount),
+                _WindForce,
+                _IsEnableSurfaceCollision,
+                _CurrentBlendRatio,
+                _IsFakeWave,
+                _FakeWaveSpeed * _FakeWaveSpeedScale,
+                _FakeWavePower * _FakeWavePowerScale,
+                _CollisionScale,
+                _Relaxation);
+
+            _RestDeltaTime -= ProcTime;
         }
 
-        public void PostLateUpdateImpl()
+        public void ApplySimulationToBoneTransform()
         {
+            if (!isActiveAndEnabled) return;
             if (_DelayTime > 0.0f) return;
 
             _Job.PostSimulation();
         }
 
-        public void WaitLateUpdateImpl()
+        public void WaitBoneTransformJobs()
         {
+            if (!isActiveAndEnabled) return;
             if (_DelayTime > 0.0f) return;
 
             _Job.WaitSimulation();
@@ -444,13 +450,12 @@ namespace SPCR
                 Points[i].WindForceScale = _WindForceScaleCurve.Evaluate(rate) * rate;
                 Points[i].FrictionScale = _FrictionCurve.Evaluate(rate);
                 Points[i].SliderJointLength = _SliderJointLengthCurve.Evaluate(rate);
+                Points[i].FakeWavePower = _FakeWavePowerCurve.Evaluate(rate);
+                Points[i].FakeWaveFreq = _FakeWaveFreqCurve.Evaluate(rate);
                 Points[i].BoneAxis = src._BoneAxis;
                 Points[i].Position = PointTransforms[i].position;
-                Points[i].OldPosition = PointTransforms[i].position;
-                Points[i].Rotation = PointTransforms[i].rotation;
-                Points[i].PreviousDirection = PointTransforms[i].parent.position - PointTransforms[i].position;
-                Points[i].ParentLength = Points[i].PreviousDirection.magnitude;
-                Points[i].LocalRotation = PointTransforms[i].localRotation;
+                Points[i].Direction = PointTransforms[i].parent.position - PointTransforms[i].position;
+                Points[i].ParentLength = Points[i].Direction.magnitude;
 
                 if (src.CreateMovableLimitTarget())
                 {
@@ -519,15 +524,29 @@ namespace SPCR
 
             for (int i = 0; i < _PointTbl.Length; ++i)
             {
-                if (_PointTbl[i]._RefChildPoint == null) continue;
+                if (_PointTbl[i]._RefChildPoint != null)
+                {
+                    Points[i].Child = _PointTbl[i]._RefChildPoint._Index;
+                }
+            }
 
-                Points[i].Child = _PointTbl[i]._RefChildPoint._Index;
-                Points[Points[i].Child].Parent = _PointTbl[i]._Index;
+            for (int i = 0; i < _PointTbl.Length; ++i)
+            {
+                if (_PointTbl[i]._RefChildPoint != null)
+                {
+                    Points[Points[i].Child].Parent = _PointTbl[i]._Index;
+                }
+            }
+
+            for (int i = 0; i < _PointTbl.Length; ++i)
+            {
+                if (_PointTbl[i]._RefParentPoint != null)
+                {
+                    Points[i].Parent = _PointTbl[i]._RefParentPoint._Index;
+                }
             }
 
             CreationConstraintTable();
-
-            List<SPCRJointDynamicsJob.SurfaceFaceConstraints> surfaceConstraints = GetSurfaceFaceConstraints();
 
             if (!_Job.Initialize(
                 _RootTransform,
@@ -537,30 +556,14 @@ namespace SPCR
                 _ConstraintTable,
                 _ColliderTbl,
                 _PointGrabberTbl,
-                _PlaneLimitterTbl == null ? 0 : _PlaneLimitterTbl.Length,
-                surfaceConstraints.ToArray(),
+                _PlaneLimitterTbl,
+                SurfaceFacePoints,
                 GetAnglesConfig()))
             {
                 enabled = false;
             }
 
-            if (_PlaneLimitterTbl != null)
-            {
-                _FlatPlanes = new Plane[_PlaneLimitterTbl.Length];
-                for (int i = 0; i < _PlaneLimitterTbl.Length; ++i)
-                {
-                    if (_PlaneLimitterTbl[i] == null)
-                    {
-                        Debug.LogError("SPCRJointDynamics: PlaneLimitterTbl [" + i + "] is null!!!");
-                        enabled = false;
-                        return;
-                    }
-                    _FlatPlanes[i] = new Plane(_PlaneLimitterTbl[i].up, _PlaneLimitterTbl[i].position);
-                }
-            }
-
-            float DeltaTime = Time.deltaTime * _TimeScale;
-            _RestDeltaTime += DeltaTime;
+            _RestDeltaTime += Time.deltaTime * _TimeScale;
 
             _eFade = eFade.None;
             _FadeSec = 0.0f;
@@ -568,8 +571,7 @@ namespace SPCR
             _FadeBlendRatio = 0.0f;
             _FadeBlendRatio = 0.0f;
 
-            _ResetToTPose = false;
-            _DelayTime = 10.0f / 60.0f;
+            _DelayTime = _ResetDelaySeconds;
         }
 
         void UninitializeAll()
@@ -579,14 +581,16 @@ namespace SPCR
 
         void CreateConstraintStructuralVertical(SPCRJointDynamicsPoint Point, ref List<SPCRJointDynamicsConstraint> ConstraintList)
         {
+            Point._RefChildPoint = null;
+
             for (int i = 0; i < Point.transform.childCount; ++i)
             {
                 var child = Point.transform.GetChild(i);
-                var child_point = child.gameObject.GetComponent<SPCRJointDynamicsPoint>();
+                var child_point = GetSPCRJointDynamicsPoint(child);
                 if (child_point != null)
                 {
-                    Point._RefChildPoint = child_point;
-                    var LocalPosition = Point.transform.InverseTransformPoint(child_point.transform.position);
+                    Point._RefChildPoint = Point._ForceChildPoint != null ? Point._ForceChildPoint : child_point;
+                    var LocalPosition = Point.transform.InverseTransformPoint(Point._RefChildPoint.transform.position);
                     Point._BoneAxis = LocalPosition.normalized;
 
                     ConstraintList.Add(new SPCRJointDynamicsConstraint(
@@ -608,7 +612,7 @@ namespace SPCR
 
             for (int i = 0; i < Point.transform.childCount; ++i)
             {
-                var ChildPoint = Point.transform.GetChild(i).gameObject.GetComponent<SPCRJointDynamicsPoint>();
+                var ChildPoint = GetSPCRJointDynamicsPoint(Point.transform.GetChild(i));
                 if (ChildPoint != null)
                 {
                     ComputePointParameter(ChildPoint, Depth + 1);
@@ -616,12 +620,56 @@ namespace SPCR
             }
         }
 
+        void SearchPoints(ref List<SPCRJointDynamicsPoint> list, GameObject target)
+        {
+            var pt = GetSPCRJointDynamicsPoint(target);
+            if (pt == null) return;
+
+            list.Add(pt);
+
+            for (int i = 0; i < target.transform.childCount; ++i)
+            {
+                SearchPoints(ref list, target.transform.GetChild(i).gameObject);
+            }
+        }
+
+        void SetMarking(GameObject target, SPCRJointDynamicsPoint ParentPt, bool bRoot, bool bParentDisable)
+        {
+            var pt = target.GetComponent<SPCRJointDynamicsPoint>();
+            if (pt == null) return;
+
+            pt._RefParentPoint = ParentPt;
+
+            if (bParentDisable)
+            {
+                pt.DisableMark = true;
+            }
+            else if (pt.transform.GetComponent<SPCRJointDynamicsController>() != null)
+            {
+                pt.DisableMark = true;
+            }
+            else
+            {
+                pt.DisableMark = false;
+            }
+
+            for (int i = 0; i < target.transform.childCount; ++i)
+            {
+                SetMarking(target.transform.GetChild(i).gameObject, pt, false, pt.DisableMark);
+            }
+        }
+
         public void UpdateJointConnection()
         {
+            foreach (var root in _RootPointTbl)
+            {
+                SetMarking(root.gameObject, null, true, false);
+            }
+
             var PointAll = new List<SPCRJointDynamicsPoint>();
             foreach (var root in _RootPointTbl)
             {
-                PointAll.AddRange(root.gameObject.GetComponentsInChildren<SPCRJointDynamicsPoint>());
+                SearchPoints(ref PointAll, root.gameObject);
             }
             _PointTbl = PointAll.ToArray();
             for (int i = 0; i < _PointTbl.Length; ++i)
@@ -732,6 +780,12 @@ namespace SPCR
                             ref ConstraintList);
                     }
                 }
+                for (int i = 0; i < HorizontalRootCount; ++i)
+                {
+                    CreationConstraintHorizontal_InSameChain(
+                        _RootPointTbl[i],
+                        ref ConstraintList);
+                }
                 _ConstraintsStructuralHorizontal = ConstraintList.ToArray();
             }
 
@@ -822,7 +876,7 @@ namespace SPCR
 
         public void ResetPhysics(float Delay, bool RebuildParameter = false)
         {
-            if (!enabled) return;
+            if (!isActiveAndEnabled) return;
             if (_IsCancelResetPhysics) return;
 
             if (RebuildParameter)
@@ -835,7 +889,7 @@ namespace SPCR
 
         public void FadeIn(float fadeSec)
         {
-            if (!enabled) return;
+            if (!isActiveAndEnabled) return;
 
             if (fadeSec <= 0.0f)
             {
@@ -854,7 +908,7 @@ namespace SPCR
 
         public void FadeOut(float fadeSec)
         {
-            if (!enabled) return;
+            if (!isActiveAndEnabled) return;
 
             if (fadeSec <= 0.0f)
             {
@@ -871,13 +925,27 @@ namespace SPCR
             }
         }
 
+        SPCRJointDynamicsPoint GetSPCRJointDynamicsPoint(GameObject o)
+        {
+            var Point = o.transform.GetComponent<SPCRJointDynamicsPoint>();
+            if (Point == null) return null;
+            if (Point.DisableMark) return null;
+
+            return Point;
+        }
+
+        SPCRJointDynamicsPoint GetSPCRJointDynamicsPoint(Transform o)
+        {
+            return GetSPCRJointDynamicsPoint(o.gameObject);
+        }
+
         public SPCRJointDynamicsPoint GetChildJointDynamicsPoint(SPCRJointDynamicsPoint Parent)
         {
             if (Parent != null)
             {
                 for (int i = 0; i < Parent.transform.childCount; ++i)
                 {
-                    var child = Parent.transform.GetChild(i).GetComponent<SPCRJointDynamicsPoint>();
+                    var child = GetSPCRJointDynamicsPoint(Parent.transform.GetChild(i));
                     if (child != null)
                     {
                         return child;
@@ -921,6 +989,16 @@ namespace SPCR
                     PointA,
                     childPointB));
             }
+        }
+
+        void CreationConstraintHorizontal_InSameChain(
+            SPCRJointDynamicsPoint Point,
+            ref List<SPCRJointDynamicsConstraint> ConstraintList)
+        {
+            //ConstraintList.Add(new SPCRJointDynamicsConstraint(
+            //    ConstraintType.Structural_Horizontal,
+            //    childPointA,
+            //    childPointB));
         }
 
         void CreationConstraintShear(
@@ -994,8 +1072,8 @@ namespace SPCR
             if (childA.childCount != 1) return;
             var childB = childA.transform.GetChild(0);
 
-            var childPointA = childA.GetComponent<SPCRJointDynamicsPoint>();
-            var childPointB = childB.GetComponent<SPCRJointDynamicsPoint>();
+            var childPointA = GetSPCRJointDynamicsPoint(childA);
+            var childPointB = GetSPCRJointDynamicsPoint(childB);
 
             if (childPointB != null)
             {
@@ -1163,23 +1241,6 @@ namespace SPCR
             }
         }
 
-        List<SPCRJointDynamicsJob.SurfaceFaceConstraints> GetSurfaceFaceConstraints()
-        {
-            List<SPCRJointDynamicsJob.SurfaceFaceConstraints> faceConstraints = new List<SPCRJointDynamicsJob.SurfaceFaceConstraints>();
-            for (int i = 0; i < SurfaceFacePoints.Length; i++)
-            {
-                faceConstraints.Add(new SPCRJointDynamicsJob.SurfaceFaceConstraints
-                {
-                    IndexA = SurfaceFacePoints[i].PointA._Index,
-                    IndexB = SurfaceFacePoints[i].PointB._Index,
-                    IndexC = SurfaceFacePoints[i].PointC._Index,
-                    IndexD = SurfaceFacePoints[i].PointD._Index,
-                });
-            }
-
-            return faceConstraints;
-        }
-
         void CreateSurfaceFace(SPCRJointDynamicsPoint PointA, SPCRJointDynamicsPoint PointB, ref List<SPCRJointDynamicsSurfaceFace> faceList)
         {
             if (PointA == null || PointB == null) return;
@@ -1200,12 +1261,25 @@ namespace SPCR
 
         void OnDrawGizms_Constraint(SPCRJointDynamicsConstraint[] constraints)
         {
-            for (int i = 0; i < constraints.Length; i++)
+            if (Application.isPlaying)
             {
-                var constraint = constraints[i];
-                var pointA = constraint._PointA.transform.position;
-                var pointB = constraint._PointB.transform.position;
-                Gizmos.DrawLine(pointA, pointB);
+                for (int i = 0; i < constraints.Length; i++)
+                {
+                    var constraint = constraints[i];
+                    var pointA = constraint._PointA.transform.position;
+                    var pointB = constraint._PointB.transform.position;
+                    Gizmos.DrawLine(pointA, pointB);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < constraints.Length; i++)
+                {
+                    var constraint = constraints[i];
+                    var pointA = constraint._PointA.transform.position;
+                    var pointB = constraint._PointB.transform.position;
+                    Gizmos.DrawLine(pointA, pointB);
+                }
             }
         }
 
@@ -1251,6 +1325,8 @@ namespace SPCR
                 return;
             }
 
+            _Job.DrawGizmos_LateUpdatePoints();
+
             Gizmos.color = Color.magenta;
             _Job.DrawGizmos_Points(_IsDebugDrawPointGizmo);
 
@@ -1290,10 +1366,13 @@ namespace SPCR
                 _Job.DrawGizmos_Constraint(false, false, false, false, true);
             }
 
-            if (_IsDebugDraw_SurfaceFace)
+            if (_IsDebugDraw_SurfaceFace && _IsEnableSurfaceCollision)
             {
                 Gizmos.color = Color.red;
                 OnDrawGizmo_SurfaceFaces();
+                OnDrawGizms_Constraint(_ConstraintsStructuralVertical);
+                OnDrawGizms_Constraint(_ConstraintsStructuralHorizontal);
+                OnDrawGizms_Constraint(_ConstraintsShear);
             }
         }
 #endif//UNITY_EDITOR

@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +118,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -153,15 +155,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &46419505
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -177,6 +181,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -201,6 +206,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &46419506
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -255,15 +261,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &67789849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -279,6 +287,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -303,6 +312,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &67789850
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -405,6 +415,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -429,6 +440,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &119913602
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -450,15 +462,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 789102600}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &160868252
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,8 +508,8 @@ Camera:
   m_GameObject: {fileID: 160868252}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -573,7 +587,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 519860609}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 1388061380}
   _PlaneLimitterTbl: []
@@ -583,7 +599,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -1040,10 +1055,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -1069,7 +1137,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 1388061380}
   - {fileID: 395799003}
@@ -1156,6 +1224,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &306838266
 Transform:
   m_ObjectHideFlags: 0
@@ -1240,6 +1386,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1264,6 +1411,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &359101523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,6 +1461,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1337,6 +1486,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &359101526
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1358,15 +1508,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 433970866}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &371989108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,6 +1588,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1460,6 +1613,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &395798999
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1663,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1533,6 +1688,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &395799002
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1554,15 +1710,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1463636165}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &433970862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,6 +1770,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1636,6 +1795,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &433970865
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1657,15 +1817,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 2084879466}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &480333743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,6 +1877,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1739,6 +1902,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &480333746
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1760,15 +1924,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1225766279}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &519860608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1849,6 +2015,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1873,6 +2040,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &523523487
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1894,15 +2062,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1837327890}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &537442570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,6 +2122,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1976,6 +2147,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &537442573
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1997,15 +2169,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 713150913}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &544944389
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,15 +2212,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &544944391
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2062,6 +2238,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2086,6 +2263,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &544944392
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2157,6 +2335,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2181,6 +2360,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &564969993
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2202,15 +2382,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 67789848}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &568616906
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,6 +2442,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2284,6 +2467,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &568616909
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2305,15 +2489,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1817463366}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &578640030
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,7 +2531,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 980131838}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 732923572}
   _PlaneLimitterTbl: []
@@ -2355,7 +2543,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -2812,10 +2999,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -2841,7 +3081,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 732923572}
   - {fileID: 1843532541}
@@ -2928,6 +3168,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &578640032
 Transform:
   m_ObjectHideFlags: 0
@@ -2992,6 +3310,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3016,6 +3335,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &609101306
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3037,15 +3357,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 537442574}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &713150909
 GameObject:
   m_ObjectHideFlags: 0
@@ -3095,6 +3417,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3119,6 +3442,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &713150912
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3140,15 +3464,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 46419504}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &732923568
 GameObject:
   m_ObjectHideFlags: 0
@@ -3198,6 +3524,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3222,6 +3549,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &732923571
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3243,15 +3571,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1843532541}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &737237206
 GameObject:
   m_ObjectHideFlags: 0
@@ -3301,6 +3631,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3325,6 +3656,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &737237209
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3346,15 +3678,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 568616910}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &758771251
 GameObject:
   m_ObjectHideFlags: 0
@@ -3404,6 +3738,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3428,6 +3763,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &758771254
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3449,15 +3785,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1740230928}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &764913509
 GameObject:
   m_ObjectHideFlags: 0
@@ -3534,6 +3872,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &764913511
@@ -3599,6 +3938,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3623,6 +3963,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &789102599
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3644,15 +3985,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1258383800}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &819780063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3733,6 +4076,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3757,6 +4101,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &845853544
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3778,15 +4123,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 544944390}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &906534318
 GameObject:
   m_ObjectHideFlags: 0
@@ -3819,15 +4166,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &906534320
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3843,6 +4192,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3867,6 +4217,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &906534321
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3938,6 +4289,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3962,6 +4314,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &909271400
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3983,15 +4336,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1324393769}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &966238672
 GameObject:
   m_ObjectHideFlags: 0
@@ -4001,6 +4356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 966238673}
+  - component: {fileID: 966238674}
   m_Layer: 0
   m_Name: Info
   m_TagString: Untagged
@@ -4028,6 +4384,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &966238674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966238672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fe4bb233f248741a0d48d3a77dc06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FrameRate: 60
 --- !u!1 &980131837
 GameObject:
   m_ObjectHideFlags: 0
@@ -4108,6 +4477,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4132,6 +4502,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1044318477
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4153,15 +4524,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 2016883152}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1049812381
 GameObject:
   m_ObjectHideFlags: 0
@@ -4231,6 +4604,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4255,6 +4629,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1163063022
 GameObject:
   m_ObjectHideFlags: 0
@@ -4304,6 +4679,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4328,6 +4704,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1163063025
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4349,15 +4726,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1343774287}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1205462533
 GameObject:
   m_ObjectHideFlags: 0
@@ -4389,7 +4768,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 819780064}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 523523488}
   _PlaneLimitterTbl: []
@@ -4399,7 +4780,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -4856,10 +5236,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -4885,7 +5318,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 523523488}
   - {fileID: 1837327890}
@@ -4972,6 +5405,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1205462535
 Transform:
   m_ObjectHideFlags: 0
@@ -5036,6 +5547,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5060,6 +5572,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1206249952
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5081,15 +5594,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1355818518}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1210348589
 GameObject:
   m_ObjectHideFlags: 0
@@ -5139,6 +5654,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5163,6 +5679,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1210348592
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5184,15 +5701,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1546480553}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1225766275
 GameObject:
   m_ObjectHideFlags: 0
@@ -5242,6 +5761,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5266,6 +5786,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1225766278
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5287,15 +5808,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 845853545}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1253551665
 GameObject:
   m_ObjectHideFlags: 0
@@ -5327,7 +5850,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 2119788671}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 2080888975}
   _PlaneLimitterTbl: []
@@ -5337,7 +5862,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -5794,10 +6318,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -5823,7 +6400,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 2080888975}
   - {fileID: 909271401}
@@ -5910,6 +6487,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1253551667
 Transform:
   m_ObjectHideFlags: 0
@@ -5957,15 +6612,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &1258383801
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5981,6 +6638,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6005,6 +6663,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1258383802
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6082,6 +6741,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6106,6 +6766,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &1284500666
 Transform:
   m_ObjectHideFlags: 0
@@ -6169,6 +6830,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6193,6 +6855,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1324393768
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6214,15 +6877,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1994581664}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1343774283
 GameObject:
   m_ObjectHideFlags: 0
@@ -6272,6 +6937,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6296,6 +6962,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1343774286
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6317,15 +6984,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1563487195}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1355818514
 GameObject:
   m_ObjectHideFlags: 0
@@ -6375,6 +7044,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6399,6 +7069,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1355818517
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6420,15 +7091,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 359101527}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1388061376
 GameObject:
   m_ObjectHideFlags: 0
@@ -6478,6 +7151,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6502,6 +7176,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1388061379
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6523,15 +7198,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 395799003}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1463636161
 GameObject:
   m_ObjectHideFlags: 0
@@ -6581,6 +7258,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6605,6 +7283,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1463636164
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6626,15 +7305,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1535845361}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1465263236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6684,6 +7365,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6708,6 +7390,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1465263239
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6729,15 +7412,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b5e69ea2-5bfa-4dfb-8351-cc4abe526028
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 906534319}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000020861627, y: -1, z: 0}
   _Depth: 6
   _Index: 6
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1535845357
 GameObject:
   m_ObjectHideFlags: 0
@@ -6787,6 +7472,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6811,6 +7497,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1535845360
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6832,15 +7519,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 609101307}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1546480549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6890,6 +7579,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6914,6 +7604,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1546480552
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6935,15 +7626,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 119913603}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1557154703
 GameObject:
   m_ObjectHideFlags: 0
@@ -6993,6 +7686,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7017,6 +7711,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1557154706
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7038,15 +7733,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b3af24e7-794c-42e3-8287-448d5fcfe600
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1677964891}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000014901163, y: -1, z: 0}
   _Depth: 4
   _Index: 4
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1563487191
 GameObject:
   m_ObjectHideFlags: 0
@@ -7096,6 +7793,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7120,6 +7818,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1563487194
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7141,15 +7840,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1944948982}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1677964887
 GameObject:
   m_ObjectHideFlags: 0
@@ -7199,6 +7900,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7223,6 +7925,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1677964890
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7244,15 +7947,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1465263240}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1740230924
 GameObject:
   m_ObjectHideFlags: 0
@@ -7302,6 +8007,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7326,6 +8032,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1740230927
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7347,15 +8054,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1557154707}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1817463362
 GameObject:
   m_ObjectHideFlags: 0
@@ -7405,6 +8114,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7429,6 +8139,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1817463365
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7450,15 +8161,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1206249953}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1822871745
 GameObject:
   m_ObjectHideFlags: 0
@@ -7490,7 +8203,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 103473099}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 1163063026}
   _PlaneLimitterTbl: []
@@ -7500,7 +8215,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -7957,10 +8671,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -7986,7 +8753,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 1163063026}
   - {fileID: 1343774287}
@@ -8073,6 +8840,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1822871747
 Transform:
   m_ObjectHideFlags: 0
@@ -8168,6 +9013,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8192,6 +9038,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1825215522
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8213,15 +9060,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: c23ae6b9-a299-442b-be0d-8071dd56e357
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1210348593}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000089406974, y: -1, z: 0}
   _Depth: 2
   _Index: 2
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1837327886
 GameObject:
   m_ObjectHideFlags: 0
@@ -8271,6 +9120,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8295,6 +9145,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1837327889
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8316,15 +9167,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1825215523}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1843532537
 GameObject:
   m_ObjectHideFlags: 0
@@ -8374,6 +9227,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8398,6 +9252,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1843532540
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8419,15 +9274,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 3bafa50f-2354-4ec9-95b1-9bd134230a7a
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 758771255}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000005960465, y: -1, z: 0}
   _Depth: 1
   _Index: 1
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1882931204
 GameObject:
   m_ObjectHideFlags: 0
@@ -8497,6 +9354,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8521,6 +9379,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1944948978
 GameObject:
   m_ObjectHideFlags: 0
@@ -8570,6 +9429,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8594,6 +9454,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1944948981
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8615,15 +9476,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 480333747}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &1986074370
 GameObject:
   m_ObjectHideFlags: 0
@@ -8693,6 +9556,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8717,6 +9581,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1994581660
 GameObject:
   m_ObjectHideFlags: 0
@@ -8766,6 +9631,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8790,6 +9656,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1994581663
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8811,15 +9678,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 400ab7bd-f38e-4abc-8a45-d0295bdc7f45
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 1044318478}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000011920933, y: -1, z: 0}
   _Depth: 3
   _Index: 3
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &2016883148
 GameObject:
   m_ObjectHideFlags: 0
@@ -8869,6 +9738,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8893,6 +9763,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2016883151
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8914,15 +9785,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: b2507129-1da9-49bf-939a-c7cbae956d8e
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 564969994}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.00000017881395, y: -1, z: 0}
   _Depth: 5
   _Index: 5
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &2066809535
 GameObject:
   m_ObjectHideFlags: 0
@@ -8954,7 +9827,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InspectorLang: 1
   Name: 
+  ExecutionOrder: 0
   _RootTransform: {fileID: 1824544862}
+  _SearchPointDepth: 0
   _RootPointTbl:
   - {fileID: 737237210}
   _PlaneLimitterTbl: []
@@ -8964,7 +9839,6 @@ MonoBehaviour:
   _SubSteps: 1
   _IsCancelResetPhysics: 0
   _IsEnableSurfaceCollision: 0
-  _SurfaceCollisionDivision: 1
   _MassScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -9421,10 +10295,63 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _CollisionAnimateRadius:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.7
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _CollisionReturn_Start: 0.5
+  _CollisionReturn_Speed: 0.5
   _Gravity: {x: 0, y: -9.8, z: 0}
   _WindForce: {x: 10, y: 0, z: 5}
+  _EnableWindForcePowerToAnimationBlendRatio: 0
+  _WindForcePowerToAnimationBlendRatioCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _RootSlideLimit: 4
   _RootRotateLimit: 360
+  _ConstraintShrinkLimit: -1
+  _ResetDelaySeconds: 0
   _AllShrink: 1
   _AllStretch: 1
   _StructuralShrinkVertical: 1
@@ -9450,7 +10377,7 @@ MonoBehaviour:
   _IsCollideStructuralVertical: 1
   _IsCollideStructuralHorizontal: 1
   _IsCollideShear: 1
-  _EnableCaptureAnimationTransform: 1
+  _BlendRatio: 0
   _PointTbl:
   - {fileID: 737237210}
   - {fileID: 568616910}
@@ -9537,6 +10464,84 @@ MonoBehaviour:
   _MaxPointDepth: 7
   _IsPaused: 0
   _StabilizationFrameRate: 60
+  _UseLimitAngles: 0
+  _LimitAngle: -1
+  _LimitFromRoot: 0
+  _LimitPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _IsFakeWave: 0
+  _FakeWaveSpeed: 10
+  _FakeWavePower: 0.05
+  _FakeWavePowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _FakeWaveFreqCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &2066809537
 Transform:
   m_ObjectHideFlags: 0
@@ -9601,6 +10606,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9625,6 +10631,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2080888974
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9646,15 +10653,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: dc22d348-00eb-436a-9a11-e1636e33353c
+  _IsFixed: 1
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 909271401}
-  _IsFixed: 1
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -0.000000029802326, y: -1, z: 5.6843424e-13}
   _Depth: 0
   _Index: 0
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!1 &2084879465
 GameObject:
   m_ObjectHideFlags: 0
@@ -9687,15 +10696,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueGUIID: 0f1ae1c7-dc21-41ba-8fa5-f68f3437ce87
+  _IsFixed: 0
   _Mass: 1
   _MovableLimitRadius: -1
+  _UseForSurfaceCollision: 1
+  _ForceChildPoint: {fileID: 0}
   _RefChildPoint: {fileID: 0}
-  _IsFixed: 0
+  _RefParentPoint: {fileID: 0}
   _BoneAxis: {x: -1, y: 0, z: 0}
   _Depth: 7
   _Index: 7
   _MovableLimitTargetIndex: 0
-  _UseForSurfaceCollision: 1
 --- !u!23 &2084879467
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9711,6 +10722,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9735,6 +10747,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2084879468
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -5,8 +5,9 @@
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *  
- *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
+ *
+ *  @author Hiromoto Noriyuki <hrmtnryk@sparkfx.jp>
+ *          Piyush Nitnaware <nitnaware.piyush@spark-creative.co.jp>
 */
 
 using UnityEngine;
@@ -349,7 +350,6 @@ namespace SPCR
                 }
             }
 
-            spcrJointDynamicsSave.Relaxation = SPCRJointDynamicsContoller._Relaxation;
             spcrJointDynamicsSave.SubSteps = SPCRJointDynamicsContoller._SubSteps;
 
             //@spcrJointDynamicsSave.IsEnablePointCollision = SPCRJointDynamicsContoller._IsEnablePointCollision;
@@ -358,7 +358,6 @@ namespace SPCR
             spcrJointDynamicsSave.IsCancelResetPhysics = SPCRJointDynamicsContoller._IsCancelResetPhysics;
 
             spcrJointDynamicsSave.IsEnableSurfaceCollision = SPCRJointDynamicsContoller._IsEnableSurfaceCollision;
-            spcrJointDynamicsSave.SurfaceCollisionDivision = SPCRJointDynamicsContoller._SurfaceCollisionDivision;
 
             spcrJointDynamicsSave.MassScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._MassScaleCurve);
             spcrJointDynamicsSave.GravityScaleCurve = GetSPCRAnimaCurveKeyFrames(SPCRJointDynamicsContoller._GravityScaleCurve);
@@ -643,15 +642,11 @@ namespace SPCR
                 SPCRJointDynamicsContoller._RootPointTbl = new SPCRJointDynamicsPoint[0];
             }
 
-            SPCRJointDynamicsContoller._Relaxation = spcrJointDynamicsSave.Relaxation;
-            SPCRJointDynamicsContoller._SubSteps = spcrJointDynamicsSave.SubSteps;
-
             //@SPCRJointDynamicsContoller._IsEnablePointCollision = spcrJointDynamicsSave.IsEnablePointCollision;
             //@SPCRJointDynamicsContoller._DetailHitDivideMax = spcrJointDynamicsSave.DetailHitDivideMax;
 
             SPCRJointDynamicsContoller._IsCancelResetPhysics = spcrJointDynamicsSave.IsCancelResetPhysics;
             SPCRJointDynamicsContoller._IsEnableSurfaceCollision = spcrJointDynamicsSave.IsEnableSurfaceCollision;
-            SPCRJointDynamicsContoller._SurfaceCollisionDivision = spcrJointDynamicsSave.SurfaceCollisionDivision;
 
             SPCRJointDynamicsContoller._MassScaleCurve = GetAnimCurve(spcrJointDynamicsSave.MassScaleCurve);
             SPCRJointDynamicsContoller._GravityScaleCurve = GetAnimCurve(spcrJointDynamicsSave.GravityScaleCurve);

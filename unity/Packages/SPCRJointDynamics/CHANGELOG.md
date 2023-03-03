@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.6] - 2023-03-03
+###Added
+Removed unsafe code.
+Supported Branched chain.
+Improved stability.
+Faster speeds have been achieved.
+Pseudo-wind sway function added to end points.
+
 ## [2.0.5] - 2022-06-27
 ###Added
 Fix AreaLimit

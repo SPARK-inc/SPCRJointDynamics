@@ -6,7 +6,7 @@
  *  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *  @author Noriyuki Hiromoto <hrmtnryk@sparkfx.jp>
+ *  @author Hiromoto Noriyuki <hrmtnryk@sparkfx.jp>
 */
 
 using UnityEngine;
@@ -28,33 +28,27 @@ namespace SPCR
             }
         }
 
+        public GameObject MovableLimitTarget { get; private set; }
+        public bool EnableMovableLimit { get { return _MovableLimitRadius >= 0.0f; } }
+        public bool DisableMark { get; set; }
+
         [Header("=== 物理設定項目 ===")]
+        public bool _IsFixed = false;
         public float _Mass = 1.0f;
         public float _MovableLimitRadius = -1.0f;
-        public GameObject MovableLimitTarget { get; private set; }
-
-        public bool EnableMovableLimit { get { return _MovableLimitRadius >= 0.0f; } }
-
         public bool _UseForSurfaceCollision = true;
+        public SPCRJointDynamicsPoint _ForceChildPoint = null;
 
         [Header("=== 物理自動設定項目 ===")]
         public SPCRJointDynamicsPoint _RefChildPoint;
-        public bool _IsFixed;
-        [HideInInspector]
+        public SPCRJointDynamicsPoint _RefParentPoint;
         public Vector3 _BoneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
-        [HideInInspector]
         public float _Depth;
-        [HideInInspector]
         public int _Index;
-        [HideInInspector]
         public int _MovableLimitTargetIndex;
-
-        [HideInInspector]
-        public Vector3 _LocalScale;
-        [HideInInspector]
-        public Vector3 _LocalPosition;
-        [HideInInspector]
-        public Quaternion _LocalRotation;
+        public Vector3 _LocalScale { set; get; }
+        public Vector3 _LocalPosition { set; get; }
+        public Quaternion _LocalRotation { set; get; }
 
         public void Reset()
         {
