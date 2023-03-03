@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace SPCR
 {
-    [DisallowMultipleComponent, DefaultExecutionOrder(2000)]
+    [DisallowMultipleComponent, DefaultExecutionOrder(20000 + 2)]
     public class SPCRJointDynamicsJobManager_Step2 : MonoBehaviour
     {
         void Update()

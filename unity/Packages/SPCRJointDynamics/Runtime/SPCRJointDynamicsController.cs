@@ -18,7 +18,7 @@ using UnityEngine.Serialization;
 
 namespace SPCR
 {
-    [DefaultExecutionOrder(30000)]
+    [DefaultExecutionOrder(20000 - 1)]
     public class SPCRJointDynamicsController : MonoBehaviour
     {
         float _TimeScale = 1.0f;

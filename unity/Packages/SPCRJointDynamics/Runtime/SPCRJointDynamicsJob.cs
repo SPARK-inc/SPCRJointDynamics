@@ -232,6 +232,12 @@ namespace SPCR
         {
             Uninitialize();
 
+            if (RootBone == null)
+            {
+                Debug.LogError("SPCRJointDynamics: RootBone is null!!!");
+                return false;
+            }
+
             _RootBone = RootBone;
             _PreviousRootRotation = _RootBone.rotation;
             _PreviousRootPosition = _RootBone.position;

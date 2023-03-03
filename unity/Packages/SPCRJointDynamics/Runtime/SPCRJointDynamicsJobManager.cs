@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace SPCR
 {
-    [DisallowMultipleComponent, DefaultExecutionOrder(100)]
+    [DisallowMultipleComponent, DefaultExecutionOrder(20000)]
     [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step1))]
     [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step2))]
     [RequireComponent(typeof(SPCRJointDynamicsJobManager_Step3))]
@@ -25,20 +25,33 @@ namespace SPCR
         public int _OrderStepCount = 0;
         public List<SPCRJointDynamicsController>[] _Controllers;
 
+#if UNITY_EDITOR
+        [UnityEditor.InitializeOnEnterPlayMode]
+        static void OnInitializeOnEnterPlayMode()
+        {
+            _bDestroyed = false;
+            _Instance = null;
+        }
+#endif//UNITY_EDITOR
+
+        static bool _bDestroyed = false;
         static SPCRJointDynamicsJobManager _Instance;
         static public SPCRJointDynamicsJobManager Instance
         {
             get
             {
-                if (_Instance == null)
+                if (!_bDestroyed)
                 {
-                    _Instance = GameObject.FindObjectOfType<SPCRJointDynamicsJobManager>();
                     if (_Instance == null)
                     {
-                        var obj = new GameObject("SPCRJointDynamicsJobManager");
-                        GameObject.DontDestroyOnLoad(obj);
-                        _Instance = obj.AddComponent<SPCRJointDynamicsJobManager>();
-                        _Instance.Initialize();
+                        _Instance = GameObject.FindObjectOfType<SPCRJointDynamicsJobManager>();
+                        if (_Instance == null)
+                        {
+                            var obj = new GameObject("SPCRJointDynamicsJobManager");
+                            GameObject.DontDestroyOnLoad(obj);
+                            _Instance = obj.AddComponent<SPCRJointDynamicsJobManager>();
+                            _Instance.Initialize();
+                        }
                     }
                 }
                 return _Instance;
@@ -47,6 +60,8 @@ namespace SPCR
 
         static public void Push(SPCRJointDynamicsController ctrl)
         {
+            if (_bDestroyed) return;
+
             Instance._Controllers[(int)ctrl.ExecutionOrder].Add(ctrl);
 
             Instance._DynamicsBoneCount += ctrl.PointTbl.Length;
@@ -55,10 +70,25 @@ namespace SPCR
 
         static public void Pop(SPCRJointDynamicsController ctrl)
         {
+            if (_bDestroyed) return;
+
             Instance._Controllers[(int)ctrl.ExecutionOrder].Remove(ctrl);
 
             Instance._DynamicsBoneCount -= ctrl.PointTbl.Length;
             Instance._DynamicsColliderCount -= ctrl._ColliderTbl.Length;
+        }
+
+        private void OnDestroy()
+        {
+            _bDestroyed = true;
+
+            _Instance._Controllers[0].Clear();
+            _Instance._Controllers[1].Clear();
+
+            _Instance._DynamicsBoneCount = 0;
+            _Instance._DynamicsColliderCount = 0;
+
+            _Instance = null;
         }
 
         void Initialize()
