@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.7] - 2023-04-07
+###Added
+Fixed inspector display.
+BURST and JOBSYSTEM were disabled by default and have been enabled.
+Fixed errors when displaying Gizmo.
+Added data validity check method public bool RunValidityChecks()
+
 ## [2.0.6] - 2023-03-03
 ###Added
 Removed unsafe code.

@@ -12,9 +12,9 @@
 */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SPCR
 {
@@ -254,6 +254,151 @@ namespace SPCR
         float _DelayTime;
         SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
+        public bool RunValidityChecks()
+        {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            var HEAD = "SPCR_DATA_ERROR [[" + gameObject.name + "(" + Name + ") ]]: ";
+            if (_RootTransform == null)
+            {
+                Debug.LogError(HEAD + "_RootTransform is Null!!!");
+                return false;
+            }
+
+            for (int i = 0; i < _RootPointTbl.Length; ++i)
+            {
+                if (_RootPointTbl[i] == null)
+                {
+                    Debug.LogError(HEAD + "_RootPointTbl[" + i + "] is Null!!!");
+                    return false;
+                }
+                foreach (var c in _RootPointTbl[i].gameObject.GetComponents<Component>())
+                {
+                    if (c == null)
+                    {
+                        Debug.LogError(HEAD + "_RootPointTbl[" + i + "] is Missing!!!");
+                        return false;
+                    }
+                }
+            }
+            for (int i = 0; i < _PointTbl.Length; ++i)
+            {
+                if (_PointTbl[i] == null)
+                {
+                    Debug.LogError(HEAD + "_PointTbl[" + i + "] is Null!!!");
+                    return false;
+                }
+                foreach (var c in _PointTbl[i].gameObject.GetComponents<Component>())
+                {
+                    if (c == null)
+                    {
+                        Debug.LogError(HEAD + "_PointTbl[" + i + "] is Missing!!!");
+                        return false;
+                    }
+                }
+            }
+            for (int i = 0; i < _ColliderTbl.Length; ++i)
+            {
+                if (_ColliderTbl[i] == null)
+                {
+                    Debug.LogError(HEAD + "_ColliderTbl[" + i + "] is null!!!");
+                    return false;
+                }
+                foreach (var c in _ColliderTbl[i].gameObject.GetComponents<Component>())
+                {
+                    if (c == null)
+                    {
+                        Debug.LogError(HEAD + "_ColliderTbl[" + i + "] is Missing!!!");
+                        return false;
+                    }
+                }
+            }
+            for (int i = 0; i < _PointGrabberTbl.Length; ++i)
+            {
+                if (_PointGrabberTbl[i] == null)
+                {
+                    Debug.LogError(HEAD + "_PointGrabberTbl[" + i + "] is null!!!");
+                    return false;
+                }
+                foreach (var c in _PointGrabberTbl[i].gameObject.GetComponents<Component>())
+                {
+                    if (c == null)
+                    {
+                        Debug.LogError(HEAD + "_PointGrabberTbl[" + i + "] is Missing!!!");
+                        return false;
+                    }
+                }
+            }
+            for (int i = 0; i < _PlaneLimitterTbl.Length; ++i)
+            {
+                if (_PlaneLimitterTbl[i] == null)
+                {
+                    Debug.LogError(HEAD + "_PlaneLimitterTbl[" + i + "] is null!!!");
+                    return false;
+                }
+                foreach (var c in _PlaneLimitterTbl[i].gameObject.GetComponents<Component>())
+                {
+                    if (c == null)
+                    {
+                        Debug.LogError(HEAD + "_PlaneLimitterTbl[" + i + "] is Missing!!!");
+                        return false;
+                    }
+                }
+            }
+
+            foreach (var c in _ConstraintsStructuralVertical)
+            {
+                if (!_PointTbl.Contains(c._PointA) || !_PointTbl.Contains(c._PointB))
+                {
+                    Debug.LogError(HEAD + "_ConstraintsStructuralVertical is Invalid!!!");
+                    return false;
+                }
+            }
+            foreach (var c in _ConstraintsStructuralHorizontal)
+            {
+                if (!_PointTbl.Contains(c._PointA) || !_PointTbl.Contains(c._PointB))
+                {
+                    Debug.LogError(HEAD + "_ConstraintsStructuralHorizontal is Invalid!!!");
+                    return false;
+                }
+            }
+            foreach (var c in _ConstraintsShear)
+            {
+                if (!_PointTbl.Contains(c._PointA) || !_PointTbl.Contains(c._PointB))
+                {
+                    Debug.LogError(HEAD + "_ConstraintsShear is Invalid!!!");
+                    return false;
+                }
+            }
+            foreach (var c in _ConstraintsBendingVertical)
+            {
+                if (!_PointTbl.Contains(c._PointA) || !_PointTbl.Contains(c._PointB))
+                {
+                    Debug.LogError(HEAD + "_ConstraintsBendingVertical is Invalid!!!");
+                    return false;
+                }
+            }
+            foreach (var c in _ConstraintsBendingHorizontal)
+            {
+                if (!_PointTbl.Contains(c._PointA) || !_PointTbl.Contains(c._PointB))
+                {
+                    Debug.LogError(HEAD + "_ConstraintsBendingHorizontal is Invalid!!!");
+                    return false;
+                }
+            }
+
+            foreach (var c in _surfaceFacePoints)
+            {
+                if (!_PointTbl.Contains(c.PointA) || !_PointTbl.Contains(c.PointB) || !_PointTbl.Contains(c.PointC) || !_PointTbl.Contains(c.PointD))
+                {
+                    Debug.LogError(HEAD + "_surfaceFacePoints is Invalid!!!");
+                    return false;
+                }
+            }
+#endif//DEVELOPMENT_BUILD || UNITY_EDITOR
+
+            return true;
+        }
+
         public void SetPointDynamicsRatio(int Index, float Ratio)
         {
             if (!isActiveAndEnabled) return;
@@ -278,6 +423,8 @@ namespace SPCR
                 pt._LocalPosition = pt.transform.localPosition;
                 pt._LocalRotation = pt.transform.localRotation;
             }
+
+            RunValidityChecks();
         }
 
         void OnEnable()
@@ -389,7 +536,7 @@ namespace SPCR
                 _RootTransform,
                 _RootSlideLimit * ProcTime,
                 _RootRotateLimit * ProcTime,
-                _ConstraintShrinkLimit < 0.0f ? 1000000.0f: _ConstraintShrinkLimit,
+                _ConstraintShrinkLimit < 0.0f ? 1000000.0f : _ConstraintShrinkLimit,
                 _IsPaused ? 0.0f : ProcTime,
                 _SubSteps * Math.Max(1, LoopCount),
                 _WindForce,
@@ -780,12 +927,6 @@ namespace SPCR
                             ref ConstraintList);
                     }
                 }
-                for (int i = 0; i < HorizontalRootCount; ++i)
-                {
-                    CreationConstraintHorizontal_InSameChain(
-                        _RootPointTbl[i],
-                        ref ConstraintList);
-                }
                 _ConstraintsStructuralHorizontal = ConstraintList.ToArray();
             }
 
@@ -866,6 +1007,167 @@ namespace SPCR
                 _ConstraintTable = null;
             }
 #endif
+        }
+
+        SPCRJointDynamicsPoint GetDynamicsPoint(Transform target, int depth)
+        {
+            var point = target.GetComponent<SPCRJointDynamicsPoint>();
+            if (point != null)
+            {
+                if (depth == 0) return point;
+
+                for (int i = 0; i < target.childCount; ++i)
+                {
+                    point = GetDynamicsPoint(target.GetChild(i), depth - 1);
+                    if (point != null) return point;
+                }
+            }
+
+            return null;
+        }
+
+        public void SearchRootPoints()
+        {
+            if (_RootTransform != null)
+            {
+                var PointList = new List<SPCRJointDynamicsPoint>();
+                for (int i = 0; i < _RootTransform.transform.childCount; ++i)
+                {
+                    var child = _RootTransform.transform.GetChild(i);
+                    var point = GetDynamicsPoint(child, _SearchPointDepth);
+                    if (point != null)
+                    {
+                        PointList.Add(point);
+                    }
+                }
+                _RootPointTbl = PointList.ToArray();
+            }
+        }
+
+        SPCRJointDynamicsPoint GetNearestPoint(Vector3 Base, ref List<SPCRJointDynamicsPoint> Source, bool IsIgnoreY)
+        {
+            float NearestDistance = float.MaxValue;
+            int NearestIndex = -1;
+            for (int i = 0; i < Source.Count; ++i)
+            {
+                var Direction = Source[i].transform.position - Base;
+                if (IsIgnoreY) Direction.y = 0.0f;
+                var Distance = Direction.sqrMagnitude;
+                if (NearestDistance > Distance)
+                {
+                    NearestDistance = Distance;
+                    NearestIndex = i;
+                }
+            }
+            var Point = Source[NearestIndex];
+            Source.RemoveAt(NearestIndex);
+            return Point;
+        }
+
+        public enum UpdateJointConnectionType
+        {
+            Default,
+            SortNearPointXYZ,
+            SortNearPointXZ,
+            SortNearPointXYZ_FixedBeginEnd,
+            SortNearPointXZ_FixedBeginEnd,
+        }
+
+        public void SortConstraintsHorizontalRoot(UpdateJointConnectionType Type)
+        {
+            switch (Type)
+            {
+            case UpdateJointConnectionType.Default:
+                {
+                }
+                break;
+            case UpdateJointConnectionType.SortNearPointXYZ:
+                {
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = _RootPointTbl[0];
+                    for (int i = 1; i < _RootPointTbl.Length; ++i)
+                    {
+                        SourcePoints.Add(_RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            false));
+                    }
+                    _RootPointTbl = SortedPoints.ToArray();
+                }
+                break;
+            case UpdateJointConnectionType.SortNearPointXZ:
+                {
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = _RootPointTbl[0];
+                    for (int i = 1; i < _RootPointTbl.Length; ++i)
+                    {
+                        SourcePoints.Add(_RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            true));
+                    }
+                    _RootPointTbl = SortedPoints.ToArray();
+                }
+                break;
+            case UpdateJointConnectionType.SortNearPointXYZ_FixedBeginEnd:
+                {
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = _RootPointTbl[0];
+                    var EdgeB = _RootPointTbl[_RootPointTbl.Length - 1];
+                    for (int i = 1; i < _RootPointTbl.Length - 1; ++i)
+                    {
+                        SourcePoints.Add(_RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            false));
+                    }
+                    SortedPoints.Add(EdgeB);
+                    _RootPointTbl = SortedPoints.ToArray();
+                }
+                break;
+            case UpdateJointConnectionType.SortNearPointXZ_FixedBeginEnd:
+                {
+                    var SourcePoints = new List<SPCRJointDynamicsPoint>();
+                    var EdgeA = _RootPointTbl[0];
+                    var EdgeB = _RootPointTbl[_RootPointTbl.Length - 1];
+                    for (int i = 1; i < _RootPointTbl.Length - 1; ++i)
+                    {
+                        SourcePoints.Add(_RootPointTbl[i]);
+                    }
+                    var SortedPoints = new List<SPCRJointDynamicsPoint>();
+                    SortedPoints.Add(EdgeA);
+                    while (SourcePoints.Count > 0)
+                    {
+                        SortedPoints.Add(GetNearestPoint(
+                            SortedPoints[SortedPoints.Count - 1].transform.position,
+                            ref SourcePoints,
+                            true));
+                    }
+                    SortedPoints.Add(EdgeB);
+                    _RootPointTbl = SortedPoints.ToArray();
+                }
+                break;
+            }
+
+            UpdateJointConnection();
         }
 
         public void ImmediateParameterReflection()
@@ -989,16 +1291,6 @@ namespace SPCR
                     PointA,
                     childPointB));
             }
-        }
-
-        void CreationConstraintHorizontal_InSameChain(
-            SPCRJointDynamicsPoint Point,
-            ref List<SPCRJointDynamicsConstraint> ConstraintList)
-        {
-            //ConstraintList.Add(new SPCRJointDynamicsConstraint(
-            //    ConstraintType.Structural_Horizontal,
-            //    childPointA,
-            //    childPointB));
         }
 
         void CreationConstraintShear(

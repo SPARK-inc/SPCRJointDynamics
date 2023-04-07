@@ -40,15 +40,24 @@ namespace SPCR
         public SPCRJointDynamicsPoint _ForceChildPoint = null;
 
         [Header("=== 物理自動設定項目 ===")]
+        [HideInInspector]
         public SPCRJointDynamicsPoint _RefChildPoint;
+        [HideInInspector]
         public SPCRJointDynamicsPoint _RefParentPoint;
+        [HideInInspector]
         public Vector3 _BoneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
+        [HideInInspector]
         public float _Depth;
+        [HideInInspector]
         public int _Index;
+        [HideInInspector]
         public int _MovableLimitTargetIndex;
-        public Vector3 _LocalScale { set; get; }
-        public Vector3 _LocalPosition { set; get; }
-        public Quaternion _LocalRotation { set; get; }
+        [HideInInspector]
+        public Vector3 _LocalScale;
+        [HideInInspector]
+        public Vector3 _LocalPosition;
+        [HideInInspector]
+        public Quaternion _LocalRotation;
 
         public void Reset()
         {

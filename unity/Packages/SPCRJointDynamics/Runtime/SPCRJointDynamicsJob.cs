@@ -11,8 +11,8 @@
  *          Piyush Nitnaware <nitnaware.piyush@spark-creative.co.jp>
 */
 
-//#define ENABLE_BURST
-//#define ENABLE_JOBSYSTEM
+#define ENABLE_BURST
+#define ENABLE_JOBSYSTEM
 
 using UnityEngine;
 using UnityEngine.Jobs;
@@ -446,7 +446,7 @@ namespace SPCR
                 t.localScale = _PointsR[i].InitialLocalScale;
             }
 
-            if (_Constraints.IsCreated)_Constraints.Dispose();
+            if (_Constraints.IsCreated) _Constraints.Dispose();
             if (_SurfaceConstraints.IsCreated) _SurfaceConstraints.Dispose();
             if (_GrabbersR.IsCreated) _GrabbersR.Dispose();
             if (_GrabbersRW.IsCreated) _GrabbersRW.Dispose();
@@ -1439,10 +1439,13 @@ namespace SPCR
 
         public void DrawGizmos_LateUpdatePoints()
         {
-            Gizmos.color = Color.cyan;
-            for (int i = 0; i < _PointCount; ++i)
+            if (_PointsRW.IsCreated)
             {
-                Gizmos.DrawSphere(_PointsRW[i].Position_CurrentTransform, 0.005f);
+                Gizmos.color = Color.cyan;
+                for (int i = 0; i < _PointCount; ++i)
+                {
+                    Gizmos.DrawSphere(_PointsRW[i].Position_CurrentTransform, 0.005f);
+                }
             }
         }
 
@@ -1450,26 +1453,30 @@ namespace SPCR
         {
             if (Draw3DGizmo)
             {
-                if (_PointTransforms == null) return;
-
-                for (int i = 0; i < _PointTransforms.Length; ++i)
+                if (_PointTransforms != null)
                 {
-                    Gizmos.color = Color.white;
-                    Gizmos.DrawSphere(_PointTransforms[i].position, 0.05f);
-                    Gizmos.color = Color.blue;
-                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].forward * 0.4f);
-                    Gizmos.color = Color.green;
-                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].up * 0.4f);
-                    Gizmos.color = Color.red;
-                    DrawArrow(_PointTransforms[i].position, _PointTransforms[i].right * 0.4f);
+                    for (int i = 0; i < _PointTransforms.Length; ++i)
+                    {
+                        Gizmos.color = Color.white;
+                        Gizmos.DrawSphere(_PointTransforms[i].position, 0.05f);
+                        Gizmos.color = Color.blue;
+                        DrawArrow(_PointTransforms[i].position, _PointTransforms[i].forward * 0.4f);
+                        Gizmos.color = Color.green;
+                        DrawArrow(_PointTransforms[i].position, _PointTransforms[i].up * 0.4f);
+                        Gizmos.color = Color.red;
+                        DrawArrow(_PointTransforms[i].position, _PointTransforms[i].right * 0.4f);
+                    }
                 }
             }
             else
             {
-                Gizmos.color = Color.blue;
-                for (int i = 0; i < _PointCount; ++i)
+                if (_PointsRW.IsCreated)
                 {
-                    Gizmos.DrawSphere(_PointsRW[i].Position_Current, 0.005f);
+                    Gizmos.color = Color.blue;
+                    for (int i = 0; i < _PointCount; ++i)
+                    {
+                        Gizmos.DrawSphere(_PointsRW[i].Position_Current, 0.005f);
+                    }
                 }
             }
 

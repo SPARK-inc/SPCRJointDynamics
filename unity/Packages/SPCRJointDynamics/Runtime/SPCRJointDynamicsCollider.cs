@@ -152,14 +152,14 @@ namespace SPCR
 
                 switch (_SurfaceColliderForce)
                 {
-                    case ColliderForce.Off:
-                        break;
-                    case ColliderForce.Push:
-                        DrawArrow(transform.position + transform.up * Height * 0.5f, -transform.up, Height);
-                        break;
-                    case ColliderForce.Pull:
-                        DrawArrow(transform.position - transform.up * Height * 0.5f, transform.up, Height);
-                        break;
+                case ColliderForce.Off:
+                    break;
+                case ColliderForce.Push:
+                    DrawArrow(transform.position + transform.up * Height * 0.5f, -transform.up, Height);
+                    break;
+                case ColliderForce.Pull:
+                    DrawArrow(transform.position - transform.up * Height * 0.5f, transform.up, Height);
+                    break;
                 }
             }
         }
