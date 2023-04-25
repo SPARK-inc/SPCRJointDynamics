@@ -863,8 +863,8 @@ namespace SPCR
                     }
                     else
                     {
-                        ptRW.Position_Previous += RootSlideOffset;
-                        ptRW.Position_Current += RootSlideOffset;
+                        ptRW.Position_Previous = ApplySystemTransform(ptRW.Position_Previous, RootPosition, RootSlideOffset, RootRotationOffset);
+                        ptRW.Position_Current = ApplySystemTransform(ptRW.Position_Current, RootPosition, RootSlideOffset, RootRotationOffset);
 
                         Vector3 Displacement = Vector3.zero;
                         if (!IsPaused)

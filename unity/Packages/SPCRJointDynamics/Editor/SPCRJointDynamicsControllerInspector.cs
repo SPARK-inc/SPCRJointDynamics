@@ -152,7 +152,7 @@ namespace SPCR
                 DrawGroupBox(new string[] { "変換制限", "Transform restriction" }[Lang], () =>
                 {
                     UpdateFloat(new string[] { "ルートの最大移動距離(秒)", "Maximum move distance of root(sec.)" }[Lang], controller, ref controller._RootSlideLimit);
-                    //UpdateFloat(new string[] { "ルートの最大回転角(秒)", "Maximum rotate angle of root(sec.)" }[Lang], controller, ref controller._RootRotateLimit);
+                    UpdateFloat(new string[] { "ルートの最大回転角(秒)", "Maximum rotate angle of root(sec.)" }[Lang], controller, ref controller._RootRotateLimit);
                     UpdateFloat(new string[] { "拘束の最大縮小距離(ステップ)", "Maximum shrink constraint limit(step)" }[Lang], controller, ref controller._ConstraintShrinkLimit);
                 });
 
