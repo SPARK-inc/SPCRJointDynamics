@@ -749,10 +749,15 @@ namespace SPCR
                 var RootRotationOffset = Quaternion.identity;
                 var RootDeltaRotation = RootRotation * Quaternion.Inverse(PreviousRootRotation);
                 var RotateAngle = Mathf.Acos(RootDeltaRotation.w) * 2.0f * Mathf.Rad2Deg;
+                if(RotateAngle > 180.0f)
+                {
+                    RotateAngle = RotateAngle - 360.0f;
+                }
                 if ((RootRotateLimit >= 0.0f) && (Mathf.Abs(RotateAngle) > RootRotateLimit))
                 {
+                    float TempAngle;
                     Vector3 RotateAxis;
-                    RootDeltaRotation.ToAngleAxis(out RotateAngle, out RotateAxis);
+                    RootDeltaRotation.ToAngleAxis(out TempAngle, out RotateAxis);
 
                     /*
                      * Fixed in 2022.1.X
