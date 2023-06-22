@@ -252,6 +252,7 @@ namespace SPCR
 
         float _RestDeltaTime;
         float _DelayTime;
+        bool _RequireWarp = false;
         SPCRJointDynamicsJob _Job = new SPCRJointDynamicsJob();
 
         public bool RunValidityChecks()
@@ -414,6 +415,11 @@ namespace SPCR
             _Job.SetPointDynamicsRatio(Index, Ratio);
         }
 
+        public void Warp()
+        {
+            _RequireWarp = true;
+        }
+
         void Awake()
         {
             for (int i = 0; i < _PointTbl.Length; ++i)
@@ -534,8 +540,8 @@ namespace SPCR
 
             _Job.Simulation(
                 _RootTransform,
-                _RootSlideLimit * ProcTime,
-                _RootRotateLimit * ProcTime,
+                _RequireWarp ? 0.0f : _RootSlideLimit * ProcTime,
+                _RequireWarp ? 0.0f : _RootRotateLimit * ProcTime,
                 _ConstraintShrinkLimit < 0.0f ? 1000000.0f : _ConstraintShrinkLimit,
                 _IsPaused ? 0.0f : ProcTime,
                 _SubSteps * Math.Max(1, LoopCount),
@@ -549,6 +555,11 @@ namespace SPCR
                 _Relaxation);
 
             _RestDeltaTime -= ProcTime;
+
+            if (_RequireWarp)
+            {
+                _RequireWarp = false;
+            }
         }
 
         public void ApplySimulationToBoneTransform()
