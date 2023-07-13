@@ -1409,13 +1409,14 @@ namespace SPCR
             }
         }
 
-        public void PostSimulation()
+        public void PostSimulation(float BlendRatio)
         {
             {
                 var Job = new JobApplySimlationResult();
                 Job.PointsR = _PointsR;
                 Job.PointsRW = _PointsRW;
                 Job.PointsP2T = _PointsP2T;
+                Job.BlendRatio = BlendRatio;
 #if ENABLE_JOBSYSTEM
                 _hJob = Job.Schedule(_PointTransformArray, _hJob);
 #else//ENABLE_JOBSYSTEM
@@ -1907,6 +1908,7 @@ namespace SPCR
             public NativeArray<PointRW> PointsRW;
             [ReadOnly] public NativeArray<PointR> PointsR;
             [ReadOnly] public NativeArray<Vector3> PointsP2T;
+            [ReadOnly] public float BlendRatio;
 
 #if ENABLE_JOBSYSTEM
             void IJobParallelForTransform.Execute(int index, TransformAccess transform)
@@ -1926,7 +1928,7 @@ namespace SPCR
                     {
                         ptRW.Direction_Previous = Direction;
                         transform.position = ptRW.Position_ToTransform;
-                        SetRotation(ref ptR, ref ptRW, transform);
+                        SetRotation(ref ptR, ref ptRW, transform, 0.0f);
                     }
                     else
                     {
@@ -1936,19 +1938,19 @@ namespace SPCR
                 else
                 {
                     ptRW.Position_ToTransform = transform.position;
-                    SetRotation(ref ptR, ref ptRW, transform);
+                    SetRotation(ref ptR, ref ptRW, transform, BlendRatio);
                 }
 
                 PointsRW[index] = ptRW;
             }
 
 #if ENABLE_JOBSYSTEM
-            void SetRotation(ref PointR ptR, ref PointRW ptRW, TransformAccess transform)
+            void SetRotation(ref PointR ptR, ref PointRW ptRW, TransformAccess transform, float blendRatio)
 #else//ENABLE_JOBSYSTEM
             void SetRotation(ref PointR ptR, ref PointRW ptRW, Transform transform)
 #endif//ENABLE_JOBSYSTEM
             {
-                transform.localRotation = ptR.InitialLocalRotation;
+                transform.localRotation = Quaternion.Slerp(ptR.InitialLocalRotation, transform.localRotation, blendRatio);
                 if (ptR.Child != -1)
                 {
                     var Direction = PointsP2T[ptR.Child] - ptRW.Position_ToTransform;
@@ -1957,7 +1959,7 @@ namespace SPCR
                         Matrix4x4 mRotate = Matrix4x4.Rotate(transform.rotation);
                         Vector3 AimVector = mRotate * ptR.BoneAxis;
                         Quaternion AimRotation = Quaternion.FromToRotation(AimVector, Direction);
-                        transform.rotation = AimRotation * transform.rotation;
+                        transform.rotation = Quaternion.Slerp(AimRotation * transform.rotation, transform.rotation, blendRatio);
                     }
                 }
             }

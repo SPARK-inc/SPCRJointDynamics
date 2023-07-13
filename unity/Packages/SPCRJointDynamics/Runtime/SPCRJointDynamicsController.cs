@@ -567,7 +567,7 @@ namespace SPCR
             if (!isActiveAndEnabled) return;
             if (_DelayTime > 0.0f) return;
 
-            _Job.PostSimulation();
+            _Job.PostSimulation(_CurrentBlendRatio);
         }
 
         public void WaitBoneTransformJobs()
