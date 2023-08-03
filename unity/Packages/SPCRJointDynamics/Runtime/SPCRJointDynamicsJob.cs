@@ -14,6 +14,7 @@
 #define ENABLE_BURST
 #define ENABLE_JOBSYSTEM
 
+using System;
 using UnityEngine;
 using UnityEngine.Jobs;
 using Unity.Collections;
@@ -1215,7 +1216,7 @@ namespace SPCR
                     var CurrentTransformPosition = Vector3.Lerp(ptRW.Position_PreviousTransform, ptRW.Position_CurrentTransform, StepDelta);
                     ptRW.Position_ToTransform = Vector3.Lerp(
                         ptRW.Position_Current, CurrentTransformPosition,
-                        Mathf.SmoothStep(0.0f, 1.0f, BlendRatio));
+                        Mathf.SmoothStep(0.0f, 1.0f, Mathf.Max(ptR.ForceFadeRatio, BlendRatio)));
 
                     if (IsFakeWave)
                     {
@@ -1938,7 +1939,7 @@ namespace SPCR
                 else
                 {
                     ptRW.Position_ToTransform = transform.position;
-                    SetRotation(ref ptR, ref ptRW, transform, BlendRatio);
+                    SetRotation(ref ptR, ref ptRW, transform, Mathf.Max(ptR.ForceFadeRatio, BlendRatio));
                 }
 
                 PointsRW[index] = ptRW;
