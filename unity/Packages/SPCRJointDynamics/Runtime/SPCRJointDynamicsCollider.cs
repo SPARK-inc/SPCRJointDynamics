@@ -76,6 +76,8 @@ namespace SPCR
             }
         }
 
+        public bool _IsInverseCollider = false;
+
         public ColliderForce _SurfaceColliderForce = ColliderForce.Off;
 
         public bool _ShowColiiderGizmo = true;

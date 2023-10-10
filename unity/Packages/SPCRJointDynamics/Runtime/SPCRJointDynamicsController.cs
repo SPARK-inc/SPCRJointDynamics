@@ -600,6 +600,7 @@ namespace SPCR
 
                 Points[i].Parent = -1;
                 Points[i].Child = -1;
+                Points[i].AppyInvertCollision = src._ApplyInvertCollision ? 1 : 0;
                 Points[i].Weight = src._IsFixed ? 0.0f : 1.0f;
                 Points[i].Mass = Math.Max(0.01f, src._Mass * _MassScaleCurve.Evaluate(rate));
                 Points[i].Resistance = 1.0f - Mathf.Clamp01(_ResistanceCurve.Evaluate(rate) * 0.01f);
@@ -614,6 +615,7 @@ namespace SPCR
                 Points[i].Position = PointTransforms[i].position;
                 Points[i].Direction = PointTransforms[i].parent.position - PointTransforms[i].position;
                 Points[i].ParentLength = Points[i].Direction.magnitude;
+                Points[i].PointRadius = src._PointRadius;
 
                 if (src.CreateMovableLimitTarget())
                 {

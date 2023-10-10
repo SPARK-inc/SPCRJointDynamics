@@ -42,11 +42,17 @@ namespace SPCR
             UpdateSlider("RadiusTailScale", collider, ref collider._RadiusTailScale, 0.0f, 16.0f);
             UpdateSlider("Height", collider, ref collider._Height, 0.0f, 5.0f);
             UpdateSlider("Friction", collider, ref collider._Friction, 0.0f, 1.0f);
-            
-            if (collider.IsCapsule)
+
+            Titlebar("モード", new Color(0.5f, 1f, 0.5f));
+            UpdateToggle("Inverse Collider", collider, ref collider._IsInverseCollider);
+
+            if (collider.IsCapsule && !collider._IsInverseCollider)
             {
                 Titlebar("表面衝突", new Color(1.0f, 0.7f, 0.7f));
                 collider._SurfaceColliderForce = (SPCRJointDynamicsCollider.ColliderForce)EditorGUILayout.EnumPopup(new GUIContent("Force Type", "表面がコライダーに刺さった時のフォース"), collider._SurfaceColliderForce);
+            }else
+            {
+                collider._SurfaceColliderForce = SPCRJointDynamicsCollider.ColliderForce.Off;
             }
 
             Titlebar("デバッグ", new Color(0.5f, 0.5f, 0.5f));

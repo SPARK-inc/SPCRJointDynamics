@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.9] - 2023-10-07
+###Added
+Added radius parameter to SPCRJointDynamicsPoint
+
 ## [2.0.8] - 2023-08-03
 ###Added
 Fix Animation blend

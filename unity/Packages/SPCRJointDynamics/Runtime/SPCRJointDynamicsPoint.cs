@@ -35,8 +35,10 @@ namespace SPCR
         [Header("=== 物理設定項目 ===")]
         public bool _IsFixed = false;
         public float _Mass = 1.0f;
+        public float _PointRadius = 0.0f;
         public float _MovableLimitRadius = -1.0f;
         public bool _UseForSurfaceCollision = true;
+        public bool _ApplyInvertCollision = true;
         public SPCRJointDynamicsPoint _ForceChildPoint = null;
 
         [Header("=== 物理自動設定項目 ===")]
@@ -58,6 +60,10 @@ namespace SPCR
         public Vector3 _LocalPosition;
         [HideInInspector]
         public Quaternion _LocalRotation;
+
+#if UNITY_EDITOR
+        public bool _DebugDrawPointRadius = true;
+#endif
 
         public void Reset()
         {
@@ -99,6 +105,7 @@ namespace SPCR
 #if UNITY_EDITOR
         void OnDrawGizmos()
         {
+            Color defColor = Gizmos.color;
             if (EnableMovableLimit)
             {
                 if (UnityEditor.Selection.Contains(gameObject))
@@ -111,6 +118,14 @@ namespace SPCR
                 else
                     Gizmos.DrawWireSphere(transform.position, _MovableLimitRadius);
             }
+
+            if (_DebugDrawPointRadius)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireSphere(transform.position, _PointRadius);
+            }
+
+            Gizmos.color = defColor;
         }
 #endif//UNITY_EDITOR
     }

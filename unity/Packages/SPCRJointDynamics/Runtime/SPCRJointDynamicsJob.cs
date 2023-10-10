@@ -33,6 +33,7 @@ namespace SPCR
             public int Parent;
             public int Child;
             public int MovableLimitIndex;
+            public int AppyInvertCollision;
             public float MovableLimitRadius;
             public float Weight;
             public float Mass;
@@ -54,6 +55,7 @@ namespace SPCR
             public float BendingShrinkHorizontal;
             public float BendingStretchHorizontal;
             public float WindForceScale;
+            public float PointRadius;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 Position;
@@ -64,6 +66,7 @@ namespace SPCR
         {
             public int Parent;
             public int Child;
+            public int AppyInvertCollision;
             public int MovableLimitIndex;
             public float MovableLimitRadius;
             public float Weight;
@@ -87,6 +90,7 @@ namespace SPCR
             public float FakeWavePower;
             public float FakeWaveFreq;
             public float ForceFadeRatio;
+            public float PointRadius;
             public Vector3 Gravity;
             public Vector3 BoneAxis;
             public Vector3 InitialLocalScale;
@@ -123,6 +127,7 @@ namespace SPCR
             public float RadiusTailScale;
             public float Height;
             public float Friction;
+            public bool IsInverseCollider;
             public SPCRJointDynamicsCollider.ColliderForce ForceType;
         }
 
@@ -262,6 +267,7 @@ namespace SPCR
                 ptR.Parent = src.Parent;
                 ptR.Child = src.Child;
 
+                ptR.AppyInvertCollision = src.AppyInvertCollision;
                 ptR.MovableLimitIndex = src.MovableLimitIndex;
                 ptR.MovableLimitRadius = src.MovableLimitRadius;
                 ptR.Weight = src.Weight;
@@ -284,6 +290,7 @@ namespace SPCR
                 ptR.BendingShrinkVertical = src.BendingShrinkVertical * 0.5f;
                 ptR.BendingStretchVertical = src.BendingStretchVertical * 0.5f;
                 ptR.ForceFadeRatio = 0.0f;
+                ptR.PointRadius = src.PointRadius;
 
                 ptR.Gravity = src.Gravity;
                 ptR.WindForceScale = src.WindForceScale;
@@ -379,6 +386,7 @@ namespace SPCR
                     colR.RadiusTailScale = src.RadiusTailScale;
                     colR.Height = src.IsCapsule ? src.Height : 0.0f;
                     colR.Friction = src.Friction;
+                    colR.IsInverseCollider = src._IsInverseCollider;
                     colR.ForceType = src._SurfaceColliderForce;
 
                     colRW.Enabled = src.isActiveAndEnabled ? 1 : 0;
@@ -1129,48 +1137,80 @@ namespace SPCR
 
                             if (colR.Height > EPSILON)
                             {
-                                if (Collision.PushoutFromCapsule(ref colR, ref colRW, ref RWptA.Position_Current))
+                                if (colR.IsInverseCollider)
                                 {
-                                    Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    if (ptRA.AppyInvertCollision == 1 && Collision.PushInFromCapsule(ref colR, ref colRW, ref RWptA.Position_Current))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
+
+                                    if (ptRB.AppyInvertCollision == 1 && Collision.PushInFromCapsule(ref colR, ref colRW, ref RWptB.Position_Current))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
                                 }
-                                if (Collision.PushoutFromCapsule(ref colR, ref colRW, ref RWptB.Position_Current))
+                                else
                                 {
-                                    Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    if (Collision.PushoutFromCapsule(ref colR, ref colRW, ref RWptA.Position_Current, ref ptRA))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
+                                    if (Collision.PushoutFromCapsule(ref colR, ref colRW, ref RWptB.Position_Current, ref ptRB))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
                                 }
                             }
                             else
                             {
-                                if (Collision.PushoutFromSphere(ref colR, ref colRW, ref RWptA.Position_Current))
+                                if (colR.IsInverseCollider)
                                 {
-                                    Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    if (ptRA.AppyInvertCollision == 1 && Collision.PushInFromSphere(ref colR, ref colRW, ref RWptA.Position_Current))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
+                                    if (ptRB.AppyInvertCollision == 1 && Collision.PushInFromSphere(ref colR, ref colRW, ref RWptB.Position_Current))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
                                 }
-                                if (Collision.PushoutFromSphere(ref colR, ref colRW, ref RWptB.Position_Current))
+                                else
                                 {
-                                    Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    if (Collision.PushoutFromSphere(ref colR, ref colRW, ref RWptA.Position_Current, ref ptRA))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
+                                    if (Collision.PushoutFromSphere(ref colR, ref colRW, ref RWptB.Position_Current, ref ptRB))
+                                    {
+                                        Friction = Mathf.Max(Friction, colR.Friction * 0.25f);
+                                    }
                                 }
                             }
 
-                            float Radius;
-                            Vector3 pointOnLine, pointOnCollider;
-                            if (Collision.CollisionDetection(ref colR, ref colRW, RWptA.Position_Current, RWptB.Position_Current, out pointOnLine, out pointOnCollider, out Radius))
+                            if (!colR.IsInverseCollider)
                             {
-                                var Pushout = pointOnLine - pointOnCollider;
-                                var PushoutDistance = Pushout.magnitude;
+                                float Radius;
+                                Vector3 pointOnLine, pointOnCollider;
+                                if (Collision.CollisionDetection(ref colR, ref colRW, RWptA.Position_Current, RWptB.Position_Current, out pointOnLine, out pointOnCollider, out Radius))
+                                {
+                                    var Pushout = pointOnLine - pointOnCollider;
+                                    var PushoutDistance = Pushout.magnitude;
 
-                                var pointDistance = (RWptB.Position_Current - RWptA.Position_Current).magnitude * 0.5f;
-                                var rateP1 = Mathf.Clamp01((pointOnLine - RWptA.Position_Current).magnitude / pointDistance);
-                                var rateP2 = Mathf.Clamp01((pointOnLine - RWptB.Position_Current).magnitude / pointDistance);
+                                    var pointDistance = (RWptB.Position_Current - RWptA.Position_Current).magnitude * 0.5f;
+                                    var rateP1 = Mathf.Clamp01((pointOnLine - RWptA.Position_Current).magnitude / pointDistance);
+                                    var rateP2 = Mathf.Clamp01((pointOnLine - RWptB.Position_Current).magnitude / pointDistance);
 
-                                Pushout /= PushoutDistance;
+                                    Pushout /= PushoutDistance;
 
-                                Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
-                                if (WeightA > EPSILON)
-                                    RWptA.Position_Current += Pushout * rateP2;
-                                if (WeightB > EPSILON)
-                                    RWptB.Position_Current += Pushout * rateP1;
+                                    Pushout *= Mathf.Max(Radius - PushoutDistance, 0.0f);
+                                    if (WeightA > EPSILON)
+                                        RWptA.Position_Current += Pushout * rateP2;
+                                    if (WeightB > EPSILON)
+                                        RWptB.Position_Current += Pushout * rateP1;
 
-                                var Dot = Vector3.Dot(Vector3.up, (pointOnLine - pointOnCollider).normalized);
-                                Friction = Mathf.Max(Friction, colR.Friction * Mathf.Clamp01(Dot));
+                                    var Dot = Vector3.Dot(Vector3.up, (pointOnLine - pointOnCollider).normalized);
+                                    Friction = Mathf.Max(Friction, colR.Friction * Mathf.Clamp01(Dot));
+                                }
                             }
                         }
 
@@ -1611,29 +1651,29 @@ namespace SPCR
 
         class Collision
         {
-            public static bool PushoutFromSphere(Vector3 Center, float Radius, ref Vector3 point)
+            public static bool PushoutFromSphere(Vector3 Center, float Radius, float pointRadius, ref Vector3 point)
             {
                 var direction = point - Center;
                 var sqrDirectionLength = direction.sqrMagnitude;
-                var radius = Radius;
                 if (sqrDirectionLength > EPSILON)
                 {
-                    if (sqrDirectionLength < radius * radius)
+                    var directionLength = Mathf.Sqrt(sqrDirectionLength) - pointRadius;
+
+                    if (directionLength < Radius)
                     {
-                        var directionLength = Mathf.Sqrt(sqrDirectionLength);
-                        point = Center + direction * radius / directionLength;
+                        point = Center + direction * Radius / directionLength;
                         return true;
                     }
                 }
                 return false;
             }
 
-            public static bool PushoutFromSphere(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point)
+            public static bool PushoutFromSphere(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point, ref PointR pointR)
             {
-                return PushoutFromSphere(colRW.Position_Current, colRW.Radius, ref point);
+                return PushoutFromSphere(colRW.Position_Current, colRW.Radius, pointR.PointRadius, ref point);
             }
 
-            public static bool PushoutFromCapsule(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point)
+            public static bool PushoutFromCapsule(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point, ref PointR pointR)
             {
                 var capsuleVec = colRW.Direction_Current;
                 var capsuleVecNormal = capsuleVec.normalized;
@@ -1642,11 +1682,11 @@ namespace SPCR
                 var distanceOnVec = Vector3.Dot(capsuleVecNormal, targetVec);
                 if (distanceOnVec <= EPSILON)
                 {
-                    return PushoutFromSphere(capsulePos, colRW.Radius, ref point);
+                    return PushoutFromSphere(capsulePos, colRW.Radius, pointR.PointRadius, ref point);
                 }
                 else if (distanceOnVec >= colR.Height)
                 {
-                    return PushoutFromSphere(capsulePos + capsuleVec, colRW.Radius * colR.RadiusTailScale, ref point);
+                    return PushoutFromSphere(capsulePos + capsuleVec, colRW.Radius * colR.RadiusTailScale, pointR.PointRadius, ref point);
                 }
                 else
                 {
@@ -1655,11 +1695,70 @@ namespace SPCR
                     var sqrPushoutDistance = pushoutVec.sqrMagnitude;
                     if (sqrPushoutDistance > EPSILON)
                     {
+                        var pushoutDistance = Mathf.Sqrt(sqrPushoutDistance) - pointR.PointRadius;
+
                         var Radius = colRW.Radius * Mathf.Lerp(1.0f, colR.RadiusTailScale, distanceOnVec / colR.Height);
-                        if (sqrPushoutDistance < Radius * Radius)
+                        if (pushoutDistance < Radius)
                         {
-                            var pushoutDistance = Mathf.Sqrt(sqrPushoutDistance);
                             point = positionOnVec + pushoutVec * Radius / pushoutDistance;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+
+            public static bool PushInFromSphere(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point)
+            {
+                return PushInFromSphere(colRW.Position_Current, colRW.Radius, ref point);
+            }
+
+            public static bool PushInFromSphere(Vector3 Center, float Radius, ref Vector3 point)
+            {
+                var direction = Center - point;
+                var sqrDirectionLength = direction.sqrMagnitude;
+                var radius = Radius;
+
+                if (sqrDirectionLength > EPSILON)
+                {
+                    if (sqrDirectionLength > radius * radius)
+                    {
+                        var directionLength = Mathf.Sqrt(sqrDirectionLength);
+                        point = point + direction.normalized * (directionLength - radius);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public static bool PushInFromCapsule(ref ColliderR colR, ref ColliderRW colRW, ref Vector3 point)
+            {
+                var capsuleVec = colRW.Direction_Current;
+                var capsuleVecNormal = capsuleVec.normalized;
+                var capsulePos = colRW.Position_Current;
+                var targetVec = point - capsulePos;
+                var distanceOnVec = Vector3.Dot(capsuleVecNormal, targetVec);
+                if (distanceOnVec <= EPSILON)
+                {
+                    return PushInFromSphere(capsulePos, colRW.Radius, ref point);
+                }
+                else if (distanceOnVec >= colR.Height)
+                {
+                    return PushInFromSphere(capsulePos + capsuleVec, colRW.Radius * colR.RadiusTailScale, ref point);
+                }
+                else
+                {
+                    var positionOnVec = (capsulePos + (capsuleVecNormal * distanceOnVec));
+
+                    var pullInVec = positionOnVec - point;
+                    var sqrPullInDistance = pullInVec.sqrMagnitude;
+                    if (sqrPullInDistance > EPSILON)
+                    {
+                        var Radius = colRW.Radius * Mathf.Lerp(1.0f, colR.RadiusTailScale, colR.Height / distanceOnVec);
+                        if (sqrPullInDistance > Radius * Radius)
+                        {
+                            var pullInDistance = Mathf.Sqrt(sqrPullInDistance);
+                            point = point + pullInVec.normalized * (pullInDistance - Radius);
                             return true;
                         }
                     }
@@ -1744,6 +1843,41 @@ namespace SPCR
                 pointOnQ = posQ + dirQ * tQ;
 
                 return (pointOnQ - pointOnP).sqrMagnitude;
+            }
+
+            public static bool PushInCollisionDetection(ref ColliderR colR, ref ColliderRW colRW, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider, out float Radius)
+            {
+                if (colR.Height <= EPSILON)
+                {
+                    return PushInCollisionDetection_Sphere(colRW.Position_Current, colRW.Radius, point1, point2, out pointOnLine, out pointOnCollider, out Radius);
+                }
+                else
+                {
+                    CollisionDetection_Capsule(ref colR, ref colRW, point1, point2, out pointOnLine, out pointOnCollider, out Radius);
+                    return false;
+                }
+            }
+
+            public static bool PushInCollisionDetection_Sphere(Vector3 center, float radius, Vector3 point1, Vector3 point2, out Vector3 pointOnLine, out Vector3 pointOnCollider, out float Radius)
+            {
+                var direction = point2 - point1;
+                var directionLength = direction.magnitude;
+                direction /= directionLength;
+
+                var toCenter = center - point1;
+                var dot = Vector3.Dot(direction, toCenter);
+                var pointOnDirection = direction * Mathf.Clamp(dot, 0.0f, directionLength);
+
+                pointOnCollider = center;
+                pointOnLine = pointOnDirection + point1;
+                Radius = radius;
+
+                if ((pointOnCollider - pointOnLine).sqrMagnitude > radius * radius)
+                {
+                    return false;
+                }
+
+                return true;
             }
         }
 
@@ -1939,7 +2073,14 @@ namespace SPCR
                 else
                 {
                     ptRW.Position_ToTransform = transform.position;
-                    SetRotation(ref ptR, ref ptRW, transform, Mathf.Max(ptR.ForceFadeRatio, BlendRatio));
+                    if (ptR.Child != -1)
+                    {
+                        SetRotation(ref ptR, ref ptRW, transform, Mathf.Max(PointsR[ptR.Child].ForceFadeRatio, BlendRatio));
+                    }
+                    else
+                    {
+                        SetRotation(ref ptR, ref ptRW, transform, BlendRatio);
+                    }
                 }
 
                 PointsRW[index] = ptRW;
