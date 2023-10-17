@@ -92,8 +92,10 @@ namespace SPCR
             uniqueGUIID = System.Guid.NewGuid().ToString();
         }
 
-        public void SetGUIIIde(string guiiid)
+        public void SetUniqueId(string guiiid)
         {
+            if (uniqueGUIID.Equals(guiiid) || System.String.IsNullOrEmpty(guiiid))
+                return;
             uniqueGUIID = guiiid;
         }
     }

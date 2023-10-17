@@ -71,6 +71,13 @@ namespace SPCR
                 GenerateNewID();
         }
 
+        public void SetUniqueID(string newID)
+        {
+            if (uniqueGUIID.Equals(newID) || System.String.IsNullOrEmpty(newID))
+                return;
+            uniqueGUIID = newID;
+        }
+
         void GenerateNewID()
         {
             uniqueGUIID = System.Guid.NewGuid().ToString();

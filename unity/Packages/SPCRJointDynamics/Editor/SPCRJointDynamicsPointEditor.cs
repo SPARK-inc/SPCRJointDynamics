@@ -33,9 +33,9 @@ namespace SPCR
             }
 
             Titlebar("デバッグ用", new Color(0.7f, 1.0f, 1.0f));
-            EditorGUI.BeginChangeCheck();
+
             UpdateToggle("Point Radius", point, ref point._DebugDrawPointRadius);
-            if(EditorGUI.EndChangeCheck())
+            if (GUI.changed)
             {
                 EditorUtility.SetDirty(point);
             }

@@ -80,11 +80,13 @@ namespace SPCR
 
         public ColliderForce _SurfaceColliderForce = ColliderForce.Off;
 
-        public bool _ShowColiiderGizmo = true;
-
         public Transform RefTransform { get; private set; }
 
         public bool IsCapsule { get { return Height > 0.0f; } }
+
+#if UNITY_EDITOR
+        public bool _ShowColiiderGizmo = true;
+#endif
 
         void Awake()
         {
@@ -102,8 +104,10 @@ namespace SPCR
             uniqueGUIID = System.Guid.NewGuid().ToString();
         }
 
-        public void SetGUIIIde(string guiiId)
+        public void SetUniqueID(string guiiId)
         {
+            if (uniqueGUIID.Equals(guiiId) || System.String.IsNullOrEmpty(guiiId))
+                return;
             uniqueGUIID = guiiId;
         }
 
@@ -142,6 +146,11 @@ namespace SPCR
                 Gizmos.color = Color.gray;
 
             ResetTransform();
+
+            if (UnityEditor.Selection.Contains(gameObject))
+                Gizmos.color = Color.green;
+            else
+                Gizmos.color = Color.gray;
 
             DrawColliderGizmo(IsCapsule, Height, Radius, RadiusTailScale, transform.position, transform.rotation);
 
