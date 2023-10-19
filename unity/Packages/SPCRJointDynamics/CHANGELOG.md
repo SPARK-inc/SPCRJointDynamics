@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.11] - 2023-10-19
+###Added
+Add SPCRJointDynamicsHelper
+
 ## [2.0.10] - 2023-10-17
 ###Added
 Fix save/load
